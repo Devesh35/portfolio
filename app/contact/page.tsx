@@ -1,7 +1,6 @@
-import type { Metadata } from "next";
-import { ContactForm } from "@/components/contact-form";
 import { ResumeButton } from "@/components/resume-button";
 import { profile } from "@/content/profile";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -37,9 +36,9 @@ export default function ContactPage() {
       </header>
 
       <div className="mt-20 grid gap-16 lg:grid-cols-[1.4fr_1fr] lg:gap-20">
-        <div data-reveal>
+        {/* <div data-reveal>
           <ContactForm />
-        </div>
+        </div> */}
 
         <aside data-reveal style={{ "--reveal-delay": "120ms" } as React.CSSProperties}>
           <h2 className="label">Direct</h2>
