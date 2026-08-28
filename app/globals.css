@@ -1,26 +1,322 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==========================================================================
+   Dark-technical. One committed visual world — no light variant by design.
+   Neutrals are biased cool (blue) so the warm ember accent stays the only
+   warm thing on the page and always reads as intentional.
+   ========================================================================== */
+
+@theme {
+  --color-void:        #08090b;
+  --color-ground:      #0b0d10;
+  --color-surface:     #101318;
+  --color-raised:      #161a20;
+  --color-line:        #222831;
+  --color-line-bright: #333b46;
+
+  --color-text:        #e9ecf1;
+  --color-muted:       #98a1ac;
+  --color-dim:         #6b7480;
+
+  --color-ember:       #e8734a;
+  --color-ember-soft:  #f0a488;
+  --color-ember-dim:   #7b3b23;
+  --color-steel:       #79a6d2;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-snap:     cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+* { box-sizing: border-box; }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  background: var(--color-ground);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ground);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
+
+::selection { background: var(--color-ember); color: var(--color-void); }
+
+:focus-visible {
+  outline: 2px solid var(--color-ember);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* --------------------------------------------------------------- typography */
+
+.font-display {
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  text-wrap: balance;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-dim);
+}
+
+.tabular { font-variant-numeric: tabular-nums; }
+
+.prose-body {
+  color: var(--color-muted);
+  line-height: 1.7;
+  max-width: 68ch;
+}
+
+/* ------------------------------------------------------------------ surfaces */
+
+.hairline { border-color: var(--color-line); }
+
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+}
+
+/* Dot grid, masked so it fades out rather than tiling to the edges. */
+.dot-grid {
+  background-image: radial-gradient(circle at 1px 1px, rgb(233 236 241 / 0.07) 1px, transparent 0);
+  background-size: 32px 32px;
+}
+
+.mask-fade-b {
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+}
+
+.mask-fade-x {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+
+/* --------------------------------------------------------------- reveal system
+   One IntersectionObserver in ScrollReveal flips [data-reveal] to data-in.
+   Stagger comes from --reveal-delay set inline; no JS timers involved.       */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity 0.7s var(--ease-out-expo) var(--reveal-delay, 0ms),
+    transform 0.7s var(--ease-out-expo) var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+[data-reveal="in"] {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* Rules that draw themselves across as they enter. */
+[data-rule] {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s var(--ease-out-expo) var(--reveal-delay, 0ms);
+}
+[data-rule="in"] { transform: scaleX(1); }
+
+/* ------------------------------------------------------------------- entrance */
+
+@keyframes rise {
+  from { opacity: 0; transform: translate3d(0, 24px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+.animate-rise {
+  animation: rise 0.85s var(--ease-out-expo) both;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+@keyframes glow-drift {
+  0%,  100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.5; }
+  50%       { transform: translate3d(-3%, 4%, 0) scale(1.08); opacity: 0.75; }
+}
+
+.animate-glow { animation: glow-drift 18s ease-in-out infinite; }
+
+/* Slow vertical scan over the hero grid — the one ambient effect on the site. */
+@keyframes scan {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(400%); }
+}
+.animate-scan { animation: scan 9s linear infinite; }
+
+/* --------------------------------------------------------------- marquee */
+
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+.animate-marquee {
+  animation: marquee 42s linear infinite;
+  width: max-content;
+}
+.marquee-host:hover .animate-marquee { animation-play-state: paused; }
+
+/* ------------------------------------------------------------------- links */
+
+.link-wipe {
+  position: relative;
+  display: inline-block;
+}
+.link-wipe::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s var(--ease-snap);
+}
+.link-wipe:hover::after,
+.link-wipe:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* --------------------------------------------------------------- project card */
+
+.card-media img {
+  transition: transform 0.9s var(--ease-out-expo), filter 0.6s ease;
+}
+.group\/card:hover .card-media img {
+  transform: scale(1.04);
+  filter: saturate(1.12);
+}
+
+.card-rule {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.55s var(--ease-snap);
+}
+.group\/card:hover .card-rule { transform: scaleX(1); }
+
+/* ------------------------------------------------------------------ buttons */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  padding: 0.8rem 1.25rem;
+  border: 1px solid var(--color-line-bright);
+  color: var(--color-text);
+  /* Fill wipes up from the bottom edge. Done with background-position rather
+     than a z-index:-1 pseudo-element: that version painted the fill behind the
+     nearest ancestor stacking context, so inside a <dialog> the hover state
+     became near-black text on an unfilled button. */
+  background-image: linear-gradient(var(--color-ember), var(--color-ember));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0%;
+  transition:
+    background-size 0.45s var(--ease-out-expo),
+    color 0.35s var(--ease-snap),
+    border-color 0.35s var(--ease-snap);
+}
+.btn:hover,
+.btn:focus-visible {
+  color: var(--color-void);
+  border-color: var(--color-ember);
+  background-size: 100% 100%;
+}
+
+.btn-primary {
+  border-color: var(--color-ember);
+  color: var(--color-ember);
+}
+
+/* ------------------------------------------------------- reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  [data-reveal] { opacity: 1; transform: none; }
+  [data-rule]   { transform: scaleX(1); }
+  .animate-scan, .animate-glow, .animate-marquee { animation: none !important; }
+  .animate-marquee { transform: none !important; }
+}
+
+/* --------------------------------------------------- career timeline graph */
+
+.branch-path {
+  stroke-dasharray: var(--len, 2000);
+  stroke-dashoffset: var(--len, 2000);
+  transition: stroke-dashoffset 1.2s var(--ease-out-expo) var(--reveal-delay, 0ms);
+}
+[data-reveal="in"] .branch-path { stroke-dashoffset: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .branch-path { stroke-dashoffset: 0 !important; }
+}
+
+/* Hover pairing: branch, leader and card share a data-tl key. TimelineFocus
+   sets data-hot on the wrapper and .tl-hot on the matching trio; everything
+   else steps back. Children are dimmed (not the [data-tl] elements
+   themselves) so this never fights the reveal system's own transitions. */
+[data-tl] > * { transition: opacity 0.3s ease; }
+[data-hot] [data-tl]:not(.tl-hot) > * { opacity: 0.35; }
+
+/* ------------------------------------------------------------ résumé viewer */
+
+.resume-dialog {
+  margin: auto;
+  /* 595pt page (793px) + scrollbar + borders — so the document fills the
+     frame edge to edge instead of leaving a gutter down one side. */
+  width: min(100vw - 2rem, 812px);
+  height: min(100dvh - 2rem, 56rem);
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 1px solid var(--color-line);
+  background: var(--color-ground);
+  color: var(--color-text);
+  overflow: hidden;
+}
+
+.resume-dialog::backdrop {
+  background: rgb(8 9 11 / 0.82);
+  backdrop-filter: blur(3px);
+}
+
+/* The page behind must not scroll while the dialog owns the screen. */
+body:has(dialog.resume-dialog[open]) { overflow: hidden; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .resume-dialog[open] { animation: dialog-in 0.32s var(--ease-out-expo); }
+  .resume-dialog[open]::backdrop { animation: fade-in 0.32s ease; }
+}
+
+@keyframes dialog-in {
+  from { opacity: 0; transform: translate3d(0, 12px, 0) scale(0.99); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }

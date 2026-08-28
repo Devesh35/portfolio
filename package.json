@@ -6,9 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "audit": "node scripts/audit-content.mjs",
+    "resume": "node scripts/build-resume.mjs --pdf"
   },
   "dependencies": {
+    "@next/swc-linux-x64-gnu": "^16.3.3",
+    "geist": "^1.7.2",
     "next": "16.3.3",
     "react": "19.2.8",
     "react-dom": "19.2.8"
