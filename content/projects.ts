@@ -40,17 +40,26 @@ export const PHASE_LABEL: Record<Phase, string> = {
 export type Origin = "greenfield" | "rebuild" | "inherited" | "support";
 
 export const ORIGIN_LABEL: Record<Origin, string> = {
-  greenfield: "Greenfield",
-  rebuild: "Full rebuild",
-  inherited: "Inherited codebase",
-  support: "Support engagement",
+  greenfield: "Built from zero",
+  rebuild: "Ground-up rebuild",
+  inherited: "Joined existing",
+  support: "Support role",
 };
 
+/** Headline for the project page's starting-point panel. */
+export const ORIGIN_STATEMENT: Record<Origin, string> = {
+  greenfield: "Started from an empty repository",
+  rebuild: "A live product, rebuilt from scratch",
+  inherited: "Joined a product that was already running",
+  support: "Kept a live product healthy",
+};
+
+/** Fallback detail when a project has no originNote of its own. */
 export const ORIGIN_BLURB: Record<Origin, string> = {
-  greenfield: "Started from an empty repository.",
-  rebuild: "The product existed; this implementation was written from the ground up.",
-  inherited: "Joined an existing codebase and extended it.",
-  support: "Joined an existing codebase to fix and maintain it.",
+  greenfield: "Nothing was here before — I set up the repository and built the whole thing.",
+  rebuild: "The product was already live. This version replaced it, written new rather than patched.",
+  inherited: "The codebase existed before me. I joined to add features and improve what was there.",
+  support: "Bug fixes and maintenance on an existing codebase, alongside my main assignment.",
 };
 
 export interface Project {
@@ -103,7 +112,7 @@ export const projects: Project[] = [
     ownership: ["design", "build", "test", "ship", "operate"],
     origin: "rebuild",
     originNote:
-      "The platform was live; the web and mobile front ends and the backend services were rebuilt, not patched.",
+      "The old platform stayed live while the new web app, mobile app and backend services were written to replace it — a rewrite, not a patch job.",
     metrics: [
       { label: "investors", value: "160,000+", source: "estateguru.co" },
       { label: "loans facilitated", value: "€951M+", source: "estateguru.co" },
@@ -128,10 +137,14 @@ export const projects: Project[] = [
       "The uniform deployment approach enabled seamless integration and scalability for future expansion.",
     ],
     stack: [
-      "Next.js", "React Native", "TypeScript", "Node.js", "Express", "MongoDB",
-      "AWS", "Terraform", "Docker", "GitHub Actions", "Nx", "Swagger / OpenAPI", "Lokalise",
-      "SSO / OAuth 2.0", "Google Sign-In", "Meta Login", "Sign in with Apple",
-      "Jest", "Cypress", "Datadog", "Google Maps",
+      "Next.js", "React Native", "TypeScript", "JavaScript (ES6+)", "Responsive & cross-platform UI",
+      "Node.js", "Express.js", "REST API design", "Microservices", "Swagger / OpenAPI", "MongoDB",
+      "AWS", "Amazon ECS", "Amazon S3", "Amazon Route 53", "Elastic Load Balancing", "Amazon CloudFront",
+      "Amazon SNS", "Amazon SQS", "AWS IAM", "Amazon CloudWatch", "Docker", "Docker Compose",
+      "Terraform", "Multi-environment deployments", "Blue-green deployment", "CI/CD pipelines",
+      "GitHub Actions", "Datadog", "Jest", "node:test runner", "Cypress", "Unit testing",
+      "Integration testing", "SSO / OAuth 2.0", "Google Sign-In", "Meta Login", "Sign in with Apple",
+      "Google Maps", "Lokalise", "Nx Monorepo",
     ],
     skillsUsed: [
       { name: "Next.js", how: "The rebuilt investor dashboard, loan listings and auto-invest flows — the legacy web frontend replaced outright." },
@@ -192,10 +205,11 @@ export const projects: Project[] = [
       "Delivered as part of a larger programme to fully automate operations for a sustainable-energy solutions company.",
     ],
     stack: [
-      "React", "Node.js", "Express", "Azure", "Azure App Service", "Azure Cosmos DB",
-      "Azure Blob Storage", "Azure AI Foundry", "Okta", "Microsoft Entra ID", "Microsoft Entra PIM",
-      "Azure Repos", "Azure DevOps", "SSO / OAuth 2.0",
-      "GPT-5.4", "Terraform", "CI/CD",
+      "React", "TypeScript", "JavaScript (ES6+)", "Tailwind CSS", "Responsive & cross-platform UI",
+      "Node.js", "Express.js", "REST API design", "Schema design", "Azure", "Azure App Service",
+      "Azure Blob Storage", "Azure Cosmos DB", "Terraform", "Multi-environment deployments",
+      "Rolling deployments", "CI/CD pipelines", "SSO / OAuth 2.0", "Azure AI Foundry", "Microsoft Entra ID",
+      "Microsoft Entra PIM", "GPT-5.4", "Okta", "Azure DevOps", "Azure Repos",
     ],
     skillsUsed: [
       { name: "React", how: "The analysis and monitoring UI where teams read findings and suggested fixes." },
@@ -236,10 +250,10 @@ export const projects: Project[] = [
       "Advertising platform with embeddable single-page stores and real-time campaign analytics.",
     contribution:
       "Led the platform's major enhancement work: designed the architecture and schemas for the interactive single-page stores, built access control, Razorpay payments and Kafka-backed analytics, took initial load from about 4 seconds to under 1, added a WebSocket inbox with Meta integrations, and defined every environment as code with CloudFormation — including the blue-green cutover that took deployment downtime from about eight minutes to fifteen seconds.",
-    ownership: ["design", "build", "ship", "operate"],
+    ownership: ["design", "build", "test", "ship", "operate"],
     origin: "inherited",
     originNote:
-      "Live product. Joined to extend it — new features, then the performance work.",
+      "The platform was live with real advertisers on it. I joined to build new features, then took on the performance work.",
     metrics: [],
     highlights: [
       "Led significant enhancements to the advertising platform to boost user engagement and extend functionality.",
@@ -260,9 +274,13 @@ export const projects: Project[] = [
       "Supported the entire infrastructure on AWS for scalable, secure deployment.",
     ],
     stack: [
-      "React", "Node.js", "Express", "MongoDB", "Redis", "Apache Kafka",
-      "WebSocket", "Razorpay", "SSO / OAuth 2.0", "Google Sign-In", "Meta Login",
-      "AWS", "CloudFormation",
+      "React", "JavaScript (ES6+)", "Redux", "Responsive & cross-platform UI", "Node.js",
+      "Express.js", "REST API design", "WebSocket", "Apache Kafka", "MongoDB", "Redis", "Schema design",
+      "Query optimisation & scaling", "AWS", "AWS Elastic Beanstalk", "Amazon S3", "Amazon Route 53",
+      "Elastic Load Balancing", "Amazon CloudFront", "AWS IAM", "Amazon CloudWatch", "CloudFormation",
+      "Multi-environment deployments", "Blue-green deployment", "CI/CD pipelines", "GitLab CI/CD",
+      "Jest", "node:test runner", "Unit testing", "SSO / OAuth 2.0", "Google Sign-In", "Meta Login",
+      "Razorpay", "Meta Business APIs (WhatsApp, Facebook, Instagram)",
     ],
     skillsUsed: [
       { name: "React", how: "Single-page stores that embed into websites and apps, responsive across placements." },
@@ -299,10 +317,10 @@ export const projects: Project[] = [
       "Two-wheeler rental platform operating across Pune, with customer web and Android apps and an operations admin panel.",
     contribution:
       "Joined a live platform to extend it. Built booking features across the React web app and the native Java/Kotlin Android app against a Node.js/Express backend on MongoDB, integrated Google Maps to show live user data on the booking and pickup flows, cut booking query time from about 6 seconds to under 2, and built the admin panel operations staff use to manage fleet and pricing.",
-    ownership: ["build", "ship"],
+    ownership: ["build", "ship", "operate"],
     origin: "inherited",
     originNote:
-      "Live product. Joined to extend it.",
+      "The rental platform was already running across Pune when I joined to build on it.",
     metrics: [
       { label: "rides completed", value: "1,000,000+", source: "boongg.com" },
       { label: "customers", value: "200,000+", source: "boongg.com" },
@@ -319,8 +337,10 @@ export const projects: Project[] = [
       "Built an admin panel letting staff manage bikes, bookings and pricing across outlets.",
     ],
     stack: [
-      "React", "Android (Java, Kotlin)", "Node.js", "Express",
-      "MongoDB", "AWS", "Google Maps",
+      "React", "JavaScript (ES6+)", "Responsive & cross-platform UI", "Android (Java, Kotlin)",
+      "Node.js", "Express.js", "REST API design", "MongoDB", "Query optimisation & scaling",
+      "AWS", "Amazon EC2", "Amazon S3", "Amazon Route 53", "Elastic Load Balancing", "Amazon SNS",
+      "Amazon SQS", "AWS IAM", "Amazon CloudWatch", "Multi-environment deployments", "Google Maps",
     ],
     skillsUsed: [
       { name: "React", how: "Customer-facing web features for booking." },
@@ -351,7 +371,7 @@ export const projects: Project[] = [
       "Sports-management platform connecting children, parents, coaches, managers and club owners, with role-based access to schedules, teams and activity tracking.",
     contribution:
       "Architected and implemented the entire backend: designed the PostgreSQL schema from the requirements specification, built the Node.js services with Redis caching, containerised everything with Docker and deployed on AWS.",
-    ownership: ["design", "build", "ship"],
+    ownership: ["design", "build", "test", "ship", "operate"],
     origin: "greenfield",
     metrics: [],
     highlights: [
@@ -363,7 +383,13 @@ export const projects: Project[] = [
       "Designed the architecture to manage complex access levels and provide a scalable foundation for future enhancements.",
       "Gave each role scoped access to schedules, teams and activity tracking.",
     ],
-    stack: ["Node.js", "Express", "PostgreSQL", "Docker", "AWS"],
+    stack: [
+      "React Native", "TypeScript", "JavaScript (ES6+)", "Redux", "Responsive & cross-platform UI",
+      "Node.js", "Express.js", "REST API design", "PostgreSQL", "Schema design", "AWS", "AWS Elastic Beanstalk",
+      "Amazon S3", "Amazon RDS", "Amazon Route 53", "Elastic Load Balancing", "AWS IAM",
+      "Amazon CloudWatch", "Docker", "Docker Compose", "Multi-environment deployments", "Rolling deployments",
+      "CI/CD pipelines", "GitLab CI/CD", "node:test runner", "Integration testing",
+    ],
     skillsUsed: [
       { name: "Node.js", how: "The entire backend — architected and implemented from the requirements spec." },
       { name: "Express", how: "REST APIs with role-based access for children, parents, coaches, managers and club owners." },
@@ -386,7 +412,7 @@ export const projects: Project[] = [
       "Health and fitness tracker that captures user activity and applies AI analysis to surface personalised insights and trends.",
     contribution:
       "Built the cross-platform mobile app in React Native with a native Kotlin module for activity tracking, plus the app-side layer that surfaces personalised insight. The Python and AI/ML data-processing pipeline behind the insights was owned by the client.",
-    ownership: ["build"],
+    ownership: ["design", "build", "test", "ship", "operate"],
     origin: "greenfield",
     metrics: [],
     highlights: [
@@ -398,8 +424,11 @@ export const projects: Project[] = [
       "The Python and AI/ML processing behind those insights was built and run by the client, not by Dev.",
     ],
     stack: [
-      "React Native", "Android (Java, Kotlin)", "Node.js", "MongoDB",
-      "SSO / OAuth 2.0", "Google Sign-In", "Sign in with Apple",
+      "React Native", "TypeScript", "JavaScript (ES6+)", "Tailwind CSS", "Responsive & cross-platform UI",
+      "Android (Java, Kotlin)", "Node.js", "Express.js", "REST API design", "MongoDB", "Schema design",
+      "Azure", "Azure App Service", "Multi-environment deployments", "Rolling deployments",
+      "CI/CD pipelines", "GitLab CI/CD", "node:test runner", "Unit testing", "SSO / OAuth 2.0",
+      "Google Sign-In", "Sign in with Apple",
     ],
     skillsUsed: [
       { name: "React Native", how: "The shared Android and iOS app — screens, navigation and the insight views." },
@@ -430,7 +459,7 @@ export const projects: Project[] = [
       "Financial-analysis tool on PostgreSQL letting analysts explore data through dashboards, with a desktop companion app and automated report generation.",
     contribution:
       "First production engagement. Delivered web application features with React and Node.js/Express on AWS, designed the REST APIs and PostgreSQL schemas, built the Electron bridge that connects the web app to its desktop companion, and automated Power BI reporting with Selenium scripts on an AWS Windows instance — replacing a manual process.",
-    ownership: ["design", "build"],
+    ownership: ["design", "build", "test", "ship", "operate"],
     origin: "greenfield",
     metrics: [],
     highlights: [
@@ -441,7 +470,12 @@ export const projects: Project[] = [
       "Designed REST APIs and database schemas on PostgreSQL.",
       "One of two engagements here built on PostgreSQL rather than MongoDB.",
     ],
-    stack: ["React", "Node.js", "Express", "PostgreSQL", "Electron.js", "Selenium", "AWS"],
+    stack: [
+      "React", "JavaScript (ES6+)", "Redux", "Responsive & cross-platform UI", "Electron.js",
+      "Node.js", "Express.js", "REST API design", "PostgreSQL", "AWS", "Amazon EC2", "Amazon S3",
+      "Amazon RDS", "Amazon Route 53", "Elastic Load Balancing", "AWS IAM", "Amazon CloudWatch",
+      "Multi-environment deployments", "Jest", "node:test runner", "Unit testing", "Selenium",
+    ],
     skillsUsed: [
       { name: "React", how: "Dashboards that let analysts explore financial data directly." },
       { name: "Node.js", how: "The services behind the dashboards and reports." },
@@ -469,14 +503,19 @@ export const projects: Project[] = [
     ownership: ["build"],
     origin: "support",
     originNote:
-      "Live product. Bug fixes and support alongside the main assignment.",
+      "The marketplace was live; I handled bug fixes and support while carrying my main assignment.",
     metrics: [],
     highlights: [
       "Two-sided marketplace: one platform serving shoppers buying and retailers selling.",
       "Retailer-facing catalogue and listing flows alongside the customer storefront.",
       "Carried as a support engagement while a main client assignment was already running.",
     ],
-    stack: ["React", "Node.js", "Express", "MongoDB"],
+    stack: [
+      "React", "JavaScript (ES6+)", "Redux", "Responsive & cross-platform UI", "Node.js",
+      "Express.js", "REST API design", "MongoDB", "Query optimisation & scaling", "AWS",
+      "AWS Elastic Beanstalk", "Amazon S3", "Amazon DynamoDB", "Amazon Route 53", "Elastic Load Balancing",
+      "AWS IAM", "Amazon CloudWatch", "Multi-environment deployments",
+    ],
     skillsUsed: [
       { name: "React", how: "Feature work and fixes across the shopper storefront and the retailer side." },
       { name: "Node.js", how: "Backend fixes and features in the support rotation." },
@@ -506,14 +545,19 @@ export const projects: Project[] = [
     ownership: ["build"],
     origin: "inherited",
     originNote:
-      "Still in development, not yet live, when the engagement started.",
+      "The product was still being built and had not launched yet when I joined.",
     metrics: [],
     highlights: [
       "Patient records, appointment scheduling, prescriptions, reports and patient communication in a single platform.",
       "Used Firebase for real-time sync, so a change made at the front desk shows up on the doctor’s screen without a refresh.",
       "Short, focused engagement between two longer client assignments.",
     ],
-    stack: ["React", "Node.js", "MongoDB", "Firebase"],
+    stack: [
+      "React", "JavaScript (ES6+)", "Redux", "Responsive & cross-platform UI", "Node.js",
+      "Express.js", "REST API design", "MongoDB", "Query optimisation & scaling", "AWS",
+      "AWS Elastic Beanstalk", "Amazon S3", "Amazon Route 53", "Elastic Load Balancing",
+      "Amazon CloudFront", "AWS IAM", "Amazon CloudWatch", "Multi-environment deployments",
+    ],
     skillsUsed: [
       { name: "React", how: "Feature work across records, scheduling, prescriptions and reporting surfaces." },
       { name: "Node.js", how: "The services behind those surfaces." },
@@ -535,7 +579,7 @@ export const projects: Project[] = [
       "Android and web app connecting customers with restaurants — table booking through to order fulfilment, with live status for both sides.",
     contribution:
       "Built the Kotlin Android app and the React web app, with Firebase keeping booking, ordering and fulfilment in sync in real time between the customer and the restaurant manager. Earliest end-to-end product, built before joining Nirmitee.io.",
-    ownership: ["design", "build"],
+    ownership: ["design", "build", "ship"],
     origin: "greenfield",
     metrics: [],
     highlights: [
@@ -545,7 +589,11 @@ export const projects: Project[] = [
       "Android app written in Kotlin.",
       "Earliest end-to-end product, built before the Nirmitee.io years.",
     ],
-    stack: ["Android (Kotlin)", "React", "Node.js", "Firebase", "SSO / OAuth 2.0", "Google Sign-In"],
+    stack: [
+      "React", "JavaScript (ES6+)", "Redux", "Responsive & cross-platform UI", "Android (Java, Kotlin)",
+      "Node.js", "Express.js", "REST API design", "Firebase", "Schema design", "SSO / OAuth 2.0",
+      "Google Sign-In",
+    ],
     skillsUsed: [
       { name: "Android (Kotlin)", how: "The customer app for booking and ordering, written in Kotlin." },
       { name: "React", how: "The web app for restaurant managers." },
@@ -580,7 +628,10 @@ export const projects: Project[] = [
       "Simulation engines written to mirror how the real system behaves, so the semantics hold up under inspection.",
       "Everything runs client-side against simulated state — no backend to keep alive.",
     ],
-    stack: ["Next.js", "TypeScript", "Canvas", "Simulation engines"],
+    stack: [
+      "Next.js", "TypeScript", "JavaScript (ES6+)", "Tailwind CSS", "Responsive & cross-platform UI",
+      "Canvas", "Simulation engines",
+    ],
     skillsUsed: [
       { name: "Next.js", how: "The app shell each simulation lives in." },
       { name: "TypeScript", how: "The system models — a commit graph you can actually operate on." },

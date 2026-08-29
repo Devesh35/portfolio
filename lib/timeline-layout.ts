@@ -36,7 +36,7 @@ export const YEAR_COL = 54;
 export const SPINE_X = 74;
 export const LANE_GAP = 52;
 
-const CARD_H = 126;
+const CARD_H = 162; // measured: title + dates + 2-line summary + link + gaps
 const CARD_GAP = 16;
 const MILESTONE_H = 44;
 /** The line inside a card that should meet its point in time (the title). */

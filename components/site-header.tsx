@@ -104,28 +104,32 @@ export function SiteHeader() {
             </a>
           </nav>
 
-          <button
-            type="button"
-            onClick={() => window.dispatchEvent(new CustomEvent(OPEN_SEARCH_EVENT))}
-            aria-label="Search projects and skills"
-            className="flex h-11 w-11 items-center justify-center md:hidden"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" strokeWidth="2" />
-              <path d="M15.5 15.5 L21 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            onClick={() => setMenuOpen(true)}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-nav"
-            aria-label="Open menu"
-            className="-mr-2 flex h-11 w-11 flex-col items-center justify-center gap-[6px] md:hidden"
-          >
-            <span className="block h-px w-6 bg-text" />
-            <span className="block h-px w-6 bg-text" />
-          </button>
+          {/* One right-aligned group, so justify-between can't strand the
+              search icon in the middle of the bar. */}
+          <div className="-mr-2 flex items-center gap-1 md:hidden">
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent(OPEN_SEARCH_EVENT))}
+              aria-label="Search projects and skills"
+              className="flex h-11 w-11 items-center justify-center"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" strokeWidth="2" />
+                <path d="M15.5 15.5 L21 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMenuOpen(true)}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-nav"
+              aria-label="Open menu"
+              className="flex h-11 w-11 flex-col items-center justify-center gap-[6px]"
+            >
+              <span className="block h-px w-6 bg-text" />
+              <span className="block h-px w-6 bg-text" />
+            </button>
+          </div>
         </div>
       </header>
 

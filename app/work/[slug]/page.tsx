@@ -5,8 +5,9 @@ import { notFound } from "next/navigation";
 
 import { projects, getProject } from "@/content/projects";
 import { isDevBuild } from "@/lib/env";
+import { groupStack } from "@/lib/stack-sections";
 import { SkillIcon } from "@/components/skill-icon";
-import { OriginTag } from "@/components/origin-tag";
+import { OriginPanel } from "@/components/origin-tag";
 import { PhaseTags } from "@/components/phase-tags";
 
 export function generateStaticParams() {
@@ -86,11 +87,8 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
           className="animate-rise mt-6 border-t border-line pt-5"
           style={{ "--rise-delay": "210ms" } as React.CSSProperties}
         >
-          <p className="label mb-3">Where it started</p>
-          <OriginTag origin={project.origin} showBlurb />
-          {project.originNote && (
-            <p className="prose-body mt-3 text-sm">{project.originNote}</p>
-          )}
+          <p className="label mb-3">Starting point</p>
+          <OriginPanel origin={project.origin} note={project.originNote} />
 
           <p className="label mb-3 mt-8">What I owned</p>
           <PhaseTags phases={project.ownership} size="md" />
@@ -214,20 +212,28 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
               </dl>
             </div>
           )}
-
           <div data-reveal>
             <h2 className="label">Stack</h2>
-            <ul className="mt-5 flex flex-wrap gap-1.5">
-              {project.stack.map((tech) => (
-                <li
-                  key={tech}
-                  className="chip gap-1.5 px-2.5 py-1.5 font-mono text-[0.6875rem]"
-                >
-                  <SkillIcon name={tech} size={12} />
-                  {tech}
-                </li>
+            <div className="mt-5 space-y-5">
+              {groupStack(project.stack).map((section) => (
+                <div key={section.label}>
+                  <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-dim">
+                    {section.label}
+                  </p>
+                  <ul className="mt-2 flex flex-wrap gap-1.5">
+                    {section.items.map((tech) => (
+                      <li
+                        key={tech}
+                        className="border border-line px-2.5 py-1.5 font-mono text-[0.6875rem] text-muted"
+                      >
+                        <SkillIcon name={tech} size={12} className="mr-1.5 inline-block align-[-1px]" />
+                        {tech}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
 
           {project.url && (

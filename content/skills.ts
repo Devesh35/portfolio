@@ -87,8 +87,13 @@ export const skillGroups: SkillGroup[] = [
       { name: "PostgreSQL" },
       { name: "Redis" },
       { name: "Firebase", projects: ["dine-in"] },
-      { name: "Schema design", projects: ["nextdecade", "goapi", "wellcompanion", "dine-in"] },
-      { name: "Query optimisation & scaling", projects: WITH_DB },
+      { name: "Schema design", projects: ["nextdecade", "modcart", "goapi", "wellcompanion", "dine-in"] },
+      {
+        name: "Query optimisation & scaling",
+        // Only where an existing system's queries were tuned — not the
+        // from-scratch builds (Dev, 2026-08-29).
+        projects: ["modcart", "boongg", "tradegully", "bestosys"],
+      },
     ],
   },
   {
@@ -104,7 +109,6 @@ export const skillGroups: SkillGroup[] = [
       { name: "AWS Lambda", aliases: ["Lambda"], note: "Event-driven functions off the request path." },
 
       { name: "Amazon S3", aliases: ["S3"], note: "Object storage — assets, artefacts, backups.", projects: ON_AWS },
-      { name: "Amazon EBS", aliases: ["EBS", "Elastic Block Store"], note: "Block storage attached to instances.", projects: ON_AWS },
 
       { name: "Amazon RDS", aliases: ["RDS"], note: "Managed relational databases.", projects: ["goapi", "datachamps"] },
       { name: "Amazon DynamoDB", aliases: ["DynamoDB"], note: "Managed key-value store.", projects: ["tradegully"] },
