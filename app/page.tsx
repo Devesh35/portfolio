@@ -23,9 +23,17 @@ export default function HomePage() {
 
         <div className="relative mx-auto w-full max-w-6xl px-5 py-20 sm:px-8">
           <p
-            className="animate-rise label"
+            className="animate-rise label flex flex-wrap items-center gap-x-3 gap-y-2"
             style={{"--rise-delay": "40ms"} as React.CSSProperties}>
-            {profile.location} — {profile.currentRole}
+            <span className="inline-flex items-center gap-2 text-ember">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember opacity-50" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-ember" />
+              </span>
+              Available for work
+            </span>
+            <span aria-hidden="true" className="text-dim">·</span>
+            <span>{profile.location} — {profile.currentRole}</span>
           </p>
 
           <h1
@@ -55,6 +63,11 @@ export default function HomePage() {
               See the work
             </Link>
             <ResumeButton className="btn">View résumé</ResumeButton>
+            <a
+              href={`mailto:${profile.email}`}
+              className="link-wipe self-center font-mono text-sm text-muted hover:text-text">
+              {profile.email}
+            </a>
           </div>
 
           {/* Dev's own outcomes. Client platform numbers stay on project pages. */}
@@ -109,8 +122,7 @@ export default function HomePage() {
               data-reveal
               style={{"--reveal-delay": `${i * 80}ms`} as React.CSSProperties}
               className="bg-ground p-7">
-              <span className="font-mono text-xs text-dim">0{i + 1}</span>
-              <h3 className="mt-4 font-display text-2xl font-semibold">
+              <h3 className="font-display text-2xl font-semibold">
                 {phase.title}
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted">

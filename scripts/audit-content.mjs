@@ -183,6 +183,8 @@ section("Images");
 for (const project of projects) {
   const file = resolve(ROOT, "public", project.image.src.replace(/^\//, ""));
   if (!existsSync(file)) fail(`${project.slug}: image ${project.image.src} does not exist`);
+  const art = resolve(ROOT, "public", "projects", "art", `${project.slug}.png`);
+  if (!existsSync(art)) fail(`${project.slug}: background art public/projects/art/${project.slug}.png does not exist — run scripts/build-covers.mjs`);
 }
 ok(`${projects.length} project images present`);
 

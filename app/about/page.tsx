@@ -3,14 +3,14 @@ import Link from "next/link";
 
 import { profile, lifecycle } from "@/content/profile";
 import { roles } from "@/content/experience";
+import { resume } from "@/content/resume";
 import { skillGroups } from "@/content/skills";
 import { projects } from "@/content/projects";
-import { yearsSinceCareerStart } from "@/lib/experience";
+import { experienceLabel, yearsSinceCareerStart } from "@/lib/experience";
 
 export const metadata: Metadata = {
   title: "About",
-  description:
-    "Full Stack & DevOps Engineer in Pune with nearly five years across FinTech, AdTech, mobility, HealthTech and AIOps platforms.",
+  description: `Full Stack & DevOps Engineer in Pune with ${experienceLabel().toLowerCase()} across FinTech, AdTech, mobility, HealthTech and AIOps platforms.`,
   alternates: { canonical: "/about" },
 };
 
@@ -47,7 +47,6 @@ export default function AboutPage() {
       {/* ------------------------------------------------------------- lifecycle */}
       <section className="mt-24">
         <div data-reveal className="flex items-baseline gap-4">
-          <span className="font-mono text-xs text-ember">01</span>
           <h2 className="font-display text-3xl font-semibold">How I work</h2>
         </div>
         <div data-rule className="mt-6 h-px w-full bg-line" />
@@ -60,10 +59,7 @@ export default function AboutPage() {
               style={{ "--reveal-delay": `${i * 70}ms` } as React.CSSProperties}
               className="grid gap-2 py-6 sm:grid-cols-[10rem_1fr] sm:gap-8"
             >
-              <div className="flex items-baseline gap-3">
-                <span className="font-mono text-xs text-ember">0{i + 1}</span>
-                <h3 className="font-display text-xl font-semibold">{phase.title}</h3>
-              </div>
+              <h3 className="font-display text-xl font-semibold">{phase.title}</h3>
               <p className="text-[0.9375rem] leading-relaxed text-muted">{phase.body}</p>
             </li>
           ))}
@@ -73,7 +69,6 @@ export default function AboutPage() {
       {/* -------------------------------------------------------------- timeline */}
       <section className="mt-24">
         <div data-reveal className="flex items-baseline gap-4">
-          <span className="font-mono text-xs text-ember">02</span>
           <h2 className="font-display text-3xl font-semibold">Experience</h2>
         </div>
         <div data-rule className="mt-6 h-px w-full bg-line" />
@@ -102,7 +97,33 @@ export default function AboutPage() {
                 ))}
               </ul>
 
-              <ul className="mt-5 flex flex-wrap gap-1.5">
+              {/* The full engagement detail — same source as the résumé, so
+                  every point listed there is listed here too. Roles match by
+                  index: both lists are newest-first. */}
+              {resume.roles[i] && resume.roles[i].projects.length > 0 && (
+                <div className="mt-9 space-y-9 border-t border-line pt-7">
+                  {resume.roles[i].projects.map((detail) => (
+                    <div key={detail.heading}>
+                      <h4 className="font-display text-lg font-semibold text-text/90">
+                        {detail.heading}
+                      </h4>
+                      <ul className="mt-4 space-y-2.5">
+                        {detail.bullets.map((bullet) => (
+                          <li
+                            key={bullet}
+                            className="flex gap-3 text-[0.9375rem] leading-relaxed text-muted"
+                          >
+                            <span className="mt-2.5 h-px w-3 shrink-0 bg-line-bright" />
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <ul className="mt-7 flex flex-wrap gap-1.5">
                 {role.projects.map((slug) => {
                   const project = projects.find((p) => p.slug === slug);
                   if (!project) return null;
@@ -126,7 +147,6 @@ export default function AboutPage() {
       {/* ------------------------------------------------------------- education */}
       <section className="mt-24">
         <div data-reveal className="flex items-baseline gap-4">
-          <span className="font-mono text-xs text-ember">03</span>
           <h2 className="font-display text-3xl font-semibold">Education</h2>
         </div>
         <div data-rule className="mt-6 h-px w-full bg-line" />
@@ -167,8 +187,7 @@ export default function AboutPage() {
       <section className="mt-24">
         <div data-reveal className="flex flex-wrap items-baseline justify-between gap-4">
           <div className="flex items-baseline gap-4">
-            <span className="font-mono text-xs text-ember">04</span>
-            <h2 className="font-display text-3xl font-semibold">Toolkit</h2>
+              <h2 className="font-display text-3xl font-semibold">Toolkit</h2>
           </div>
           <Link href="/skills" className="link-wipe font-mono text-sm text-muted hover:text-text">
             All {skillGroups.reduce((n, g) => n + g.items.length, 0)} tools →

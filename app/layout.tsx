@@ -6,6 +6,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ScrollReveal } from "@/components/scroll-reveal";
+import { ConsoleSignature } from "@/components/console-signature";
 import { ResumeProvider } from "@/components/resume-modal";
 import { profile } from "@/content/profile";
 import { site } from "@/content/site";
@@ -69,6 +70,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </ResumeProvider>
 
         <ScrollReveal />
+        <ConsoleSignature />
 
         <script
           type="application/ld+json"

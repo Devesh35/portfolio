@@ -19,7 +19,7 @@
 
 import { periodFor } from "@/content/timeline";
 
-export type ImageKind = "placeholder" | "marketing" | "own";
+export type ImageKind = "placeholder" | "cover" | "marketing" | "own";
 
 /** Which parts of the lifecycle Dev personally owned on a project. */
 export type Phase = "design" | "lead" | "build" | "test" | "ship" | "operate";
@@ -53,6 +53,9 @@ export interface Project {
   highlights: string[];
   stack: string[];
   image: { src: string; kind: ImageKind; alt: string; note?: string };
+  /** What each tool actually did here — rendered on the project page and
+   *  surfaced by the skills explorer. Names use the stack's exact spelling. */
+  skillsUsed?: { name: string; how: string }[];
   featured: boolean;
 }
 
@@ -99,10 +102,27 @@ export const projects: Project[] = [
       "Next.js", "React Native", "TypeScript", "Node.js", "Express", "MongoDB",
       "PostgreSQL", "AWS", "Terraform", "Docker", "GitHub Actions", "Nx", "Jest", "Cypress", "Datadog",
     ],
+    skillsUsed: [
+      { name: "Next.js", how: "The rebuilt investor dashboard, loan listings and auto-invest flows — the legacy web frontend replaced outright." },
+      { name: "React Native", how: "The revamped mobile app, sharing libraries, types and API clients with the web app." },
+      { name: "TypeScript", how: "One type system across web, mobile and the API clients, enforced by the monorepo." },
+      { name: "Nx", how: "Monorepo boundaries that let web and mobile share business logic instead of copying it." },
+      { name: "Node.js", how: "The modular backend services the legacy backend was migrated to." },
+      { name: "Express", how: "REST APIs for investor, loan and auto-invest data." },
+      { name: "MongoDB", how: "The target datastore — schema design plus the live production migration onto it." },
+      { name: "PostgreSQL", how: "The system of record being migrated off, kept serving until cutover." },
+      { name: "Docker", how: "Frontend and backend containerised so every environment runs the same build." },
+      { name: "GitHub Actions", how: "Build, test and deploy pipelines across development, staging and production." },
+      { name: "Terraform", how: "All AWS infrastructure provisioned as code." },
+      { name: "AWS", how: "Hosts the platform across the three environments." },
+      { name: "Jest", how: "Unit coverage raised to roughly 90% on targeted modules." },
+      { name: "Cypress", how: "End-to-end tests that catch investor- and loan-flow regressions before release." },
+      { name: "Datadog", how: "Monitoring and alerting, with the fast rollback path a regulated platform needs." },
+    ],
     image: {
       src: "/projects/estateguru.png",
-      kind: "placeholder",
-      alt: "Estateguru — asset pending",
+      kind: "cover",
+      alt: "Estateguru — stylized cover art",
       note: "The screens Dev built sit behind an investor login. A homepage screenshot would show marketing pages he did not design — prefer a redacted dashboard capture.",
     },
     featured: true,
@@ -131,10 +151,21 @@ export const projects: Project[] = [
       "Delivered as part of a larger programme to fully automate operations for a sustainable-energy solutions company.",
     ],
     stack: ["React", "Node.js", "Express", "MongoDB", "Azure", "Azure AI Foundry", "GPT-5.4", "Terraform", "CI/CD"],
+    skillsUsed: [
+      { name: "React", how: "The analysis and monitoring UI where teams read findings and suggested fixes." },
+      { name: "Node.js", how: "Services that pull logs and metrics from multiple sources through their APIs." },
+      { name: "Express", how: "The platform's own APIs over the ingested data." },
+      { name: "MongoDB", how: "Stores the ingested logs, metrics and generated analyses." },
+      { name: "Azure AI Foundry", how: "Hosts the model behind the log analysis." },
+      { name: "GPT-5.4", how: "Analyses logs across the process lifecycle, producing explanations and suggested fixes." },
+      { name: "Terraform", how: "Azure infrastructure provisioned as code." },
+      { name: "CI/CD", how: "Pipelines for the MERN stack, built as part of the engagement." },
+      { name: "Azure", how: "Where the platform runs." },
+    ],
     image: {
       src: "/projects/nextdecade.png",
-      kind: "placeholder",
-      alt: "NextDecade Observability — asset pending",
+      kind: "cover",
+      alt: "NextDecade Observability — stylized cover art",
       note: "Internal platform, no public URL. Best replacement is an anonymised UI capture.",
     },
     featured: true,
@@ -172,10 +203,22 @@ export const projects: Project[] = [
       "React", "Node.js", "Express", "MongoDB", "Redis", "Apache Kafka",
       "WebSocket", "AWS", "CloudFormation", "Docker",
     ],
+    skillsUsed: [
+      { name: "React", how: "Single-page stores that embed into websites and apps, responsive across placements." },
+      { name: "Node.js", how: "The platform services behind stores, campaigns and analytics." },
+      { name: "Express", how: "REST APIs, including role-based access control." },
+      { name: "MongoDB", how: "Primary datastore for stores, campaigns and interactions." },
+      { name: "Apache Kafka", how: "Ad-campaign analytics as an event stream, decoupled from the transactional path." },
+      { name: "Redis", how: "Caching that keeps aggregation and reporting fast." },
+      { name: "WebSocket", how: "The real-time chat between advertisers and customers." },
+      { name: "Docker", how: "Containerised services across environments." },
+      { name: "CloudFormation", how: "Dev, staging and production defined as code." },
+      { name: "AWS", how: "Hosting — with blue-green cutovers that took deploy downtime from ~8 minutes to 10–15 seconds." },
+    ],
     image: {
       src: "/projects/modcart.png",
-      kind: "placeholder",
-      alt: "Modcart — asset pending",
+      kind: "cover",
+      alt: "Modcart — stylized cover art",
       note: "modcart.io now runs an AI coupon platform — a product that postdates this work. Its homepage is actively misleading as a case-study image.",
     },
     featured: true,
@@ -211,10 +254,21 @@ export const projects: Project[] = [
       "React", "React Native", "Android (Java, Kotlin)", "Node.js", "Express",
       "MongoDB", "AWS", "Razorpay", "Google Maps",
     ],
+    skillsUsed: [
+      { name: "React", how: "Customer-facing web features for booking and availability." },
+      { name: "React Native", how: "Cross-platform pieces shared with the customer app work." },
+      { name: "Android (Java, Kotlin)", how: "The native customer app improvements." },
+      { name: "Node.js", how: "Backend feature work on booking, availability and analytics." },
+      { name: "Express", how: "The APIs behind those features." },
+      { name: "MongoDB", how: "The platform's datastore." },
+      { name: "Razorpay", how: "Payment integration for bookings." },
+      { name: "Google Maps", how: "Live bike location, pickup and booking flows." },
+      { name: "AWS", how: "Where the platform is deployed." },
+    ],
     image: {
       src: "/projects/boongg.png",
-      kind: "placeholder",
-      alt: "Boongg — asset pending",
+      kind: "cover",
+      alt: "Boongg — stylized cover art",
       note: "Improvement engagement — scope the caption so it doesn't imply he built the whole platform.",
     },
     featured: true,
@@ -243,7 +297,15 @@ export const projects: Project[] = [
       "Gave each role scoped access to schedules, teams and activity tracking.",
     ],
     stack: ["Node.js", "Express", "PostgreSQL", "Redis", "Docker", "AWS"],
-    image: { src: "/projects/goapi.png", kind: "placeholder", alt: "GOAPI — asset pending" },
+    skillsUsed: [
+      { name: "Node.js", how: "The entire backend — architected and implemented from the requirements spec." },
+      { name: "Express", how: "REST APIs with role-based access for children, parents, coaches, managers and club owners." },
+      { name: "PostgreSQL", how: "Schema designed from the requirements specification." },
+      { name: "Redis", how: "Caching on the hot read paths." },
+      { name: "Docker", how: "Everything containerised." },
+      { name: "AWS", how: "Deployment target." },
+    ],
+    image: { src: "/projects/goapi.png", kind: "cover", alt: "GOAPI — stylized cover art" },
     featured: false,
   },
 
@@ -265,10 +327,15 @@ export const projects: Project[] = [
       "Applies AI analysis to surface personalised insights and trends rather than raw numbers.",
     ],
     stack: ["React", "Node.js", "MongoDB"],
+    skillsUsed: [
+      { name: "React", how: "The tracker UI surfacing personalised insights and trends." },
+      { name: "Node.js", how: "Activity capture and the analysis layer that turns raw tracking data into insight." },
+      { name: "MongoDB", how: "Stores the captured activity data." },
+    ],
     image: {
       src: "/projects/wellcompanion.png",
-      kind: "placeholder",
-      alt: "WellCompanion — asset pending",
+      kind: "cover",
+      alt: "WellCompanion — stylized cover art",
       note: "Thin on detail — only one résumé mentions it. Worth expanding from memory before this page goes public.",
     },
     featured: false,
@@ -284,19 +351,28 @@ export const projects: Project[] = [
     summary:
       "Financial-analysis tool on PostgreSQL letting analysts explore data through dashboards, with a desktop companion app and automated report generation.",
     contribution:
-      "First production engagement. Delivered web application features with React and Node.js/Express on AWS, designed the REST APIs and PostgreSQL schemas, and built the automated report generation that replaced a manual process.",
+      "First production engagement. Delivered web application features with React and Node.js/Express on AWS, designed the REST APIs and PostgreSQL schemas, built the Electron bridge that connects the web app to its desktop companion, and automated Power BI reporting with Selenium scripts on an AWS Windows instance — replacing a manual process.",
     ownership: ["design", "build"],
     metrics: [],
     highlights: [
       "Built dashboards letting analysts explore financial data directly.",
-      "Built a desktop companion app alongside the web dashboards.",
-      "Built automated report generation that replaced manual reporting.",
+      "Built the desktop companion app and the Electron bridge connecting it to the web app, so the dashboards can drive desktop-side capabilities.",
+      "Automated Power BI report generation with Selenium scripts running on an AWS Windows instance, replacing the manual reporting process.",
       "Delivered production web application features with React, Node.js/Express and AWS.",
       "Designed REST APIs and database schemas on PostgreSQL.",
       "The only engagement in this list built on PostgreSQL rather than MongoDB.",
     ],
-    stack: ["React", "Node.js", "Express", "PostgreSQL", "AWS"],
-    image: { src: "/projects/datachamps.png", kind: "placeholder", alt: "Datachamps — asset pending" },
+    stack: ["React", "Node.js", "Express", "PostgreSQL", "Electron.js", "Selenium", "AWS"],
+    skillsUsed: [
+      { name: "React", how: "Dashboards that let analysts explore financial data directly." },
+      { name: "Node.js", how: "The services behind the dashboards and reports." },
+      { name: "Express", how: "REST APIs, designed as part of the engagement." },
+      { name: "PostgreSQL", how: "The analysis schemas — the one engagement here built on PostgreSQL rather than MongoDB." },
+      { name: "Electron.js", how: "The bridge connecting the web app to its desktop companion, exposing desktop-side capabilities to the dashboards." },
+      { name: "Selenium", how: "Scripted Power BI automation on an AWS Windows instance — the automated reporting that replaced the manual process." },
+      { name: "AWS", how: "Hosts the application, plus the Windows instance the report automation runs on." },
+    ],
+    image: { src: "/projects/datachamps.png", kind: "cover", alt: "Datachamps — stylized cover art" },
     featured: false,
   },
 
@@ -319,10 +395,16 @@ export const projects: Project[] = [
       "Carried as a support engagement while a main client assignment was already running.",
     ],
     stack: ["React", "Node.js", "Express", "MongoDB"],
+    skillsUsed: [
+      { name: "React", how: "Feature work and fixes across the shopper storefront and the retailer side." },
+      { name: "Node.js", how: "Backend fixes and features in the support rotation." },
+      { name: "Express", how: "The marketplace APIs." },
+      { name: "MongoDB", how: "The platform's datastore." },
+    ],
     image: {
       src: "/projects/tradegully.png",
-      kind: "placeholder",
-      alt: "Tradegully — asset pending",
+      kind: "cover",
+      alt: "Tradegully — stylized cover art",
       note: "Thinnest entry on the site. The product description is Dev's; the specifics of what he built still need filling in before this page is worth reading.",
     },
     featured: false,
@@ -346,7 +428,12 @@ export const projects: Project[] = [
       "Short, focused engagement between two longer client assignments.",
     ],
     stack: ["React", "Node.js", "MongoDB"],
-    image: { src: "/projects/bestosys.png", kind: "placeholder", alt: "Bestosys — asset pending" },
+    skillsUsed: [
+      { name: "React", how: "Feature work across records, scheduling, prescriptions and reporting surfaces." },
+      { name: "Node.js", how: "The services behind those surfaces." },
+      { name: "MongoDB", how: "Patient records and scheduling data." },
+    ],
+    image: { src: "/projects/bestosys.png", kind: "cover", alt: "Bestosys — stylized cover art" },
     featured: false,
   },
 
@@ -370,7 +457,12 @@ export const projects: Project[] = [
       "Earliest end-to-end product, built before the Nirmitee.io years.",
     ],
     stack: ["Android", "React", "Node.js"],
-    image: { src: "/projects/dine-in.png", kind: "placeholder", alt: "Dine In — asset pending" },
+    skillsUsed: [
+      { name: "Android", how: "The native customer and manager apps." },
+      { name: "React", how: "The web app for both sides of the table." },
+      { name: "Node.js", how: "The flow keeping booking, ordering and fulfilment in sync between customer and restaurant." },
+    ],
+    image: { src: "/projects/dine-in.png", kind: "cover", alt: "Dine In — stylized cover art" },
     featured: false,
   },
 
@@ -396,10 +488,16 @@ export const projects: Project[] = [
       "Everything runs client-side against simulated state — no backend to keep alive.",
     ],
     stack: ["Next.js", "TypeScript", "Canvas", "Simulation engines"],
+    skillsUsed: [
+      { name: "Next.js", how: "The app shell each simulation lives in." },
+      { name: "TypeScript", how: "The system models — a commit graph you can actually operate on." },
+      { name: "Canvas", how: "Renders the graphs and animations from live model state." },
+      { name: "Simulation engines", how: "Real merge, rebase and cherry-pick semantics — not a scripted replay." },
+    ],
     image: {
       src: "/projects/devtools.png",
-      kind: "placeholder",
-      alt: "DevTools — asset pending",
+      kind: "cover",
+      alt: "DevTools — stylized cover art",
       note: "Dev's own product — no permission concerns. Highest-priority image to replace.",
     },
     featured: true,

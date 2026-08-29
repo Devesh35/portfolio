@@ -38,6 +38,7 @@ export const skillGroups: SkillGroup[] = [
       { name: "Tailwind CSS" },
       { name: "Responsive & cross-platform UI" },
       { name: "Android (Java, Kotlin)", aliases: ["Android"] },
+      { name: "Electron.js", aliases: ["Electron"] },
       { name: "Canvas" },
       { name: "Simulation engines" },
     ],
@@ -114,6 +115,7 @@ export const skillGroups: SkillGroup[] = [
     items: [
       { name: "Jest" },
       { name: "Cypress" },
+      { name: "Selenium" },
       { name: "Unit testing" },
       { name: "Integration testing" },
       { name: "Smoke testing" },

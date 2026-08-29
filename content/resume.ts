@@ -1,5 +1,6 @@
 import { periodFor } from "@/content/timeline";
 import { profile } from "@/content/profile";
+import { experienceLabel } from "@/lib/experience";
 import { site } from "@/content/site";
 
 /**
@@ -39,18 +40,18 @@ export interface ResumeRole {
 export const resume = {
   header: {
     name: profile.name,
-    line: `${profile.location} | ${profile.title} | Nearly 5 Years Experience`,
+    line: `${profile.location} | ${profile.title} | ${experienceLabel()} Experience`,
     stack: "Next.js | Node.js | MongoDB | CI/CD | AWS",
     contact: [
       { label: "Email", value: profile.email, href: `mailto:${profile.email}` },
-      { label: "Phone", value: "+91-7875177354" },
+      { label: "Phone", value: profile.phone },
       { label: "LinkedIn", value: "linkedin.com/in/devesh-singh-769249129", href: profile.links.linkedin },
       { label: "Portfolio", value: site.url.replace(/^https?:\/\//, ""), href: site.url },
     ],
   },
 
   summary:
-    "Full Stack & DevOps Engineer with nearly 5 years building web and mobile products end-to-end (Next.js / React Native, Node.js / Express, MongoDB) and the Docker, Terraform, and CI/CD pipelines that ship them on AWS and Azure. Revamped the web and mobile platform of a European property-lending marketplace (€951M+ in loans) and raised automated test coverage to ~90% on targeted modules; senior developer on an AI-assisted observability platform.",
+    `Full Stack & DevOps Engineer with ${experienceLabel().toLowerCase()} building web and mobile products end-to-end (Next.js / React Native, Node.js / Express, MongoDB) and the Docker, Terraform, and CI/CD pipelines that ship them on AWS and Azure. Revamped the web and mobile platform of a European property-lending marketplace (€951M+ in loans) and raised automated test coverage to ~90% on targeted modules; senior developer on an AI-assisted observability platform.`,
 
   soloProject: {
     url: profile.links.devtools,
@@ -80,7 +81,7 @@ export const resume = {
           heading: "Estateguru — Full Stack Web & Mobile Revamp (FinTech / Real Estate)",
           url: "https://estateguru.co",
           context:
-            "European property-lending platform with 159K+ investors and €951M+ in loans facilitated across 8 countries. Started in the Software Engineer role, continued as SDE 2.",
+            "European property-lending platform with 160,000+ investors and €951M+ in loans facilitated across 8 countries. Started in the Software Engineer role, continued as SDE 2.",
           stack:
             "Next.js, TypeScript, React Native, Node.js, Express, MongoDB, AWS, Terraform, Docker, GitHub Actions, Nx Monorepo, Jest, Cypress, Datadog",
           bullets: [

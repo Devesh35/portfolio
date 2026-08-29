@@ -37,7 +37,17 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
   const next = projects[(index + 1) % projects.length];
 
   return (
-    <article className="mx-auto max-w-5xl px-5 pb-28 pt-36 sm:px-8 sm:pt-44">
+    <article className="relative isolate mx-auto max-w-5xl px-5 pb-28 pt-36 sm:px-8 sm:pt-44">
+      {/* The project's own line art, ghosted behind the header. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-4 right-0 -z-10 hidden h-[540px] w-[720px] bg-contain bg-right-top bg-no-repeat opacity-[0.17] lg:block"
+        style={{
+          backgroundImage: `url(/projects/art/${project.slug}.png)`,
+          maskImage: "linear-gradient(to bottom, black 45%, transparent 95%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black 45%, transparent 95%)",
+        }}
+      />
       <Link href="/work" className="link-wipe font-mono text-xs text-muted hover:text-text">
         ← All work
       </Link>
@@ -78,7 +88,7 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
         </div>
       </header>
 
-      {project.image.kind === "placeholder" ? (
+      {project.image.kind === "placeholder" || project.image.kind === "cover" ? (
         /* No real screenshot yet. Showing the generated card here would just
            repeat the heading above it, so this carries the link instead. */
         <div
@@ -132,6 +142,25 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
             <h2 className="label">What I built</h2>
             <p className="prose-body mt-4 text-lg text-text/90">{project.contribution}</p>
           </section>
+
+          {project.skillsUsed && project.skillsUsed.length > 0 && (
+            <section data-reveal className="mt-14">
+              <h2 className="label">The stack, and what each piece did</h2>
+              <dl className="mt-6 divide-y divide-line border-y border-line">
+                {project.skillsUsed.map((item) => (
+                  <div
+                    key={item.name}
+                    className="group/skill grid gap-1.5 py-4 sm:grid-cols-[11rem_1fr] sm:gap-6"
+                  >
+                    <dt className="font-mono text-sm text-steel transition-colors duration-300 group-hover/skill:text-ember">
+                      {item.name}
+                    </dt>
+                    <dd className="text-[0.9375rem] leading-relaxed text-muted">{item.how}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          )}
 
           {project.highlights.length > 0 && (
             <section data-reveal className="mt-14">

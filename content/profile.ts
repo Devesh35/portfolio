@@ -9,13 +9,8 @@ import { projects } from "@/content/projects";
  */
 
 export const CAREER_START = new Date("2021-11-01");
-
-export function yearsOfExperience(now: Date = new Date()): number {
-  const months =
-    (now.getFullYear() - CAREER_START.getFullYear()) * 12 +
-    (now.getMonth() - CAREER_START.getMonth());
-  return Math.floor((months / 12) * 10) / 10;
-}
+// The computations live in lib/experience.ts (yearsSinceCareerStart,
+// experienceLabel) — one clock, read from everywhere.
 
 /** Distinct domains worked in, counted rather than claimed. */
 const domainCount = new Set(projects.map((p) => p.domain.split("·")[0].trim())).size;

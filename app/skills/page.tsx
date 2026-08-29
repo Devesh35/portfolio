@@ -1,19 +1,52 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { skillGroups, evidenceFor } from "@/content/skills";
-import { getProject, projects } from "@/content/projects";
+import { SkillsExplorer, type ExplorerGroup } from "@/components/skills-explorer";
+import { skillGroups } from "@/content/skills";
+import { projects } from "@/content/projects";
 import { profile } from "@/content/profile";
 import { yearsSinceCareerStart } from "@/lib/experience";
 
 export const metadata: Metadata = {
   title: "Skills",
   description:
-    "Everything Devesh Singh works with across frontend, backend, data, cloud, infrastructure as code, CI/CD, testing and integrations — each linked to the projects that used it.",
+    "Every tool Devesh Singh works with, linked to the projects that used it and what it did there — a skills list with receipts.",
   alternates: { canonical: "/skills" },
 };
 
+const normalise = (value: string) => value.trim().toLowerCase();
+
+/**
+ * Resolve each skill to its evidence at build time: the projects whose stack
+ * lists it, and — when the project records it — what the tool actually did
+ * there (Project.skillsUsed). The client explorer receives plain data.
+ */
+function buildExplorerGroups(): ExplorerGroup[] {
+  return skillGroups.map((group) => ({
+    id: group.id,
+    label: group.label,
+    note: group.note,
+    skills: group.items.map((skill) => {
+      const names = [skill.name, ...(skill.aliases ?? [])].map(normalise);
+      return {
+        name: skill.name,
+        note: skill.note ?? null,
+        evidence: projects
+          .filter((project) => project.stack.some((tech) => names.includes(normalise(tech))))
+          .map((project) => ({
+            slug: project.slug,
+            name: project.name,
+            how:
+              project.skillsUsed?.find((used) => names.includes(normalise(used.name)))?.how ??
+              null,
+          })),
+      };
+    }),
+  }));
+}
+
 export default function SkillsPage() {
+  const groups = buildExplorerGroups();
   const total = skillGroups.reduce((sum, group) => sum + group.items.length, 0);
   const years = yearsSinceCareerStart();
 
@@ -31,72 +64,14 @@ export default function SkillsPage() {
           className="animate-rise prose-body mt-6 text-lg"
           style={{ "--rise-delay": "180ms" } as React.CSSProperties}
         >
-          Everything below has shipped something. Where a tool was used on a project on
-          this site, the project is named next to it — a skills list you can check is worth
-          more than one you have to take on faith.
-        </p>
-        <p
-          className="animate-rise prose-body mt-4 text-lg"
-          style={{ "--rise-delay": "220ms" } as React.CSSProperties}
-        >
-          {years} years of it, weighted toward the seam between the application and the
-          infrastructure it runs on.
+          Everything below has shipped something. Select any tool and it shows its receipts —
+          which projects used it, and what it did there. {years} years of this, weighted toward
+          the seam between the application and the infrastructure it runs on.
         </p>
       </header>
 
-      <div className="mt-20 space-y-20">
-        {skillGroups.map((group, groupIndex) => (
-          <section key={group.id}>
-            <div data-reveal className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-              <span className="font-mono text-xs text-ember">
-                {String(groupIndex + 1).padStart(2, "0")}
-              </span>
-              <h2 className="font-display text-2xl font-semibold sm:text-3xl">{group.label}</h2>
-              <p className="font-mono text-xs text-dim">{group.note}</p>
-            </div>
-            <div data-rule className="mt-5 h-px w-full bg-line" />
-
-            <ul className="mt-8 divide-y divide-line border-y border-line">
-              {group.items.map((skill, i) => {
-                const evidence = evidenceFor(skill);
-
-                return (
-                  <li
-                    key={skill.name}
-                    data-reveal
-                    style={{ "--reveal-delay": `${Math.min(i, 6) * 45}ms` } as React.CSSProperties}
-                    className="grid gap-2 py-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] sm:items-baseline sm:gap-8"
-                  >
-                    <span className="font-display text-lg font-medium">{skill.name}</span>
-
-                    {evidence.length > 0 ? (
-                      <ul className="flex flex-wrap gap-x-2 gap-y-1.5">
-                        {evidence.map((slug) => {
-                          const project = getProject(slug);
-                          if (!project) return null;
-                          return (
-                            <li key={slug}>
-                              <Link
-                                href={`/work/${slug}`}
-                                className="border border-line px-2 py-0.5 font-mono text-[0.6875rem] text-dim transition-colors duration-300 hover:border-ember hover:text-ember"
-                              >
-                                {project.name}
-                              </Link>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    ) : (
-                      <span className="font-mono text-[0.6875rem] text-dim">
-                        {skill.note ?? "Used across delivery, not tied to one project"}
-                      </span>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-        ))}
+      <div className="mt-16" data-reveal>
+        <SkillsExplorer groups={groups} />
       </div>
 
       {/* ------------------------------------------------------- non-technical */}

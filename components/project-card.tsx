@@ -5,6 +5,7 @@ import { PhaseTags } from "@/components/phase-tags";
 
 const IMAGE_CAPTION: Record<Project["image"]["kind"], string | null> = {
   placeholder: null,
+  cover: null,
   marketing: "Client's public site",
   own: null,
 };
@@ -42,9 +43,6 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
             <h3 className="font-display text-2xl font-semibold transition-colors duration-300 group-hover/card:text-ember">
               {project.name}
             </h3>
-            <span className="shrink-0 font-mono text-xs text-dim">
-              {String(index + 1).padStart(2, "0")}
-            </span>
           </div>
 
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
