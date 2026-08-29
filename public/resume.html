@@ -108,15 +108,23 @@
       </div>
       <div class="skill-row">
         <span class="skill-label">Backend:</span>
-        <span class="skill-items">Node.js, Express.js, RESTful API Design, WebSocket, Apache Kafka</span>
+        <span class="skill-items">Node.js, Express.js, RESTful API Design, WebSocket, Apache Kafka, SSO / OAuth 2.0</span>
       </div>
       <div class="skill-row">
         <span class="skill-label">Databases &amp; Caching:</span>
         <span class="skill-items">MongoDB, PostgreSQL, Redis</span>
       </div>
       <div class="skill-row">
-        <span class="skill-label">Cloud &amp; Infrastructure:</span>
-        <span class="skill-items">AWS (EC2, S3, RDS, IAM, CloudWatch, Lambda), Azure, Docker, Terraform, CloudFormation, Nx Monorepo</span>
+        <span class="skill-label">AWS:</span>
+        <span class="skill-items">EC2, ECS, Elastic Beanstalk, Lambda, EC2 Auto Scaling, S3, EBS, RDS, DynamoDB, Route 53, Elastic Load Balancing, CloudFront, SNS, SQS, IAM, CloudWatch</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Azure:</span>
+        <span class="skill-items">App Service, Blob Storage, Cosmos DB, AI Foundry, Entra PIM (Privileged Identity Management), Azure DevOps, Azure Repos</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Infrastructure:</span>
+        <span class="skill-items">Docker, Docker Compose, Terraform, CloudFormation, Nx Monorepo</span>
       </div>
       <div class="skill-row">
         <span class="skill-label">CI/CD &amp; Monitoring:</span>
@@ -147,8 +155,8 @@
           <span class="date">Jun 2023 – Jun 2025 · Nov 2025 – Present</span>
         </div>
         <p class="context"><b>Context:</b> European property-lending platform with 160,000+ investors and €951M+ in loans facilitated across 8 countries. Started in the Software Engineer role, continued as SDE 2.</p>
-        <p class="stack"><b>Stack:</b> Next.js, TypeScript, React Native, Node.js, Express, MongoDB, AWS, Terraform, Docker, GitHub Actions, Nx Monorepo, Jest, Cypress, Datadog</p>
-        <ul><li>Revamped the legacy frontend to Next.js and TypeScript inside an Nx monorepo, rebuilding the investor dashboard, loan listings, and auto-invest flows across the web app and React Native mobile app with shared libraries, types, API clients, and business logic.</li><li>Migrated the backend to Node.js/Express modular services on MongoDB, designing the schemas and REST APIs for investor, loan, and auto-invest data and migrating production data from PostgreSQL.</li><li>Delivered role-based access control end to end: requirements, data model, APIs, UI, deployment, and monitoring.</li><li>Containerised the application with Docker, built CI/CD pipelines in GitHub Actions, provisioned AWS infrastructure with Terraform for development, staging, and production, and set up Datadog monitoring and alerting with fast rollback for a regulated FinTech platform.</li><li>Increased automated test coverage to ~90% for targeted application modules using Jest and Cypress.</li></ul>
+        <p class="stack"><b>Stack:</b> Next.js, TypeScript, React Native, Node.js, Express, MongoDB, AWS, Terraform, Docker, GitHub Actions, Nx Monorepo, Swagger, Lokalise, SSO / OAuth 2.0, Jest, Cypress, Datadog</p>
+        <ul><li>Revamped the legacy frontend to Next.js and TypeScript inside an Nx monorepo, rebuilding the investor dashboard, loan listings, and auto-invest flows across the web app and React Native mobile app with shared libraries, types, API clients, and business logic.</li><li>Migrated the backend to Node.js/Express modular services on MongoDB, designing the schemas and REST APIs for investor, loan, and auto-invest data.</li><li>Delivered role-based access control and social login (SSO / OAuth 2.0) end to end: requirements, data model, APIs, UI, deployment, and monitoring.</li><li>Documented the REST APIs in Swagger so web, mobile, and backend built against one contract, and managed translation keys in the existing Lokalise setup that ships the product in 6 languages.</li><li>Containerised the application with Docker, built CI/CD pipelines in GitHub Actions, provisioned AWS infrastructure with Terraform for development, staging, and production, and set up Datadog monitoring and alerting with fast rollback for a regulated FinTech platform.</li><li>Increased automated test coverage to ~90% for targeted application modules using Jest and Cypress.</li></ul>
       </div>
       <div class="proj">
         <div class="row">
@@ -156,8 +164,8 @@
           <span class="date">Jun 2026 – Jul 2026</span>
         </div>
         <p class="context"><b>Context:</b> Part of a larger programme to fully automate operations for a sustainable-energy solutions company.</p>
-        <p class="stack"><b>Stack:</b> React, Node.js, Express, MongoDB, CI/CD, Terraform, Azure, Azure AI Foundry (GPT-5.4)</p>
-        <ul><li>Senior developer on a 5-person team (3 developers, 1 QA): owned system design, code review, and delivery.</li><li>Built an AI-assisted log analysis and monitoring platform that surfaces issues and suggested fixes from application logs, integrating logs and metrics from multiple sources via their APIs.</li><li>Used GPT-5.4 through Azure AI Foundry to analyse logs across the stages of the process lifecycle, producing explanations and suggested fixes so teams could understand and resolve issues faster.</li><li>Provisioned Azure infrastructure with Terraform and set up CI/CD pipelines for the MERN stack.</li></ul>
+        <p class="stack"><b>Stack:</b> React, Node.js, Express, MongoDB, CI/CD, Terraform, Azure App Service, Cosmos DB, Blob Storage, Azure AI Foundry (GPT-5.4), SSO / OAuth 2.0, Entra PIM, Azure Repos, Azure DevOps</p>
+        <ul><li>Senior developer on a 5-person team (3 developers, 1 QA): owned system design, code review, and delivery.</li><li>Built an AI-assisted log analysis and monitoring platform that surfaces issues and suggested fixes from application logs, integrating logs and metrics from multiple sources via their APIs.</li><li>Used GPT-5.4 through Azure AI Foundry to analyse logs across the stages of the process lifecycle, producing explanations and suggested fixes so teams could understand and resolve issues faster.</li><li>Provisioned Azure infrastructure with Terraform — App Service for the platform tier, Cosmos DB for logs and analyses, Blob Storage for raw payloads — and set up CI/CD pipelines for the MERN stack out of Azure Repos and Azure DevOps.</li><li>Integrated single sign-on for platform login, and governed privileged access to the subscription with Entra PIM so elevated roles are requested and time-bound rather than standing.</li></ul>
       </div>
     </div>
     <div class="role">
@@ -174,13 +182,13 @@
           <span class="date">Jun 2022 – May 2023</span>
         </div>
         <p class="context"><b>Context:</b> One-stop platform for ads and single-page stores that embed into websites and mobile apps; the platform has since moved to a coupon-based model.</p>
-        <p class="stack"><b>Stack:</b> React.js, Node.js, Express, MongoDB, Redis, Apache Kafka, WebSocket, AWS, CloudFormation</p>
-        <ul><li>Designed the architecture and database schemas for user-interactive single-page stores, and built them with responsive layouts across mobile, tablet, and desktop so advertisers could reuse one creative across placements.</li><li>Built role-based access control, payment integration, and analytics on ad interactions and campaign performance.</li><li>Introduced Kafka event processing for ad-campaign analytics, decoupling ingestion from transactional workloads, with Redis caching for fast aggregation and reporting.</li><li>Built a WebSocket-based real-time chat with Meta integration (WhatsApp, Facebook, Instagram) so advertisers could reach customers across channels from one inbox.</li><li>Defined dev, staging, and production environments as code with CloudFormation on AWS and added blue-green deployment, cutting deployment downtime from ~8 minutes to 10–15 seconds.</li></ul>
+        <p class="stack"><b>Stack:</b> React.js, Node.js, Express, MongoDB, Redis, Apache Kafka, WebSocket, Razorpay, SSO / OAuth 2.0, AWS, CloudFormation</p>
+        <ul><li>Designed the architecture and database schemas for user-interactive single-page stores, built them with responsive layouts across mobile, tablet, and desktop so advertisers could reuse one creative across placements, and cut initial load from ~4s to under 1s.</li><li>Built role-based access control, social login (SSO / OAuth 2.0), Razorpay integration for platform and service payments, and the analytics dashboard on ad interactions and campaign performance.</li><li>Introduced Kafka event processing for ad-campaign analytics, decoupling ingestion from transactional workloads, with Redis caching for fast aggregation and reporting.</li><li>Built a WebSocket-based real-time chat with Meta integration (WhatsApp, Facebook, Instagram) so advertisers could reach customers across channels from one inbox.</li><li>Defined dev, staging, and production environments as code with CloudFormation on AWS and added blue-green deployment, cutting deployment downtime from ~8 minutes to 10–15 seconds.</li></ul>
       </div>
     </div>
 
   <h2>Additional Projects</h2>
-  <ul class="tight"><li><b>Boongg</b> (Mobility) — <a href="https://boongg.com">boongg.com</a> — Bike-rental platform (1M+ rides, 200K+ customers, 1,500+ bikes). Improved booking, availability, and analytics features for customers and admins; integrated Razorpay payments and Google Maps for live bike location, pickup, and booking flows. React.js web, Android (Java/Kotlin), Node.js/Express on MongoDB, deployed on AWS. <i>Aug 2022 – Oct 2022</i></li><li><b>Bestosys</b> (HealthTech) — Dental practice-management software letting doctors manage patient records, appointment scheduling, prescriptions, reports, and patient communication in one platform. <i>Feb 2022 – Mar 2022</i></li><li><b>Datachamps</b> (FinTech) — Financial-analysis tool on PostgreSQL that lets analysts explore data through dashboards, with a desktop companion app and automated report generation that replaced manual reporting. <i>Dec 2021 – May 2022</i></li><li><b>DevTools</b> (Personal) — <a href="https://devtools.simarium.in">devtools.simarium.in</a> — Built an interactive developer-tools project featuring a Git visualizer that simulates commit graphs and operations such as merge, rebase, and cherry-pick. <i>Apr 2026 – Present</i></li></ul>
+  <ul class="tight"><li><b>Boongg</b> (Mobility) — <a href="https://boongg.com">boongg.com</a> — Bike-rental platform (1M+ rides, 200K+ customers, 1,500+ bikes). Joined a live product: improved booking for customers and admins, cut booking query time from ~6s to under 2s, and integrated Google Maps to show live user data on pickup and booking. React.js web, Android (Java/Kotlin), Node.js/Express on MongoDB, on AWS. <i>Aug 2022 – Oct 2022</i></li><li><b>Bestosys</b> (HealthTech) — Dental practice-management software letting doctors manage patient records, appointment scheduling, prescriptions, reports, and patient communication in one platform, with Firebase real-time sync between the front desk and the doctor’s view. <i>Feb 2022 – Mar 2022</i></li><li><b>Datachamps</b> (FinTech) — Financial-analysis tool on PostgreSQL that lets analysts explore data through dashboards, with a desktop companion app and automated report generation that replaced manual reporting. <i>Dec 2021 – May 2022</i></li><li><b>DevTools</b> (Personal) — <a href="https://devtools.simarium.in">devtools.simarium.in</a> — Built an interactive developer-tools project featuring a Git visualizer that simulates commit graphs and operations such as merge, rebase, and cherry-pick. <i>Apr 2026 – Present</i></li></ul>
 
   <h2>Education</h2>
   <div class="row">

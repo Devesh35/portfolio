@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { SkillIcon } from "@/components/skill-icon";
+
 export interface ExplorerEvidence {
   slug: string;
   name: string;
@@ -25,7 +27,7 @@ export interface ExplorerGroup {
 
 /**
  * The skills page's working surface. Every tool is a button: selecting it
- * opens the receipts — which projects used it and what it did there. Search
+ * shows which projects used it and what it did there. Search
  * narrows the wall of names to the one a reader came looking for.
  *
  * Plain useState; the data arrives fully resolved from the server component.
@@ -64,7 +66,7 @@ export function SkillsExplorer({ groups }: { groups: ExplorerGroup[] }) {
           />
         </label>
         <p className="font-mono text-xs text-dim" aria-live="polite">
-          {shown} tools{query && " matching"} · select one for the receipts
+          {shown} tools{query && " matching"} · click one to see where it was used
         </p>
       </div>
 
@@ -78,7 +80,7 @@ export function SkillsExplorer({ groups }: { groups: ExplorerGroup[] }) {
                 <h2 className="font-display text-2xl font-semibold sm:text-3xl">{group.label}</h2>
                 <p className="font-mono text-xs text-dim">{group.note}</p>
               </div>
-              <div className="mt-5 h-px w-full bg-line" />
+              <div className="rule-accent mt-5 w-full" />
 
               <ul className="mt-6 flex flex-wrap gap-2">
                 {group.skills.map((skill) => {
@@ -89,12 +91,9 @@ export function SkillsExplorer({ groups }: { groups: ExplorerGroup[] }) {
                         type="button"
                         onClick={() => setActive(isActive ? null : skill.name)}
                         aria-expanded={isActive}
-                        className={`border px-3 py-1.5 font-mono text-[0.8125rem] transition-colors duration-200 ${
-                          isActive
-                            ? "border-ember bg-ember/10 text-ember"
-                            : "border-line text-muted hover:border-line-bright hover:text-text"
-                        }`}
+                        className="chip px-3 py-1.5 font-mono text-[0.8125rem]"
                       >
+                        <SkillIcon name={skill.name} />
                         {skill.name}
                         {skill.evidence.length > 0 && (
                           <span className={isActive ? "text-ember/70" : "text-dim"}>
@@ -123,14 +122,14 @@ export function SkillsExplorer({ groups }: { groups: ExplorerGroup[] }) {
                             </Link>
                           </dt>
                           <dd className="text-sm leading-relaxed text-muted">
-                            {item.how ?? "In the stack on this project."}
+                            {item.how ?? "Used on this project."}
                           </dd>
                         </div>
                       ))}
                     </dl>
                   ) : (
                     <p className="font-mono text-xs text-dim">
-                      {activeSkill.note ?? "Used across delivery, not tied to one project on this site."}
+                      {activeSkill.note ?? "Used across projects, not tied to a single one here."}
                     </p>
                   )}
                 </div>
@@ -141,7 +140,7 @@ export function SkillsExplorer({ groups }: { groups: ExplorerGroup[] }) {
 
         {shown === 0 && (
           <p className="font-mono text-sm text-dim">
-            Nothing matches “{query}” — but the contact page takes requests.
+            Nothing matches “{query}”.
           </p>
         )}
       </div>

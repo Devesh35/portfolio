@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/content/projects";
 import { PhaseTags } from "@/components/phase-tags";
+import { OriginTag } from "@/components/origin-tag";
 
 const IMAGE_CAPTION: Record<Project["image"]["kind"], string | null> = {
   placeholder: null,
@@ -28,7 +29,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 560px"
             className="object-cover object-top"
           />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void/70 via-transparent to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void/45 via-transparent to-transparent" />
           {caption && (
             <span className="absolute bottom-3 left-3 bg-void/80 px-2 py-1 font-mono text-[0.625rem] uppercase tracking-widest text-muted backdrop-blur-sm">
               {caption}
@@ -47,6 +48,9 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
 
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
             <p className="font-mono text-xs text-dim">{project.domain}</p>
+            <OriginTag origin={project.origin} />
+          </div>
+          <div className="mt-2">
             <PhaseTags phases={project.ownership} />
           </div>
           <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted">{project.summary}</p>

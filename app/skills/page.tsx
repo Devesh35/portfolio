@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { SkillsExplorer, type ExplorerGroup } from "@/components/skills-explorer";
-import { skillGroups } from "@/content/skills";
+import { evidenceFor, skillGroups } from "@/content/skills";
 import { projects } from "@/content/projects";
 import { profile } from "@/content/profile";
 import { yearsSinceCareerStart } from "@/lib/experience";
@@ -10,7 +10,7 @@ import { yearsSinceCareerStart } from "@/lib/experience";
 export const metadata: Metadata = {
   title: "Skills",
   description:
-    "Every tool Devesh Singh works with, linked to the projects that used it and what it did there — a skills list with receipts.",
+    "Every tool Devesh Singh works with, linked to the projects that used it and what it did there.",
   alternates: { canonical: "/skills" },
 };
 
@@ -31,8 +31,9 @@ function buildExplorerGroups(): ExplorerGroup[] {
       return {
         name: skill.name,
         note: skill.note ?? null,
-        evidence: projects
-          .filter((project) => project.stack.some((tech) => names.includes(normalise(tech))))
+        evidence: evidenceFor(skill)
+          .map((slug) => projects.find((project) => project.slug === slug))
+          .filter((project) => project !== undefined)
           .map((project) => ({
             slug: project.slug,
             name: project.name,
@@ -64,9 +65,9 @@ export default function SkillsPage() {
           className="animate-rise prose-body mt-6 text-lg"
           style={{ "--rise-delay": "180ms" } as React.CSSProperties}
         >
-          Everything below has shipped something. Select any tool and it shows its receipts —
-          which projects used it, and what it did there. {years} years of this, weighted toward
-          the seam between the application and the infrastructure it runs on.
+          Everything listed here has been used on a real project. Click a tool to see
+          which projects used it and what it did there. {years} years of work, split
+          between application code and the infrastructure it runs on.
         </p>
       </header>
 
@@ -82,7 +83,7 @@ export default function SkillsPage() {
             {profile.competencies.map((item) => (
               <li
                 key={item}
-                className="border border-line px-2.5 py-1.5 font-mono text-[0.6875rem] text-muted"
+                className="chip px-2.5 py-1.5 font-mono text-[0.6875rem]"
               >
                 {item}
               </li>

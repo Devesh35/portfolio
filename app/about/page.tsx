@@ -37,10 +37,10 @@ export default function AboutPage() {
           className="animate-rise prose-body mt-5 text-lg"
           style={{ "--rise-delay": "240ms" } as React.CSSProperties}
         >
-          {years} years and {projects.length} projects in, the pattern is consistent: I take
-          work from requirements and system design through to a deployment I stay
-          responsible for. The infrastructure half isn&apos;t a side interest — it&apos;s the
-          half that decides whether the other half ever reaches anyone.
+          {years} years and {projects.length} projects in, the way I work has stayed the
+          same: I take a project from requirements and system design through to deployment,
+          and stay responsible for it in production. The infrastructure side is not an
+          add-on for me — it is half of the job.
         </p>
       </header>
 
@@ -49,7 +49,7 @@ export default function AboutPage() {
         <div data-reveal className="flex items-baseline gap-4">
           <h2 className="font-display text-3xl font-semibold">How I work</h2>
         </div>
-        <div data-rule className="mt-6 h-px w-full bg-line" />
+        <div data-rule className="rule-accent mt-6 w-full" />
 
         <ol className="mt-10 divide-y divide-line border-y border-line">
           {lifecycle.map((phase, i) => (
@@ -71,7 +71,7 @@ export default function AboutPage() {
         <div data-reveal className="flex items-baseline gap-4">
           <h2 className="font-display text-3xl font-semibold">Experience</h2>
         </div>
-        <div data-rule className="mt-6 h-px w-full bg-line" />
+        <div data-rule className="rule-accent mt-6 w-full" />
 
         <ol className="mt-12 space-y-14">
           {roles.map((role, i) => (
@@ -149,7 +149,7 @@ export default function AboutPage() {
         <div data-reveal className="flex items-baseline gap-4">
           <h2 className="font-display text-3xl font-semibold">Education</h2>
         </div>
-        <div data-rule className="mt-6 h-px w-full bg-line" />
+        <div data-rule className="rule-accent mt-6 w-full" />
 
         <div data-reveal className="panel mt-10 p-7 sm:p-9">
           <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
@@ -193,7 +193,7 @@ export default function AboutPage() {
             All {skillGroups.reduce((n, g) => n + g.items.length, 0)} tools →
           </Link>
         </div>
-        <div data-rule className="mt-6 h-px w-full bg-line" />
+        <div data-rule className="rule-accent mt-6 w-full" />
 
         <div className="mt-10 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-3">
           {skillGroups.map((group, i) => (

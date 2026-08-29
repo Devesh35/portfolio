@@ -7,21 +7,22 @@
    ========================================================================== */
 
 @theme {
-  --color-void:        #08090b;
-  --color-ground:      #0b0d10;
-  --color-surface:     #101318;
-  --color-raised:      #161a20;
-  --color-line:        #222831;
-  --color-line-bright: #333b46;
+  --color-void:        #07080a;
+  --color-ground:      #0b0d11;
+  --color-surface:     #141821;
+  --color-raised:      #1c2129;
+  --color-line:        #2c3440;
+  --color-line-bright: #4a5563;
 
-  --color-text:        #e9ecf1;
-  --color-muted:       #98a1ac;
-  --color-dim:         #6b7480;
+  --color-text:        #f3f6fa;
+  --color-muted:       #b6c0cd;
+  --color-dim:         #8b96a5;
 
-  --color-ember:       #e8734a;
-  --color-ember-soft:  #f0a488;
-  --color-ember-dim:   #7b3b23;
-  --color-steel:       #79a6d2;
+  --color-ember:       #ff7a45;
+  --color-ember-soft:  #ffb392;
+  --color-ember-dim:   #9c4a26;
+  --color-steel:       #7fbcff;
+  --color-mint:        #4fd1a5;
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
@@ -39,7 +40,11 @@ html {
 }
 
 body {
-  background: var(--color-ground);
+  background:
+    radial-gradient(1100px 620px at 12% -8%, rgb(255 122 69 / 0.10), transparent 62%),
+    radial-gradient(900px 540px at 92% 4%, rgb(127 188 255 / 0.055), transparent 60%),
+    var(--color-ground);
+  background-attachment: fixed;
   color: var(--color-text);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -68,7 +73,7 @@ body {
   font-size: 0.6875rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-dim);
+  color: color-mix(in oklab, var(--color-ember) 62%, var(--color-dim));
 }
 
 .tabular { font-variant-numeric: tabular-nums; }
@@ -83,14 +88,30 @@ body {
 
 .hairline { border-color: var(--color-line); }
 
+/* A section rule that starts lit and fades out, instead of a flat grey line. */
+.rule-accent {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--color-ember) 0%,
+    rgb(255 122 69 / 0.35) 8%,
+    var(--color-line) 28%,
+    var(--color-line) 100%
+  );
+}
+
 .panel {
-  background: var(--color-surface);
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.045), rgb(255 255 255 / 0.012));
+  background-color: var(--color-surface);
   border: 1px solid var(--color-line);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.05),
+    0 1px 2px rgb(0 0 0 / 0.4);
 }
 
 /* Dot grid, masked so it fades out rather than tiling to the edges. */
 .dot-grid {
-  background-image: radial-gradient(circle at 1px 1px, rgb(233 236 241 / 0.07) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgb(233 236 241 / 0.11) 1px, transparent 0);
   background-size: 32px 32px;
 }
 
@@ -196,10 +217,13 @@ body {
 
 .card-media img {
   transition: transform 0.9s var(--ease-out-expo), filter 0.6s ease;
+  /* The cover art is deliberately low-key; without a small lift it reads as
+     an empty panel against this background. */
+  filter: saturate(1.15) brightness(1.18);
 }
 .group\/card:hover .card-media img {
   transform: scale(1.04);
-  filter: saturate(1.12);
+  filter: saturate(1.3) brightness(1.3);
 }
 
 .card-rule {
@@ -208,6 +232,18 @@ body {
   transition: transform 0.55s var(--ease-snap);
 }
 .group\/card:hover .card-rule { transform: scaleX(1); }
+
+/* Touch devices never get :hover, so the lift and the accent rule would never
+   arrive. Give them the resolved state instead of the resting one. */
+@media (hover: none) {
+  .card-media img { filter: saturate(1.3) brightness(1.32); }
+  .card-rule { transform: scaleX(1); }
+}
+
+/* The project hero on a detail page has no hover state at all. */
+.figure-media img {
+  filter: saturate(1.2) brightness(1.22);
+}
 
 /* ------------------------------------------------------------------ buttons */
 
@@ -320,3 +356,79 @@ body:has(dialog.resume-dialog[open]) { overflow: hidden; }
   to   { opacity: 1; transform: none; }
 }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------------------------------------------------------- skill icons --
+   Real brand marks (generated into content/skill-icons.ts). They keep their
+   own colour, but sit desaturated so a wall of 69 logos still reads as one
+   surface; full colour arrives on hover and selection, where it is a signal.
+   Chips opt in by clearing the filter — see [&_.skill-icon]:filter-none. */
+.skill-icon {
+  transition: transform 200ms var(--ease-snap);
+}
+
+/* Marks the generator measured as unreadable on this background. */
+.skill-icon-mono { filter: brightness(0) invert(1) opacity(0.92); }
+.skill-icon-lift { filter: brightness(2.1) saturate(1.15); }
+
+.chip:hover .skill-icon,
+.chip[aria-expanded="true"] .skill-icon {
+  transform: scale(1.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-icon {
+    transition: none;
+  }
+  .chip:hover .skill-icon,
+  .chip[aria-expanded="true"] .skill-icon {
+    transform: none;
+  }
+}
+
+/* -------------------------------------------------------------------- chips --
+   Every tag on the site: skills, project stacks, competencies. A filled
+   surface with a lit top edge, so a wall of them reads as objects rather
+   than as a grid of empty outlines. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015));
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  color: var(--color-muted);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.045);
+  transition:
+    border-color 200ms var(--ease-snap),
+    color 200ms var(--ease-snap),
+    background-color 200ms var(--ease-snap),
+    transform 200ms var(--ease-snap);
+}
+
+.chip:hover {
+  background-color: var(--color-raised);
+  border-color: var(--color-line-bright);
+  color: var(--color-text);
+  transform: translateY(-1px);
+}
+
+.chip[aria-expanded="true"] {
+  border-color: var(--color-ember);
+  color: var(--color-ember);
+  background-color: rgb(255 122 69 / 0.12);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    0 0 0 1px rgb(255 122 69 / 0.25),
+    0 6px 20px -8px rgb(255 122 69 / 0.45);
+}
+
+/* ------------------------------------------------------------- nav sheet --
+   Full-screen mobile menu. `hidden` must win over the flex display, so the
+   layout is applied only when the sheet is actually open. The warm wash sits
+   under the opaque background colour set inline on the element. */
+.nav-sheet:not([hidden]) {
+  display: flex;
+  background-image:
+    radial-gradient(760px 420px at 8% -6%, rgb(255 122 69 / 0.13), transparent 62%),
+    radial-gradient(620px 380px at 100% 8%, rgb(127 188 255 / 0.06), transparent 60%);
+}

@@ -36,7 +36,7 @@ export function SimariumSection() {
             {simarium.url.replace(/^https?:\/\//, "")} ↗
           </a>
         </div>
-        <div data-rule className="mt-6 h-px w-full bg-line" />
+        <div data-rule className="rule-accent mt-6 w-full" />
 
         <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-20">
           <div data-reveal className="lg:sticky lg:top-24 lg:self-start">

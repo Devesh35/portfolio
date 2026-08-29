@@ -317,12 +317,21 @@ const covers = [
   { slug: "devtools", name: "DevTools", domain: "Developer Tools · Simarium", track: "personal" },
 ];
 
-/** Motif only, transparent — the ghosted background art on project pages. */
+/** Motif only, transparent — the ghosted background art on project pages.
+ *  Rendered at ~15–20% opacity over near-black, so the cover palette is far
+ *  too dark for it: remap structure strokes to light greys, accents to their
+ *  soft variants, and drop panel fills so nothing reads as a dark slab. */
 function artSvgFor(cover) {
-  const accent = cover.track === "personal" ? C.ember : C.steel;
+  const accent = cover.track === "personal" ? "#f0a488" : "#a9c8e8";
+  const art = motifs[cover.slug](accent)
+    .replaceAll(`fill="${C.surface}"`, 'fill="none"')
+    .replaceAll(`fill="${C.ground}"`, 'fill="none"')
+    .replaceAll(C.bright, "#9aa5b1")
+    .replaceAll(C.muted, "#c3ccd6")
+    .replaceAll(C.dim, "#9aa5b1");
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <defs><filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="70"/></filter></defs>
-  ${motifs[cover.slug](accent)}
+  ${art}
 </svg>`;
 }
 

@@ -20,7 +20,7 @@ export const simarium = {
   body:
     "Built and operated solo. Each tool runs a real model of the system it teaches — the Git visualizer executes merge, rebase and cherry-pick against an actual commit graph rather than replaying a scripted animation. Everything runs client-side against simulated state, so there is no backend to keep alive.",
   why:
-    "Client work is what I was asked to build. This is what I build when nobody asks — and it is the clearest evidence of how I think about systems.",
+    "Client work is what I was asked to build. This is what I build on my own time, and it is the best example of how I think about systems.",
   tools: [
     {
       name: "Git Visualizer",

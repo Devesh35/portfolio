@@ -63,7 +63,7 @@ export function SiteFooter() {
 
         <div className="mt-16 flex flex-col gap-2 border-t border-line pt-8 font-mono text-xs text-dim sm:flex-row sm:justify-between">
           <span>© {new Date().getFullYear()} {profile.name}</span>
-          <span>{profile.location} · Hand-built with Next.js 16 — no template, no animation libraries</span>
+          <span>{profile.location} · Built from scratch with Next.js 16 — no template</span>
         </div>
       </div>
     </footer>

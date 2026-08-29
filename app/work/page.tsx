@@ -34,19 +34,18 @@ export default function WorkPage() {
           className="animate-rise prose-body mt-6 text-lg"
           style={{ "--rise-delay": "180ms" } as React.CSSProperties}
         >
-          {timeline.length} engagements since 2021 — property lending, ad infrastructure,
-          bike rentals, dental records, sports clubs, and an AI-assisted observability
-          platform. Rarely one at a time: at the busiest, {peak} ran together, and the
-          personal branches have never fully closed.
+          {timeline.length} engagements since 2021, across property lending, advertising,
+          bike rentals, dental software, sports clubs and an AI-assisted observability
+          platform. Often more than one at a time — at the busiest, {peak} ran in
+          parallel.
         </p>
         <p
           className="animate-rise prose-body mt-4 text-lg"
           style={{ "--rise-delay": "220ms" } as React.CSSProperties}
         >
-          The longest held for {longest} months across a pause and a restart; the shortest
-          was two. Most I carried from a requirements doc through to the deployment and the
-          alerting around it — which is the half of the job that decides whether the other
-          half ever reaches anyone.
+          The longest ran {longest} months, including a pause; the shortest was two. On
+          most of them I handled everything from requirements and system design to
+          deployment and monitoring.
         </p>
 
         <ul
@@ -61,7 +60,7 @@ export default function WorkPage() {
               </span>
             </li>
           ))}
-          <li className="flex items-center gap-2">
+          <li className="hidden items-center gap-2 md:flex">
             <span className="h-px w-6 bg-dim" style={{ borderTop: "1px dashed currentColor" }} />
             <span className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-dim">
               Support role / paused
@@ -70,11 +69,17 @@ export default function WorkPage() {
         </ul>
 
         <p
-          className="animate-rise mt-4 font-mono text-xs text-dim"
+          className="animate-rise mt-4 hidden font-mono text-xs text-dim md:block"
           style={{ "--rise-delay": "280ms" } as React.CSSProperties}
         >
           Newest at the top. A branch leaves the trunk when a project began and merges back
           when it ended.
+        </p>
+        <p
+          className="animate-rise mt-4 font-mono text-xs text-dim md:hidden"
+          style={{ "--rise-delay": "280ms" } as React.CSSProperties}
+        >
+          Newest at the top, with each project&apos;s dates and duration beside it.
         </p>
       </header>
 

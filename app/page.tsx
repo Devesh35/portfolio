@@ -65,7 +65,7 @@ export default function HomePage() {
             <ResumeButton className="btn">View résumé</ResumeButton>
             <a
               href={`mailto:${profile.email}`}
-              className="link-wipe self-center font-mono text-sm text-muted hover:text-text">
+              className="link-wipe w-full self-center pt-1 font-mono text-sm text-muted hover:text-text sm:w-auto sm:pt-0">
               {profile.email}
             </a>
           </div>
@@ -109,11 +109,11 @@ export default function HomePage() {
           </h2>
         </div>
         <p data-reveal className="prose-body mt-4 max-w-2xl">
-          Not six job titles — six things I have personally owned on production
-          systems. Every project below is tagged with the parts I was
+          The six parts of delivery I have personally handled on production
+          systems. Every project below is tagged with the ones I was
           responsible for.
         </p>
-        <div data-rule className="mt-8 h-px w-full bg-line" />
+        <div data-rule className="rule-accent mt-8 w-full" />
 
         <div className="mt-12 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-3">
           {lifecycle.map((phase, i) => (
@@ -121,7 +121,7 @@ export default function HomePage() {
               key={phase.id}
               data-reveal
               style={{"--reveal-delay": `${i * 80}ms`} as React.CSSProperties}
-              className="bg-ground p-7">
+              className="bg-ground py-6 sm:p-7">
               <h3 className="font-display text-2xl font-semibold">
                 {phase.title}
               </h3>
@@ -150,7 +150,7 @@ export default function HomePage() {
               All {projects.length} projects →
             </Link>
           </div>
-          <div data-rule className="mt-6 h-px w-full bg-line" />
+          <div data-rule className="rule-accent mt-6 w-full" />
 
           <div className="mt-14 grid gap-x-8 gap-y-16 md:grid-cols-2">
             {featuredProjects.map((project, i) => (

@@ -2,135 +2,208 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { nav } from "@/content/site";
 import { profile } from "@/content/profile";
 import { useResume } from "@/components/resume-modal";
+import { NavIcon } from "@/components/nav-icon";
 
+/**
+ * The mobile sheet is a SIBLING of <header>, never a child.
+ *
+ * Once the page is scrolled the header gains backdrop-blur, and an element
+ * with a backdrop-filter becomes the containing block for its fixed-position
+ * descendants. Nested inside, the sheet's `inset-0` resolved against a 64px
+ * header instead of the viewport and collapsed to a strip, letting the page
+ * show through. Keeping it outside the filtered element is the fix.
+ */
 export function SiteHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const { open: openResume } = useResume();
+  const sheetRef = useRef<HTMLDivElement>(null);
 
-  // Subscribing to browser state, not mirroring it into an effect.
   const scrolled = useSyncExternalStore(subscribeToScroll, isScrolled, () => false);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [menuOpen]);
 
   useEffect(() => {
+    if (!menuOpen) return;
+    sheetRef.current?.querySelector<HTMLElement>("a, button")?.focus();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [menuOpen]);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-500 ${
-        scrolled
-          ? "border-b border-line bg-ground/85 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent"
-      }`}
-    >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
-        <Link
-          href="/"
-          className="group flex items-center gap-2.5 font-mono text-sm tracking-tight"
-          aria-label={`${profile.name} — home`}
-        >
-          <span className="h-1.5 w-1.5 bg-ember transition-transform duration-500 group-hover:scale-150" />
-          <span className="font-medium">{profile.name}</span>
-        </Link>
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-500 ${
+          scrolled
+            ? "border-b border-line bg-ground/85 backdrop-blur-md"
+            : "border-b border-transparent bg-transparent"
+        }`}
+      >
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
+          <Link
+            href="/"
+            className="group flex items-center gap-2.5 font-mono text-sm tracking-tight"
+            aria-label={`${profile.name} — home`}
+          >
+            <span className="h-1.5 w-1.5 bg-ember transition-transform duration-500 group-hover:scale-150" />
+            <span className="font-medium">{profile.name}</span>
+          </Link>
 
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              aria-current={isActive(item.href) ? "page" : undefined}
-              className={`link-wipe font-mono text-[0.8125rem] transition-colors duration-300 ${
-                isActive(item.href) ? "text-ember" : "text-muted hover:text-text"
-              }`}
+          <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
+            {nav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={isActive(item.href) ? "page" : undefined}
+                className={`link-wipe font-mono text-[0.8125rem] transition-colors duration-300 ${
+                  isActive(item.href) ? "text-ember" : "text-muted hover:text-text"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <a
+              href={profile.resume.href}
+              download={profile.resume.downloadAs}
+              onClick={(event) => {
+                if (event.metaKey || event.ctrlKey || event.shiftKey) return;
+                event.preventDefault();
+                openResume();
+              }}
+              className="btn btn-primary !px-3.5 !py-2 !text-xs"
             >
-              {item.label}
-            </Link>
-          ))}
+              Résumé
+            </a>
+          </nav>
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav"
+            aria-label="Open menu"
+            className="-mr-2 flex h-11 w-11 flex-col items-center justify-center gap-[6px] md:hidden"
+          >
+            <span className="block h-px w-6 bg-text" />
+            <span className="block h-px w-6 bg-text" />
+          </button>
+        </div>
+      </header>
+
+      {/* Sheet — sibling of <header>, so no filtered ancestor can contain it. */}
+      <div
+        id="mobile-nav"
+        ref={sheetRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
+        hidden={!menuOpen}
+        style={{ backgroundColor: "var(--color-void)" }}
+        className="nav-sheet fixed inset-0 z-[70] flex-col overflow-y-auto overscroll-contain md:hidden"
+      >
+        <div className="flex h-16 shrink-0 items-center justify-between px-5">
+          <span className="flex items-center gap-2.5 font-mono text-sm">
+            <span className="h-1.5 w-1.5 bg-ember" />
+            <span className="font-medium">{profile.name}</span>
+          </span>
+          <button
+            type="button"
+            onClick={closeMenu}
+            aria-label="Close menu"
+            className="-mr-2 flex h-11 w-11 items-center justify-center"
+          >
+            <span className="relative block h-6 w-6">
+              <span className="absolute left-0 top-1/2 block h-px w-6 rotate-45 bg-text" />
+              <span className="absolute left-0 top-1/2 block h-px w-6 -rotate-45 bg-text" />
+            </span>
+          </button>
+        </div>
+
+        <nav aria-label="Mobile" className="flex flex-col px-5 pt-4">
+          {nav.map((item, i) => {
+            const active = isActive(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={closeMenu}
+                aria-current={active ? "page" : undefined}
+                style={{ "--rise-delay": `${i * 45}ms` } as React.CSSProperties}
+                className={`animate-rise flex items-center justify-between gap-4 border-b border-line py-4 ${
+                  active ? "text-ember" : "text-text"
+                }`}
+              >
+                <span className="flex items-center gap-4">
+                  <NavIcon
+                    href={item.href}
+                    className={active ? "text-ember" : "text-dim"}
+                  />
+                  <span className="font-display text-[2rem] font-medium leading-none">
+                    {item.label}
+                  </span>
+                </span>
+                {active && (
+                  <span className="h-1.5 w-1.5 shrink-0 bg-ember" aria-hidden="true" />
+                )}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="px-5 pt-8">
           <a
             href={profile.resume.href}
             download={profile.resume.downloadAs}
             onClick={(event) => {
+              closeMenu();
               if (event.metaKey || event.ctrlKey || event.shiftKey) return;
               event.preventDefault();
               openResume();
             }}
-            className="btn btn-primary !py-2 !px-3.5 !text-xs"
+            style={{ "--rise-delay": `${nav.length * 45}ms` } as React.CSSProperties}
+            className="animate-rise btn btn-primary w-full justify-center"
           >
-            Résumé
+            View résumé
           </a>
-        </nav>
+        </div>
 
-        <button
-          type="button"
-          onClick={() => setMenuOpen((open) => !open)}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-nav"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          className="relative z-50 flex h-10 w-10 flex-col items-center justify-center gap-[5px] md:hidden"
-        >
-          <span
-            className={`block h-px w-5 bg-text transition-transform duration-300 ${
-              menuOpen ? "translate-y-[3px] rotate-45" : ""
-            }`}
-          />
-          <span
-            className={`block h-px w-5 bg-text transition-transform duration-300 ${
-              menuOpen ? "-translate-y-[3px] -rotate-45" : ""
-            }`}
-          />
-        </button>
-      </div>
-
-      <div
-        id="mobile-nav"
-        hidden={!menuOpen}
-        className="fixed inset-0 top-16 z-40 flex flex-col gap-1 border-t border-line bg-ground px-5 pt-8 md:hidden"
-      >
-        {nav.map((item, i) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            onClick={closeMenu}
-            style={{ "--rise-delay": `${i * 55}ms` } as React.CSSProperties}
-            className={`animate-rise border-b border-line py-5 font-display text-3xl font-medium ${
-              isActive(item.href) ? "text-ember" : "text-text"
-            }`}
+        <div className="mt-auto px-5 pb-[calc(env(safe-area-inset-bottom)+2rem)] pt-10">
+          <p className="label">Direct</p>
+          <a
+            href={`mailto:${profile.email}`}
+            className="mt-3 block font-mono text-sm text-muted"
           >
-            {item.label}
-          </Link>
-        ))}
-        <a
-          href={profile.resume.href}
-          download={profile.resume.downloadAs}
-          onClick={(event) => {
-            closeMenu();
-            if (event.metaKey || event.ctrlKey || event.shiftKey) return;
-            event.preventDefault();
-            openResume();
-          }}
-          style={{ "--rise-delay": `${nav.length * 55}ms` } as React.CSSProperties}
-          className="animate-rise mt-8 btn btn-primary justify-center"
-        >
-          View résumé
-        </a>
+            {profile.email}
+          </a>
+          <div className="mt-4 flex gap-5 font-mono text-xs text-dim">
+            <a href={profile.links.linkedin} target="_blank" rel="noreferrer">
+              LinkedIn
+            </a>
+            <a href={profile.links.github} target="_blank" rel="noreferrer">
+              GitHub
+            </a>
+            <a href={profile.links.devtools} target="_blank" rel="noreferrer">
+              DevTools
+            </a>
+          </div>
+        </div>
       </div>
-    </header>
+    </>
   );
 }
 

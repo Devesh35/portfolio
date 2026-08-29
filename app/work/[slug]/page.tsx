@@ -4,6 +4,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { projects, getProject } from "@/content/projects";
+import { isDevBuild } from "@/lib/env";
+import { SkillIcon } from "@/components/skill-icon";
+import { OriginTag } from "@/components/origin-tag";
 import { PhaseTags } from "@/components/phase-tags";
 
 export function generateStaticParams() {
@@ -41,7 +44,7 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
       {/* The project's own line art, ghosted behind the header. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-4 right-0 -z-10 hidden h-[540px] w-[720px] bg-contain bg-right-top bg-no-repeat opacity-[0.17] lg:block"
+        className="pointer-events-none absolute -top-2 right-0 -z-10 h-[300px] w-[400px] bg-contain bg-right-top bg-no-repeat opacity-[0.18] sm:h-[420px] sm:w-[560px] lg:-top-4 lg:h-[540px] lg:w-[720px] lg:opacity-[0.2]"
         style={{
           backgroundImage: `url(/projects/art/${project.slug}.png)`,
           maskImage: "linear-gradient(to bottom, black 45%, transparent 95%)",
@@ -83,39 +86,49 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
           className="animate-rise mt-6 border-t border-line pt-5"
           style={{ "--rise-delay": "210ms" } as React.CSSProperties}
         >
-          <p className="label mb-3">What I owned</p>
+          <p className="label mb-3">Where it started</p>
+          <OriginTag origin={project.origin} showBlurb />
+          {project.originNote && (
+            <p className="prose-body mt-3 text-sm">{project.originNote}</p>
+          )}
+
+          <p className="label mb-3 mt-8">What I owned</p>
           <PhaseTags phases={project.ownership} size="md" />
         </div>
       </header>
 
       {project.image.kind === "placeholder" || project.image.kind === "cover" ? (
-        /* No real screenshot yet. Showing the generated card here would just
-           repeat the heading above it, so this carries the link instead. */
-        <div
-          className="animate-rise mt-14 flex flex-wrap items-center justify-between gap-6 border border-line border-l-2 border-l-ember-dim bg-surface px-6 py-5"
-          style={{ "--rise-delay": "240ms" } as React.CSSProperties}
-        >
-          <p className="font-mono text-xs text-dim">
-            Screenshots pending
-            {project.url ? " — the live site is the best look for now." : " for this project."}
-          </p>
-          {project.url && (
-            <a
-              href={project.url}
-              target="_blank"
-              rel="noreferrer"
-              className="link-wipe font-mono text-xs text-ember"
-            >
-              Open {project.url.replace(/^https?:\/\//, "")} ↗
-            </a>
-          )}
-        </div>
+        /* Visitors see nothing here — the sidebar already links the live
+           site. The reminder renders on the dev server only (lib/env.ts). */
+        isDevBuild ? (
+          /* No real screenshot yet. Showing the generated card here would just
+             repeat the heading above it, so this carries the link instead. */
+          <div
+            className="animate-rise mt-14 flex flex-wrap items-center justify-between gap-6 border border-line border-l-2 border-l-ember-dim bg-surface px-6 py-5"
+            style={{ "--rise-delay": "240ms" } as React.CSSProperties}
+          >
+            <p className="font-mono text-xs text-dim">
+              Dev note: screenshots pending
+              {project.url ? " — the live site is the best look for now." : " for this project."}
+            </p>
+            {project.url && (
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noreferrer"
+                className="link-wipe font-mono text-xs text-ember"
+              >
+                Open {project.url.replace(/^https?:\/\//, "")} ↗
+              </a>
+            )}
+          </div>
+        ) : null
       ) : (
         <figure
           className="animate-rise mt-14"
           style={{ "--rise-delay": "240ms" } as React.CSSProperties}
         >
-          <div className="relative aspect-[16/10] overflow-hidden border border-line bg-surface">
+          <div className="figure-media relative aspect-[16/10] overflow-hidden border border-line bg-surface">
             <Image
               src={project.image.src}
               alt={project.image.alt}
@@ -145,14 +158,15 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
 
           {project.skillsUsed && project.skillsUsed.length > 0 && (
             <section data-reveal className="mt-14">
-              <h2 className="label">The stack, and what each piece did</h2>
+              <h2 className="label">Skills used on this project</h2>
               <dl className="mt-6 divide-y divide-line border-y border-line">
                 {project.skillsUsed.map((item) => (
                   <div
                     key={item.name}
                     className="group/skill grid gap-1.5 py-4 sm:grid-cols-[11rem_1fr] sm:gap-6"
                   >
-                    <dt className="font-mono text-sm text-steel transition-colors duration-300 group-hover/skill:text-ember">
+                    <dt className="flex items-center gap-2 font-mono text-sm text-steel transition-colors duration-300 group-hover/skill:text-ember group-hover/skill:[&_.skill-icon]:filter-none">
+                      <SkillIcon name={item.name} size={14} />
                       {item.name}
                     </dt>
                     <dd className="text-[0.9375rem] leading-relaxed text-muted">{item.how}</dd>
@@ -166,11 +180,12 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
             <section data-reveal className="mt-14">
               <h2 className="label">Everything I did here</h2>
               <ul className="mt-6 space-y-5">
-                {project.highlights.map((highlight, i) => (
-                  <li key={highlight} className="flex gap-5">
-                    <span className="shrink-0 pt-1 font-mono text-xs text-ember">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
+                {project.highlights.map((highlight) => (
+                  <li key={highlight} className="flex gap-4">
+                    <span
+                      aria-hidden="true"
+                      className="mt-[0.55rem] h-1.5 w-1.5 shrink-0 bg-ember"
+                    />
                     <span className="text-[0.9375rem] leading-relaxed text-muted">{highlight}</span>
                   </li>
                 ))}
@@ -184,7 +199,7 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
             <div data-reveal>
               <h2 className="label">Platform scale</h2>
               <p className="mt-2 font-mono text-[0.625rem] leading-relaxed text-dim">
-                The product&apos;s numbers, not mine — context for the work below.
+                The product&apos;s overall numbers, shown for context.
               </p>
               <dl className="mt-5 space-y-5">
                 {project.metrics.map((metric) => (
@@ -206,8 +221,9 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
               {project.stack.map((tech) => (
                 <li
                   key={tech}
-                  className="border border-line px-2.5 py-1.5 font-mono text-[0.6875rem] text-muted"
+                  className="chip gap-1.5 px-2.5 py-1.5 font-mono text-[0.6875rem]"
                 >
+                  <SkillIcon name={tech} size={12} />
                   {tech}
                 </li>
               ))}

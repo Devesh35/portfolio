@@ -38,7 +38,7 @@ export const roles: Role[] = [
       "Delivered production web applications across finance, health, advertising and mobility clients.",
     bullets: [
       "Built backend services in Node.js and Express, designing REST APIs and schemas across PostgreSQL and MongoDB.",
-      "Developed a web and mobile platform serving 200,000+ users, with user management, analytics and payment-gateway integrations.",
+      "Developed features for a web and mobile platform serving 200,000+ users, including user management, payment-gateway and live-mapping integrations.",
       "Implemented Redis caching and optimised database queries to improve response times.",
       "Maintained responsive UI components across mobile, tablet and desktop breakpoints.",
       "Began the Estateguru revamp in this role and carried it through as SDE 2.",

@@ -190,6 +190,14 @@ ok(`${projects.length} project images present`);
 
 /* -------------------------------------------------------------- skills ---- */
 section("Skills coverage");
+for (const group of skillGroups) {
+  for (const skill of group.items) {
+    for (const slug of skill.projects ?? []) {
+      if (!projectSlugs.has(slug)) fail(`skill "${skill.name}" lists unknown project "${slug}"`);
+    }
+  }
+}
+
 
 const skillNames = new Set(
   skillGroups.flatMap((g) => g.items.flatMap((s) => [s.name, ...(s.aliases ?? [])]))
