@@ -7,6 +7,7 @@ import { nav } from "@/content/site";
 import { profile } from "@/content/profile";
 import { useResume } from "@/components/resume-modal";
 import { NavIcon } from "@/components/nav-icon";
+import { OPEN_SEARCH_EVENT } from "@/components/site-search";
 
 /**
  * The mobile sheet is a SIBLING of <header>, never a child.
@@ -77,6 +78,18 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent(OPEN_SEARCH_EVENT))}
+              aria-label="Search projects and skills"
+              className="flex items-center gap-2 border border-line px-2.5 py-1.5 font-mono text-[0.6875rem] text-dim transition-colors duration-300 hover:border-line-bright hover:text-text"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" strokeWidth="2" />
+                <path d="M15.5 15.5 L21 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+              Ctrl K
+            </button>
             <a
               href={profile.resume.href}
               download={profile.resume.downloadAs}
@@ -91,6 +104,17 @@ export function SiteHeader() {
             </a>
           </nav>
 
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent(OPEN_SEARCH_EVENT))}
+            aria-label="Search projects and skills"
+            className="flex h-11 w-11 items-center justify-center md:hidden"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" strokeWidth="2" />
+              <path d="M15.5 15.5 L21 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </button>
           <button
             type="button"
             onClick={() => setMenuOpen(true)}

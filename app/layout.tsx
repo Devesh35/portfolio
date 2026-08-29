@@ -6,6 +6,8 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ScrollReveal } from "@/components/scroll-reveal";
+import { SiteSearch } from "@/components/site-search";
+import { buildSearchIndex } from "@/lib/search-index";
 import { ConsoleSignature } from "@/components/console-signature";
 import { ResumeProvider } from "@/components/resume-modal";
 import { profile } from "@/content/profile";
@@ -70,6 +72,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </ResumeProvider>
 
         <ScrollReveal />
+        <SiteSearch index={buildSearchIndex()} />
         <ConsoleSignature />
 
         <script

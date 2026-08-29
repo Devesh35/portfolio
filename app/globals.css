@@ -54,10 +54,11 @@ body {
 
 ::selection { background: var(--color-ember); color: var(--color-void); }
 
+/* No focus rings — Dev's call (2026-08-29). Keyboard focus still reads
+   through the hover-equivalent styles on .btn and .link-wipe and border
+   colour changes on form fields. */
 :focus-visible {
-  outline: 2px solid var(--color-ember);
-  outline-offset: 3px;
-  border-radius: 2px;
+  outline: none;
 }
 
 /* --------------------------------------------------------------- typography */
@@ -66,6 +67,13 @@ body {
   letter-spacing: -0.035em;
   line-height: 0.95;
   text-wrap: balance;
+}
+
+/* text-wrap: balance above shares a longhand with white-space, so it silently
+   defeats Tailwind's `truncate` on any .font-display element (this rule is
+   unlayered and utilities are layered). Restore truncation explicitly. */
+.truncate {
+  text-wrap: nowrap;
 }
 
 .label {
