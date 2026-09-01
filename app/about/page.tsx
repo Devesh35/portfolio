@@ -72,6 +72,7 @@ export default function AboutPage() {
           <h2 className="font-display text-3xl font-semibold">Experience</h2>
         </div>
         <div data-rule className="rule-accent mt-6 w-full" />
+        <p data-reveal className="mt-6 font-mono text-sm text-dim">{resume.company.blurb}</p>
 
         <ol className="mt-12 space-y-14">
           {roles.map((role, i) => (
@@ -98,11 +99,15 @@ export default function AboutPage() {
               </ul>
 
               {/* The full engagement detail — same source as the résumé, so
-                  every point listed there is listed here too. Roles match by
-                  index: both lists are newest-first. */}
-              {resume.roles[i] && resume.roles[i].projects.length > 0 && (
+                  every point listed there is listed here too. The résumé's
+                  own layout no longer nests projects under a position (Dev,
+                  2026-09-01), so this page re-derives the grouping from
+                  which slugs this role's own project-chip list names. */}
+              {resume.majorProjects.filter((p) => role.projects.includes(p.slug)).length > 0 && (
                 <div className="mt-9 space-y-9 border-t border-line pt-7">
-                  {resume.roles[i].projects.map((detail) => (
+                  {resume.majorProjects
+                    .filter((p) => role.projects.includes(p.slug))
+                    .map((detail) => (
                     <div key={detail.heading}>
                       <h4 className="font-display text-lg font-semibold text-text/90">
                         {detail.heading}

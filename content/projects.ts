@@ -102,23 +102,25 @@ export const projects: Project[] = [
     slug: "estateguru",
     name: "Estateguru",
     domain: "FinTech · Real Estate",
-    role: "Full Stack Developer → SDE 2",
+    role: "Frontend Developer → Full Stack → Project Lead",
     period: periodFor("estateguru"),
     url: "https://estateguru.co",
     summary:
-      "European property-lending marketplace connecting investors with secured real-estate loans across 8 countries.",
+      "European property-lending marketplace connecting investors with secured real-estate loans across 8 countries. Phase 2 adds a separate borrower-facing app.",
     contribution:
-      "Revamped the investor-facing web and mobile apps end to end: rebuilt the dashboard, loan listings and auto-invest flows in Next.js and React Native inside an Nx monorepo, migrated backend services to Node.js on MongoDB, worked in the existing Lokalise setup that ships the product in 6 languages, documented the APIs in Swagger, and owned the Docker, Terraform and GitHub Actions pipeline plus the Datadog alerting that keeps it running.",
+      "Phase 1 (investor-facing app): joined as a full-stack developer on a team of 5 developers, 3 QA, 1 project lead and 1 DevOps — rebuilding the dashboard, loan listings and auto-invest flows in Next.js and React Native inside an Nx monorepo, and migrating backend services to Node.js on MongoDB. Worked in the existing Lokalise setup that ships the product in 6 languages, documented the APIs in Swagger, and owned the Docker, Terraform and GitHub Actions pipeline plus the Datadog alerting that keeps it running. Phase 1 shipped in June 2025. Phase 2 (from November 2025) is new scope — the borrower-facing app — where I rejoined as project lead, leading a team of 4 developers and 2 QA.",
     ownership: ["design", "build", "test", "ship", "operate"],
     origin: "rebuild",
     originNote:
-      "The old platform stayed live while the new web app, mobile app and backend services were written to replace it — a rewrite, not a patch job.",
+      "Phase 1: the old platform stayed live while the new investor-facing web app, mobile app and backend services were written to replace it — a rewrite, not a patch job. Phase 2 is new scope, started after Phase 1 shipped: the borrower-facing app.",
     metrics: [
       { label: "investors", value: "160,000+", source: "estateguru.co" },
       { label: "loans facilitated", value: "€951M+", source: "estateguru.co" },
       { label: "countries", value: "8", source: "estateguru.co" },
     ],
     highlights: [
+      "Phase 1 (investor-facing app): joined as a full-stack developer on a team of 5 developers, 3 QA, 1 project lead and 1 DevOps.",
+      "Phase 2 (borrower-facing app, from November 2025): rejoined as project lead, leading a team of 4 developers and 2 QA.",
       "Revamped an outdated web application to Next.js and TypeScript, and the mobile app to React Native with TypeScript.",
       "Rebuilt the investor dashboard, loan listings and auto-invest flows across web and mobile, sharing common libraries, types, API clients and business logic through an Nx monorepo.",
       "Implemented modern UI frameworks within the Nx monorepo to improve functionality and user experience.",
@@ -131,7 +133,7 @@ export const projects: Project[] = [
       "Designed and implemented CI/CD pipelines in GitHub Actions to automate build, testing and deployment across development, staging and production.",
       "Provisioned and managed AWS infrastructure as code with Terraform.",
       "Set up Datadog and CloudWatch monitoring and alerting with fast rollback, as required for a regulated FinTech platform.",
-      "Increased automated test coverage to roughly 90% on targeted application modules using Jest and Cypress.",
+      "Increased automated test coverage on the investor app from roughly 40% on the old platform to roughly 90% on the new one, using Jest and Cypress.",
       "Added end-to-end tests that catch regressions in investor and loan flows before release.",
       "The overhaul streamlined the development process and measurably improved team productivity.",
       "The uniform deployment approach enabled seamless integration and scalability for future expansion.",
@@ -182,18 +184,18 @@ export const projects: Project[] = [
     slug: "nextdecade",
     name: "NextDecade Observability",
     domain: "AIOps",
-    role: "Senior Developer",
+    role: "Project Lead",
     period: periodFor("nextdecade"),
     url: null,
     summary:
       "AI-assisted log analysis and monitoring platform for a sustainable-energy company, part of a wider operations-automation programme.",
     contribution:
-      "Senior developer on a five-person team. Owned system design, code review and delivery; built the log ingestion and analysis platform on Azure App Service, Cosmos DB and Blob Storage, wired GPT-5.4 through Azure AI Foundry to explain failures, wired sign-in through Okta federated with Microsoft Entra ID, governed privileged access with Microsoft Entra PIM, and provisioned the infrastructure with Terraform from Azure Repos.",
+      "Project lead on a fixed-scope, 6-week engagement with a team of 4 developers and 1 QA — mostly backend and DevOps work. Owned system design, code review and delivery; built the log ingestion and analysis platform on Azure App Service, Cosmos DB and Blob Storage, wired GPT-5.4 through Azure AI Foundry to explain failures, wired sign-in through Okta federated with Microsoft Entra ID, governed privileged access with Microsoft Entra PIM, and provisioned the infrastructure with Terraform from Azure Repos.",
     ownership: ["design", "lead", "build", "ship", "operate"],
     origin: "greenfield",
     metrics: [],
     highlights: [
-      "Senior developer on a five-person team — owned system design, code review and delivery.",
+      "Project lead on a fixed-scope engagement (6 weeks) with a team of 4 developers and 1 QA — owned system design, code review and delivery, working mostly on backend and DevOps.",
       "Built an AI-assisted log analysis and monitoring platform that surfaces issues and suggested fixes directly from application logs.",
       "Integrated logs and metrics from multiple sources through their APIs into one view.",
       "Used GPT-5.4 through Azure AI Foundry to analyse logs across the stages of the process lifecycle, producing plain explanations and suggested fixes so teams resolve incidents faster.",
@@ -243,19 +245,20 @@ export const projects: Project[] = [
     slug: "modcart",
     name: "Modcart",
     domain: "AdTech",
-    role: "Full Stack Developer",
+    role: "Full Stack Developer → Project Lead",
     period: periodFor("modcart"),
     url: "https://modcart.io",
     summary:
       "Advertising platform with embeddable single-page stores and real-time campaign analytics.",
     contribution:
-      "Led the platform's major enhancement work: designed the architecture and schemas for the interactive single-page stores, built access control, Razorpay payments and Kafka-backed analytics, took initial load from about 4 seconds to under 1, added a WebSocket inbox with Meta integrations, and defined every environment as code with CloudFormation — including the blue-green cutover that took deployment downtime from about eight minutes to fifteen seconds.",
+      "Joined as a full-stack developer (frontend and backend) on a team of 3 developers, 1 QA and 1 project lead; became project lead, and took on DevOps after 6 months. Led the platform's major enhancement work: designed the architecture and schemas for the interactive single-page stores, built access control, Razorpay payments and Kafka-backed analytics, took initial load from about 4 seconds to under 1, added a WebSocket inbox with Meta integrations, and defined every environment as code with CloudFormation, automating the deployment process — including the blue-green cutover that took deployment downtime from about one minute to under five seconds.",
     ownership: ["design", "build", "test", "ship", "operate"],
     origin: "inherited",
     originNote:
       "The platform was live with real advertisers on it. I joined to build new features, then took on the performance work.",
     metrics: [],
     highlights: [
+      "Joined as a full-stack developer on a team of 3 developers, 1 QA and 1 project lead, working across frontend and backend; became project lead, and took on DevOps responsibilities after 6 months.",
       "Led significant enhancements to the advertising platform to boost user engagement and extend functionality.",
       "Designed the architecture and database schemas for user-interactive single-page stores.",
       "Built responsive single-page ad units that adapt across mobile, tablet and desktop, reaching 98% screen compatibility and letting advertisers reuse one creative across placements.",
@@ -269,7 +272,7 @@ export const projects: Project[] = [
       "Implemented WebSocket communication and third-party tracking systems for real-time interaction with third-party social apps.",
       "Built a WebSocket real-time chat with Meta integration — WhatsApp, Facebook and Instagram — so advertisers could reach customers across channels from a single inbox.",
       "Defined dev, staging and production environments as code with CloudFormation, covering the admin portal, user portal, analytics service and ad delivery service.",
-      "Added blue-green deployment, cutting deployment downtime from roughly 8 minutes to 10–15 seconds.",
+      "Automated the deployment process and added blue-green deployment, cutting deployment downtime from roughly 1 minute to under 5 seconds.",
       "Implemented CI/CD pipelines for consistent releases across the three environments.",
       "Supported the entire infrastructure on AWS for scalable, secure deployment.",
     ],
@@ -295,7 +298,7 @@ export const projects: Project[] = [
       { name: "Google Sign-In", how: "Social login for the advertiser portal." },
       { name: "Meta Login", how: "Social login for the advertiser portal, alongside the Meta channel integrations." },
       { name: "CloudFormation", how: "Dev, staging and production defined as code." },
-      { name: "AWS", how: "Hosting — with blue-green cutovers that took deploy downtime from ~8 minutes to 10–15 seconds." },
+      { name: "AWS", how: "Hosting — with blue-green cutovers that took deploy downtime from ~1 minute to under 5 seconds." },
     ],
     image: {
       src: "/projects/modcart.png",
@@ -364,17 +367,20 @@ export const projects: Project[] = [
     slug: "goapi",
     name: "GOAPI",
     domain: "Sports Management",
-    role: "Backend Developer",
+    role: "Full Stack Developer (solo)",
     period: periodFor("goapi"),
     url: null,
     summary:
       "Sports-management platform connecting children, parents, coaches, managers and club owners, with role-based access to schedules, teams and activity tracking.",
     contribution:
-      "Architected and implemented the entire backend: designed the PostgreSQL schema from the requirements specification, built the Node.js services with Redis caching, containerised everything with Docker and deployed on AWS.",
+      "Full ownership as a solo developer — frontend, backend and DevOps — on a short, fixed-scope engagement. Architected and implemented the backend: designed the PostgreSQL schema from the requirements specification, built the Node.js services with Redis caching. Also built the React Native app, containerised everything with Docker and deployed on AWS.",
     ownership: ["design", "build", "test", "ship", "operate"],
     origin: "greenfield",
+    originNote:
+      "Full solo ownership of GOAPI itself, but carried alongside the ongoing Modcart engagement — not his only assignment during this window.",
     metrics: [],
     highlights: [
+      "Full ownership as a solo developer — frontend (React Native), backend and DevOps — on a short, fixed-scope engagement.",
       "Architected and implemented the backend for a sports management app supporting six distinct user roles — child, parent, coach, manager, owner and admin.",
       "Created the database schema from the Requirements Specification, using PostgreSQL.",
       "Used Node.js for the runtime environment and Redis for caching to improve system performance and scalability.",
@@ -391,6 +397,7 @@ export const projects: Project[] = [
       "CI/CD pipelines", "GitLab CI/CD", "node:test runner", "Integration testing",
     ],
     skillsUsed: [
+      { name: "React Native", how: "The mobile app for all six user roles, built solo alongside the backend." },
       { name: "Node.js", how: "The entire backend — architected and implemented from the requirements spec." },
       { name: "Express", how: "REST APIs with role-based access for children, parents, coaches, managers and club owners." },
       { name: "PostgreSQL", how: "Schema designed from the requirements specification." },
@@ -405,17 +412,18 @@ export const projects: Project[] = [
     slug: "wellcompanion",
     name: "WellCompanion",
     domain: "Health & Fitness",
-    role: "Developer",
+    role: "Full Stack Developer (solo)",
     period: periodFor("wellcompanion"),
     url: null,
     summary:
       "Health and fitness tracker that captures user activity and applies AI analysis to surface personalised insights and trends.",
     contribution:
-      "Built the cross-platform mobile app in React Native with a native Kotlin module for activity tracking, plus the app-side layer that surfaces personalised insight. The Python and AI/ML data-processing pipeline behind the insights was owned by the client.",
+      "Full ownership as a solo developer — frontend, backend and DevOps — on a short, fixed-scope engagement. Built the cross-platform mobile app in React Native with a native Kotlin module for activity tracking, the Node.js app-side services, and the deployment pipeline. The Python and AI/ML data-processing pipeline behind the insights was owned by the client.",
     ownership: ["design", "build", "test", "ship", "operate"],
     origin: "greenfield",
     metrics: [],
     highlights: [
+      "Full ownership as a solo developer — frontend, backend and DevOps — on a short, fixed-scope engagement.",
       "React Native app shipping one codebase to Android and iOS.",
       "Integrated Google and Apple social login, so users start tracking without creating an account first.",
       "Wrote the native Android activity-tracking module in Kotlin, where React Native could not reach the platform sensor APIs.",
@@ -458,11 +466,12 @@ export const projects: Project[] = [
     summary:
       "Financial-analysis tool on PostgreSQL letting analysts explore data through dashboards, with a desktop companion app and automated report generation.",
     contribution:
-      "First production engagement. Delivered web application features with React and Node.js/Express on AWS, designed the REST APIs and PostgreSQL schemas, built the Electron bridge that connects the web app to its desktop companion, and automated Power BI reporting with Selenium scripts on an AWS Windows instance — replacing a manual process.",
+      "First production engagement. Joined a 4-person frontend team (myself, a backend developer, a project lead and a QA); after 3 months began covering backend as well, leaving a 3-person team — myself across both frontend and backend, the project lead and the QA. Delivered web application features with React and Node.js/Express on AWS, designed the REST APIs and PostgreSQL schemas, built the Electron bridge that connects the web app to its desktop companion, and automated Power BI reporting with Selenium scripts on an AWS Windows instance — replacing a manual process.",
     ownership: ["design", "build", "test", "ship", "operate"],
     origin: "greenfield",
     metrics: [],
     highlights: [
+      "Joined a 4-person frontend team (myself, a backend developer, a project lead and a QA); after 3 months began covering backend too, leaving a 3-person team of myself (frontend and backend), the project lead and the QA.",
       "Built dashboards letting analysts explore financial data directly.",
       "Built the desktop companion app and the Electron bridge connecting it to the web app, so the dashboards can drive desktop-side capabilities.",
       "Automated Power BI report generation with Selenium scripts running on an AWS Windows instance, replacing the manual reporting process.",
@@ -550,7 +559,7 @@ export const projects: Project[] = [
     highlights: [
       "Patient records, appointment scheduling, prescriptions, reports and patient communication in a single platform.",
       "Used Firebase for real-time sync, so a change made at the front desk shows up on the doctor’s screen without a refresh.",
-      "Short, focused engagement between two longer client assignments.",
+      "Short, focused engagement squeezed in during the Datachamps assignment.",
     ],
     stack: [
       "React", "JavaScript (ES6+)", "Redux", "Responsive & cross-platform UI", "Node.js",
@@ -578,11 +587,12 @@ export const projects: Project[] = [
     summary:
       "Android and web app connecting customers with restaurants — table booking through to order fulfilment, with live status for both sides.",
     contribution:
-      "Built the Kotlin Android app and the React web app, with Firebase keeping booking, ordering and fulfilment in sync in real time between the customer and the restaurant manager. Earliest end-to-end product, built before joining Nirmitee.io.",
+      "Full ownership as a solo developer — frontend, backend and deployment. Built the Kotlin Android app and the React web app, with Firebase keeping booking, ordering and fulfilment in sync in real time between the customer and the restaurant manager. Earliest end-to-end product, built before joining Nirmitee.io.",
     ownership: ["design", "build", "ship"],
     origin: "greenfield",
     metrics: [],
     highlights: [
+      "Full ownership as a solo developer — frontend, backend and deployment.",
       "A full-featured Android app and web app connecting customers with restaurants.",
       "Everything is managed and tracked in the app, from booking a table to fulfilment of the order.",
       "Firebase real-time sync pushes each status change straight to both the customer and the restaurant manager — no polling, no refresh.",
@@ -616,7 +626,7 @@ export const projects: Project[] = [
     summary:
       "Interactive simulations of the systems developers rely on daily, run against modelled state in the browser.",
     contribution:
-      "Built and operated entirely solo, under his own Simarium banner. The Git visualizer is live and runs real graph operations; the simulation engines are written to mirror how the underlying systems actually behave rather than replaying a canned animation.",
+      "Full ownership as a solo developer — frontend and deployment, under his own Simarium banner (the whole system runs client-side, so there is no backend to operate). The Git visualizer is live and runs real graph operations; the simulation engines are written to mirror how the underlying systems actually behave rather than replaying a canned animation.",
     ownership: ["design", "build", "ship", "operate"],
     origin: "greenfield",
     metrics: [],

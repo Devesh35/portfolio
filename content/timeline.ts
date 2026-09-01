@@ -62,6 +62,7 @@ export const timeline: TimelineEntry[] = [
     track: "nirmitee",
     emphasis: "main",
     spans: [{ start: "2026-06", end: "2026-07" }],
+    note: "Fixed-scope engagement, 6 weeks",
   },
   {
     slug: "estateguru",
@@ -72,7 +73,7 @@ export const timeline: TimelineEntry[] = [
       { start: "2023-06", end: "2025-06" },
       { start: "2025-11", end: null },
     ],
-    note: "Phase 2 from Nov 2025",
+    note: "Phase 1: investor-facing app, shipped Jun 2025. Phase 2: borrower-facing app, from Nov 2025",
   },
   {
     slug: "wellcompanion",

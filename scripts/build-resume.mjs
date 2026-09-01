@@ -33,8 +33,14 @@ const esc = (value) =>
 
 const bare = (url) => url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
-const bullets = (items) => `<ul>${items.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>`;
+// The marker is real text (not a CSS pseudo-element) so ATS text extraction
+// keeps it on the same line as the bullet's own text instead of orphaning it.
+const bullets = (items) =>
+  `<ul>${items.map((b) => `<li><span class="bullet">▪</span>${esc(b)}</li>`).join("")}</ul>`;
 
+// Context, then the stack line, then the bullets (Dev, 2026-09-01, second
+// pass: stack moved back up above the bullets). `stack` itself only carries
+// major tech not already named in the bullets below it — not a full list.
 const projectBlock = (project) => `
       <div class="proj">
         <div class="row">
@@ -48,15 +54,16 @@ const projectBlock = (project) => `
         ${bullets(project.bullets)}
       </div>`;
 
-const roleBlock = (role) => `
-    <div class="role">
+// One position (title + period) — a plain one-sentence summary, no
+// projects nested inside it any more (Dev, 2026-09-01: positions and major
+// projects are now two separate blocks under Professional Experience).
+const positionBlock = (position) => `
+    <div class="position">
       <div class="row">
-        <span class="role-title">${esc(role.company)} <span class="role-sub">– ${esc(role.title)}</span></span>
-        <span class="date">${esc(role.period)}</span>
+        <span class="position-title">${esc(position.title)}</span>
+        <span class="date">${esc(position.period)}</span>
       </div>
-      ${role.summary ? `<p class="role-summary">${esc(role.summary)}</p>` : ""}
-      ${role.bullets ? bullets(role.bullets) : ""}
-      ${role.projects.map(projectBlock).join("")}
+      <p class="role-summary">${esc(position.summary)}</p>
     </div>`;
 
 const skillsBlock = resume.skills
@@ -71,9 +78,15 @@ const skillsBlock = resume.skills
 
 const additionalBlock = resume.additional
   .map(
-    (item) => `<li><b>${esc(item.name)}</b> (${esc(item.domain)})${
-      item.url ? ` — <a href="${item.url}">${esc(bare(item.url))}</a>` : ""
-    } — ${esc(item.text)} <i>${esc(resumePeriod(item.slug))}</i></li>`,
+    (item) => `<li class="add-item">
+        <div class="row add-row">
+          <span class="add-left"><span class="bullet">▪</span><span class="add-title"><b>${esc(item.name)}</b> (${esc(item.domain)})${
+            item.url ? ` — <a href="${item.url}">${esc(bare(item.url))}</a>` : ""
+          }</span></span>
+          <span class="date">${esc(resumePeriod(item.slug))}</span>
+        </div>
+        <span class="add-text">${esc(item.text)}</span>
+      </li>`,
   )
   .join("");
 
@@ -124,30 +137,55 @@ const html = `<!doctype html>
 
   /* ----------------------------------------------------------- experience */
   .row { display: flex; justify-content: space-between; align-items: baseline; gap: 14pt; }
-  .role { margin-bottom: 0; }
-  .role-title { font-size: 8.07pt; font-weight: 700; color: #1a1a1a; }
-  .role-sub { color: #b8511f; }
-  .role .date { font-size: 9.22pt; }
   .date { font-style: italic; color: #333; white-space: nowrap; }
-  .role-summary { margin-top: 3.2pt; }
 
-  .proj { margin-top: 7.45pt; page-break-inside: avoid; }
+  /* Company header — printed once above every position held there. */
+  .company-header { margin-bottom: 1.2pt; }
+  .company-name { font-size: 11.6pt; font-weight: 700; text-transform: uppercase; color: #7a3316; letter-spacing: 0.02em; }
+  .company-header .date { font-size: 9.22pt; font-weight: 700; font-style: normal; color: #7a3316; }
+  .company-blurb { font-size: 7.8pt; line-height: 10.8pt; color: #555; font-style: italic; margin: 1.5pt 0 6pt; }
+
+  /* Position — a title held at the company above. Deliberately larger than
+     body text so SDE 2 and Graduate Consultant both read as distinct roles,
+     not sub-labels of the company line (Dev, 2026-09-01). No border-left here
+     on purpose: a box border drawn on an element that spans a page break
+     renders as a stray rule down the blank rest of the page — plain spacing
+     avoids that failure mode. */
+  .position { margin-top: 6.5pt; margin-bottom: 0; }
+  .position-title { font-size: 10.5pt; font-weight: 700; color: #1a1a1a; }
+  .position .date { font-size: 9.22pt; }
+  .role-summary { margin-top: 2.6pt; }
+
+  /* Small labelled break between the positions and the major-project write-ups
+     that follow them (Dev, 2026-09-01 — projects are no longer nested under
+     a position). Same accent as h2, lighter weight, no border. */
+  .subhead { font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #7a3316; margin: 11pt 0 2pt; }
+
+  .proj { margin-top: 7.45pt; }
   .proj-title { font-size: 9.22pt; font-weight: 700; color: #7a3316; }
   .proj-title a { font-weight: 400; font-size: 8.07pt; }
   .proj .date { font-size: 8.07pt; }
-  .context { font-size: 8.07pt; line-height: 12.1pt; margin-top: 1.35pt; }
-  .stack { font-size: 8.07pt; line-height: 12.1pt; }
+  .context { font-size: 8.07pt; line-height: 12.1pt; margin-top: 1.35pt; page-break-after: avoid; }
+  .proj .row { page-break-after: avoid; }
+  .stack { font-size: 8.07pt; line-height: 12.1pt; margin-top: 1.35pt; }
   .context b, .stack b { color: #7a3316; }
 
   /* -------------------------------------------------------------- bullets */
-  ul { list-style: none; margin: 1.5pt 0 0; padding-left: 9.2pt; }
-  li { position: relative; margin-bottom: 3.45pt; }
-  li::before {
-    content: "▪"; position: absolute; left: -9.2pt; top: -0.5pt;
-    color: #d1662f; font-size: 7.5pt;
-  }
-  .role > ul { margin-top: 2.6pt; }
+  ul { list-style: none; margin: 1.5pt 0 0; padding-left: 0; }
+  /* The list itself CAN break across a page (Dev, 2026-09-01 — fills pages
+     instead of leaving blank space), but a single bullet's own text should
+     not split mid-sentence across that break. */
+  li { margin-bottom: 3.45pt; page-break-inside: avoid; padding-left: 9.2pt; text-indent: -9.2pt; }
+  .bullet { display: inline-block; width: 9.2pt; text-indent: 0; color: #d1662f; font-size: 8.5pt; }
+  .position > ul { margin-top: 2.6pt; }
   .tight { margin-top: 4pt; }
+  .additional-intro { font-size: 8.07pt; line-height: 12.1pt; color: #555; font-style: italic; margin-bottom: 4pt; }
+  .add-item { padding-left: 0; text-indent: 0; }
+  .add-row { margin-bottom: 0.5pt; }
+  .add-title { font-size: 9.22pt; }
+  .add-title a { font-size: 8.07pt; font-weight: 400; }
+  .tight .date { font-size: 8.07pt; }
+  .add-text { display: block; margin-left: 9.2pt; }
 
   /* ------------------------------------------------------------ education */
   .edu-line { font-size: 9.22pt; }
@@ -192,9 +230,17 @@ const html = `<!doctype html>
   ${skillsBlock}
 
   <h2>Professional Experience</h2>
-  ${resume.roles.map(roleBlock).join("")}
+  <div class="company-header row">
+    <span class="company-name">${esc(resume.company.name)}</span>
+    <span class="date">${esc(resume.company.period)}</span>
+  </div>
+  <p class="company-blurb">${esc(resume.company.blurb)}</p>
+  ${resume.positions.map(positionBlock).join("")}
+  <p class="subhead">Major Projects</p>
+  ${resume.majorProjects.map(projectBlock).join("")}
 
   <h2>Additional Projects</h2>
+  <p class="additional-intro">${esc(resume.additionalIntro)}</p>
   <ul class="tight">${additionalBlock}</ul>
 
   <h2>Education</h2>

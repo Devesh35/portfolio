@@ -1,4 +1,5 @@
 import { projects } from "@/content/projects";
+import { timeline } from "@/content/timeline";
 
 /**
  * Who Dev is. Reconciled from Devesh_Singh_Resume.pdf (the canonical file).
@@ -15,6 +16,18 @@ export const CAREER_START = new Date("2021-11-01");
 /** Distinct domains worked in, counted rather than claimed. */
 const domainCount = new Set(projects.map((p) => p.domain.split("·")[0].trim())).size;
 
+/** Client engagements only — DevTools and Dine In are personal builds with no
+ *  client (Dine In predates Nirmitee.io entirely), so they don't belong in a
+ *  "delivered to client satisfaction" count. Cross-referenced against
+ *  content/timeline.ts's `track`, the same distinction content/experience.ts
+ *  and scripts/audit-content.mjs already use. */
+const clientProjects = projects.filter(
+  (p) => timeline.find((t) => t.slug === p.slug)?.track === "nirmitee",
+);
+const clientDomainCount = new Set(
+  clientProjects.map((p) => p.domain.split("·")[0].trim()),
+).size;
+
 export const profile = {
   name: "Devesh Singh",
   /** Single public title. Do not vary this across the site. */
@@ -27,7 +40,7 @@ export const profile = {
     "I build web and mobile products end to end — and the pipelines that ship them.",
 
   intro:
-    "Next.js and React Native front ends, Node.js services on MongoDB and PostgreSQL, and the Docker, Terraform and CI/CD that put them into production on AWS and Azure. Currently revamping a European property-lending platform; and most recently senior developer on an AI-assisted observability platform.",
+    "Next.js and React Native front ends, Node.js services on MongoDB and PostgreSQL, and the Docker, Terraform and CI/CD that put them into production on AWS and Azure. Currently leading Phase 2 of a European property-lending platform (the borrower-facing app); most recently project lead on a fixed-scope AI-assisted observability platform.",
 
   email: "devesh46singh@gmail.com",
   phone: "+91 78751 77354",
@@ -62,7 +75,7 @@ export const profile = {
   achievements: [
     "Employee of the Month at Nirmitee.io, for consistent delivery and client satisfaction.",
     "Promoted from Software Engineer to SDE 2 in April 2024.",
-    `Delivered ${projects.length} projects to client satisfaction across ${domainCount} domains.`,
+    `Delivered ${clientProjects.length} projects to client satisfaction across ${clientDomainCount} domains.`,
   ],
 
   interests: ["System design", "Developer tooling", "Photography"],
@@ -92,16 +105,16 @@ export const headlineStats = [
     sub: `Across ${domainCount} domains`,
   },
   {
-    value: 15,
+    value: 5,
     suffix: "s",
     label: "Deploy downtime",
-    sub: "Cut from ~8 min · Modcart",
+    sub: "Cut from ~1 min · Modcart",
   },
   {
     value: 90,
     suffix: "%",
     label: "Test coverage",
-    sub: "Targeted modules · Estateguru",
+    sub: "Up from ~40% · Estateguru",
   },
 ];
 
@@ -115,7 +128,7 @@ export const lifecycle = [
   {
     id: "lead",
     title: "Lead",
-    body: "Senior developer on a five-person team: system design, code review and delivery. Led the enhancement programme on an advertising platform through to release.",
+    body: "Project lead on fixed-scope and enhancement engagements: system design, code review and delivery — a 4-developer, 1-QA team on an AI-assisted observability platform; the enhancement programme on an advertising platform, through to release; and a property-lending platform's borrower-facing app across frontend and backend.",
   },
   {
     id: "build",

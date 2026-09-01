@@ -45,30 +45,55 @@
 
   /* ----------------------------------------------------------- experience */
   .row { display: flex; justify-content: space-between; align-items: baseline; gap: 14pt; }
-  .role { margin-bottom: 0; }
-  .role-title { font-size: 8.07pt; font-weight: 700; color: #1a1a1a; }
-  .role-sub { color: #b8511f; }
-  .role .date { font-size: 9.22pt; }
   .date { font-style: italic; color: #333; white-space: nowrap; }
-  .role-summary { margin-top: 3.2pt; }
 
-  .proj { margin-top: 7.45pt; page-break-inside: avoid; }
+  /* Company header — printed once above every position held there. */
+  .company-header { margin-bottom: 1.2pt; }
+  .company-name { font-size: 11.6pt; font-weight: 700; text-transform: uppercase; color: #7a3316; letter-spacing: 0.02em; }
+  .company-header .date { font-size: 9.22pt; font-weight: 700; font-style: normal; color: #7a3316; }
+  .company-blurb { font-size: 7.8pt; line-height: 10.8pt; color: #555; font-style: italic; margin: 1.5pt 0 6pt; }
+
+  /* Position — a title held at the company above. Deliberately larger than
+     body text so SDE 2 and Graduate Consultant both read as distinct roles,
+     not sub-labels of the company line (Dev, 2026-09-01). No border-left here
+     on purpose: a box border drawn on an element that spans a page break
+     renders as a stray rule down the blank rest of the page — plain spacing
+     avoids that failure mode. */
+  .position { margin-top: 6.5pt; margin-bottom: 0; }
+  .position-title { font-size: 10.5pt; font-weight: 700; color: #1a1a1a; }
+  .position .date { font-size: 9.22pt; }
+  .role-summary { margin-top: 2.6pt; }
+
+  /* Small labelled break between the positions and the major-project write-ups
+     that follow them (Dev, 2026-09-01 — projects are no longer nested under
+     a position). Same accent as h2, lighter weight, no border. */
+  .subhead { font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #7a3316; margin: 11pt 0 2pt; }
+
+  .proj { margin-top: 7.45pt; }
   .proj-title { font-size: 9.22pt; font-weight: 700; color: #7a3316; }
   .proj-title a { font-weight: 400; font-size: 8.07pt; }
   .proj .date { font-size: 8.07pt; }
-  .context { font-size: 8.07pt; line-height: 12.1pt; margin-top: 1.35pt; }
-  .stack { font-size: 8.07pt; line-height: 12.1pt; }
+  .context { font-size: 8.07pt; line-height: 12.1pt; margin-top: 1.35pt; page-break-after: avoid; }
+  .proj .row { page-break-after: avoid; }
+  .stack { font-size: 8.07pt; line-height: 12.1pt; margin-top: 1.35pt; }
   .context b, .stack b { color: #7a3316; }
 
   /* -------------------------------------------------------------- bullets */
-  ul { list-style: none; margin: 1.5pt 0 0; padding-left: 9.2pt; }
-  li { position: relative; margin-bottom: 3.45pt; }
-  li::before {
-    content: "▪"; position: absolute; left: -9.2pt; top: -0.5pt;
-    color: #d1662f; font-size: 7.5pt;
-  }
-  .role > ul { margin-top: 2.6pt; }
+  ul { list-style: none; margin: 1.5pt 0 0; padding-left: 0; }
+  /* The list itself CAN break across a page (Dev, 2026-09-01 — fills pages
+     instead of leaving blank space), but a single bullet's own text should
+     not split mid-sentence across that break. */
+  li { margin-bottom: 3.45pt; page-break-inside: avoid; padding-left: 9.2pt; text-indent: -9.2pt; }
+  .bullet { display: inline-block; width: 9.2pt; text-indent: 0; color: #d1662f; font-size: 8.5pt; }
+  .position > ul { margin-top: 2.6pt; }
   .tight { margin-top: 4pt; }
+  .additional-intro { font-size: 8.07pt; line-height: 12.1pt; color: #555; font-style: italic; margin-bottom: 4pt; }
+  .add-item { padding-left: 0; text-indent: 0; }
+  .add-row { margin-bottom: 0.5pt; }
+  .add-title { font-size: 9.22pt; }
+  .add-title a { font-size: 8.07pt; font-weight: 400; }
+  .tight .date { font-size: 8.07pt; }
+  .add-text { display: block; margin-left: 9.2pt; }
 
   /* ------------------------------------------------------------ education */
   .edu-line { font-size: 9.22pt; }
@@ -97,7 +122,7 @@
     </div>
   </header>
 
-  <p class="summary">Full Stack &amp; DevOps Engineer with nearly 5 years building web and mobile products end-to-end (Next.js / React Native, Node.js / Express, MongoDB) and the Docker, Terraform, and CI/CD pipelines that ship them on AWS and Azure. Revamped the web and mobile platform of a European property-lending marketplace (€951M+ in loans) and raised automated test coverage to ~90% on targeted modules; senior developer on an AI-assisted observability platform.</p>
+  <p class="summary">Full Stack &amp; DevOps Engineer based in Pune, India. I take products from requirements and system design through to production, and stay responsible for them once they're live — the infrastructure side is as much my job as the application code. Currently leading the next phase of a European property-lending platform, after most recently leading a fixed-scope AI-assisted observability build.</p>
   <p class="summary">Solo project: <a href="https://devtools.simarium.in">devtools.simarium.in</a>, an interactive developer-infrastructure simulator with a live Git visualizer (merge, rebase, cherry-pick on a modelled commit graph).</p>
 
   <h2>Technical Skills</h2>
@@ -115,12 +140,8 @@
         <span class="skill-items">MongoDB, PostgreSQL, Redis</span>
       </div>
       <div class="skill-row">
-        <span class="skill-label">AWS:</span>
-        <span class="skill-items">EC2, ECS, Elastic Beanstalk, Lambda, EC2 Auto Scaling, S3, EBS, RDS, DynamoDB, Route 53, Elastic Load Balancing, CloudFront, SNS, SQS, IAM, CloudWatch</span>
-      </div>
-      <div class="skill-row">
-        <span class="skill-label">Azure:</span>
-        <span class="skill-items">App Service, Blob Storage, Cosmos DB, AI Foundry, Entra PIM (Privileged Identity Management), Azure DevOps, Azure Repos</span>
+        <span class="skill-label">Cloud:</span>
+        <span class="skill-items">AWS, Azure</span>
       </div>
       <div class="skill-row">
         <span class="skill-label">Infrastructure:</span>
@@ -140,55 +161,83 @@
       </div>
 
   <h2>Professional Experience</h2>
+  <div class="company-header row">
+    <span class="company-name">Nirmitee.io</span>
+    <span class="date">Nov 2021 – Present</span>
+  </div>
+  <p class="company-blurb">Nirmitee.io is a software consultancy — every engagement below is a client project delivered as a Nirmitee employee.</p>
   
-    <div class="role">
+    <div class="position">
       <div class="row">
-        <span class="role-title">Nirmitee.io <span class="role-sub">– Software Development Engineer II (SDE 2)</span></span>
+        <span class="position-title">Software Development Engineer II (SDE 2)</span>
         <span class="date">Apr 2024 – Present</span>
       </div>
-      <p class="role-summary">Promoted from Software Engineer. Own full-stack and DevOps delivery for client platforms, from requirements and system design through deployment and monitoring, working with product, design, and QA.</p>
-      
-      
+      <p class="role-summary">Promoted from Software Engineer; I own full-stack and DevOps delivery for client platforms end to end, from system design through to production.</p>
+    </div>
+    <div class="position">
+      <div class="row">
+        <span class="position-title">Software Engineer (Consultant Graduate)</span>
+        <span class="date">Nov 2021 – Apr 2024</span>
+      </div>
+      <p class="role-summary">Delivered production web and mobile applications for multiple clients, and began the Estateguru engagement that I carried through as SDE 2.</p>
+    </div>
+  <p class="subhead">Major Projects</p>
+  
       <div class="proj">
         <div class="row">
           <span class="proj-title">Estateguru — Full Stack Web &amp; Mobile Revamp (FinTech / Real Estate) <a href="https://estateguru.co">estateguru.co</a></span>
-          <span class="date">Jun 2023 – Jun 2025 · Nov 2025 – Present</span>
+          <span class="date">Jun 2023 – Present</span>
         </div>
-        <p class="context"><b>Context:</b> European property-lending platform with 160,000+ investors and €951M+ in loans facilitated across 8 countries. Started in the Software Engineer role, continued as SDE 2.</p>
-        <p class="stack"><b>Stack:</b> Next.js, TypeScript, React Native, Node.js, Express, MongoDB, AWS, Terraform, Docker, GitHub Actions, Nx Monorepo, Swagger, Lokalise, SSO / OAuth 2.0, Jest, Cypress, Datadog</p>
-        <ul><li>Revamped the legacy frontend to Next.js and TypeScript inside an Nx monorepo, rebuilding the investor dashboard, loan listings, and auto-invest flows across the web app and React Native mobile app with shared libraries, types, API clients, and business logic.</li><li>Migrated the backend to Node.js/Express modular services on MongoDB, designing the schemas and REST APIs for investor, loan, and auto-invest data.</li><li>Delivered role-based access control and social login (SSO / OAuth 2.0) end to end: requirements, data model, APIs, UI, deployment, and monitoring.</li><li>Documented the REST APIs in Swagger so web, mobile, and backend built against one contract, and managed translation keys in the existing Lokalise setup that ships the product in 6 languages.</li><li>Containerised the application with Docker, built CI/CD pipelines in GitHub Actions, provisioned AWS infrastructure with Terraform for development, staging, and production, and set up Datadog monitoring and alerting with fast rollback for a regulated FinTech platform.</li><li>Increased automated test coverage to ~90% for targeted application modules using Jest and Cypress.</li></ul>
+        <p class="context"><b>Context:</b> European property-lending platform operating across 8 countries. Phase 1 (Jun 2023 – Jun 2025) rebuilt the investor-facing web and mobile apps; Phase 2 (from Nov 2025) is new scope — the borrower-facing app.</p>
+        <p class="stack"><b>Stack:</b> Next.js, Node.js, MongoDB, AWS, CI/CD, Terraform, Docker, Nx, SSO / OAuth 2.0, Jest, Cypress, Datadog</p>
+        <ul><li><span class="bullet">▪</span>Phase 1: joined as a full-stack developer for the revamp of the legacy investor portal.</li><li><span class="bullet">▪</span>Phase 2: rejoined as project lead, leading a team of 4 developers and 2 QA.</li><li><span class="bullet">▪</span>Revamped the legacy frontend to Next.js and TypeScript inside an Nx monorepo, rebuilding the investor dashboard, loan listings and auto-invest flows across the web app and React Native mobile app, with shared libraries, types and API clients.</li><li><span class="bullet">▪</span>Migrated the backend to Node.js/Express modular services on MongoDB, designing the schemas and REST APIs for investor, loan and auto-invest data.</li><li><span class="bullet">▪</span>Raised automated test coverage on the investor app from ~40% on the old platform to ~90% on the new one, using Jest and Cypress.</li><li><span class="bullet">▪</span>Delivered role-based access control and social login end to end, and documented the APIs in Swagger so web, mobile and backend build against one contract.</li><li><span class="bullet">▪</span>Owned the CI/CD pipeline and Datadog alerting that keep the platform running, provisioned with Docker and Terraform across development, staging and production.</li></ul>
       </div>
       <div class="proj">
         <div class="row">
-          <span class="proj-title">NextDecade Observability Platform (AIOps) — Senior Developer</span>
+          <span class="proj-title">NextDecade Observability Platform (AIOps) — Project Lead</span>
           <span class="date">Jun 2026 – Jul 2026</span>
         </div>
-        <p class="context"><b>Context:</b> Part of a larger programme to fully automate operations for a sustainable-energy solutions company.</p>
-        <p class="stack"><b>Stack:</b> React, Node.js, Express, MongoDB, CI/CD, Terraform, Azure App Service, Cosmos DB, Blob Storage, Azure AI Foundry (GPT-5.4), SSO / OAuth 2.0, Entra PIM, Azure Repos, Azure DevOps</p>
-        <ul><li>Senior developer on a 5-person team (3 developers, 1 QA): owned system design, code review, and delivery.</li><li>Built an AI-assisted log analysis and monitoring platform that surfaces issues and suggested fixes from application logs, integrating logs and metrics from multiple sources via their APIs.</li><li>Used GPT-5.4 through Azure AI Foundry to analyse logs across the stages of the process lifecycle, producing explanations and suggested fixes so teams could understand and resolve issues faster.</li><li>Provisioned Azure infrastructure with Terraform — App Service for the platform tier, Cosmos DB for logs and analyses, Blob Storage for raw payloads — and set up CI/CD pipelines for the MERN stack out of Azure Repos and Azure DevOps.</li><li>Integrated single sign-on for platform login, and governed privileged access to the subscription with Entra PIM so elevated roles are requested and time-bound rather than standing.</li></ul>
+        <p class="context"><b>Context:</b> AI-assisted log analysis and monitoring platform for a sustainable-energy company, part of a larger operations-automation programme. Fixed-scope engagement, 6 weeks.</p>
+        <p class="stack"><b>Stack:</b> React, Node.js, Express, MongoDB, CI/CD, Terraform, Azure, Azure AI Foundry (GPT-5.4), SSO / OAuth 2.0</p>
+        <ul><li><span class="bullet">▪</span>Joined as project lead over a team of 4 developers and 1 QA — mostly backend and DevOps work, owning system design, code review and delivery.</li><li><span class="bullet">▪</span>Built the AI-assisted log analysis platform end to end: ingested logs and metrics from multiple sources, and wired GPT-5.4 through Azure AI Foundry to explain failures and suggest fixes.</li><li><span class="bullet">▪</span>Provisioned the Azure infrastructure with Terraform — App Service, Cosmos DB and Blob Storage — and set up CI/CD out of Azure Repos and Azure DevOps.</li><li><span class="bullet">▪</span>Integrated single sign-on through Okta federated with Microsoft Entra ID, and governed privileged access with Microsoft Entra PIM.</li></ul>
       </div>
-    </div>
-    <div class="role">
-      <div class="row">
-        <span class="role-title">Nirmitee.io <span class="role-sub">– Software Engineer (Consultant Graduate)</span></span>
-        <span class="date">Nov 2021 – Apr 2024</span>
-      </div>
-      
-      <ul><li>Delivered production web applications with React, Node.js/Express, and AWS for financial analysis (Datachamps, PostgreSQL), practice management (Bestosys), and mobility (Boongg); see Additional Projects.</li><li>Began the Estateguru revamp in this role and carried it through as SDE 2 (entry above).</li><li>Earned Employee of the Month recognition for consistent delivery and client satisfaction.</li></ul>
-      
       <div class="proj">
         <div class="row">
           <span class="proj-title">Modcart — Advertising Platform with Real-time Analytics (AdTech) <a href="https://modcart.io">modcart.io</a></span>
           <span class="date">Jun 2022 – May 2023</span>
         </div>
-        <p class="context"><b>Context:</b> One-stop platform for ads and single-page stores that embed into websites and mobile apps; the platform has since moved to a coupon-based model.</p>
-        <p class="stack"><b>Stack:</b> React.js, Node.js, Express, MongoDB, Redis, Apache Kafka, WebSocket, Razorpay, SSO / OAuth 2.0, AWS, CloudFormation</p>
-        <ul><li>Designed the architecture and database schemas for user-interactive single-page stores, built them with responsive layouts across mobile, tablet, and desktop so advertisers could reuse one creative across placements, and cut initial load from ~4s to under 1s.</li><li>Built role-based access control, social login (SSO / OAuth 2.0), Razorpay integration for platform and service payments, and the analytics dashboard on ad interactions and campaign performance.</li><li>Introduced Kafka event processing for ad-campaign analytics, decoupling ingestion from transactional workloads, with Redis caching for fast aggregation and reporting.</li><li>Built a WebSocket-based real-time chat with Meta integration (WhatsApp, Facebook, Instagram) so advertisers could reach customers across channels from one inbox.</li><li>Defined dev, staging, and production environments as code with CloudFormation on AWS and added blue-green deployment, cutting deployment downtime from ~8 minutes to 10–15 seconds.</li></ul>
+        <p class="context"><b>Context:</b> Advertising platform with embeddable single-page stores and real-time campaign analytics; the platform has since moved to a coupon-based model.</p>
+        <p class="stack"><b>Stack:</b> React.js, Node.js, Express, MongoDB, Redis, Apache Kafka, SSO / OAuth 2.0, AWS, CloudFormation</p>
+        <ul><li><span class="bullet">▪</span>Joined as a full-stack developer and took on DevOps after 6 months.</li><li><span class="bullet">▪</span>Owned the architecture and schemas for the single-page stores, and cut initial load from ~4s to under 1s.</li><li><span class="bullet">▪</span>Built role-based access control, social login, Razorpay payments, and Kafka-backed real-time analytics with Redis caching.</li><li><span class="bullet">▪</span>Built a WebSocket-based real-time chat with Meta integrations (WhatsApp, Facebook, Instagram).</li><li><span class="bullet">▪</span>Automated the deployment process and defined every environment as code with CloudFormation, adding blue-green deployment that cut downtime from ~1 minute to under 5 seconds.</li></ul>
       </div>
-    </div>
 
   <h2>Additional Projects</h2>
-  <ul class="tight"><li><b>Boongg</b> (Mobility) — <a href="https://boongg.com">boongg.com</a> — Bike-rental platform (1M+ rides, 200K+ customers, 1,500+ bikes). Joined a live product: improved booking for customers and admins, cut booking query time from ~6s to under 2s, and integrated Google Maps to show live user data on pickup and booking. React.js web, Android (Java/Kotlin), Node.js/Express on MongoDB, on AWS. <i>Aug 2022 – Oct 2022</i></li><li><b>Bestosys</b> (HealthTech) — Dental practice-management software letting doctors manage patient records, appointment scheduling, prescriptions, reports, and patient communication in one platform, with Firebase real-time sync between the front desk and the doctor’s view. <i>Feb 2022 – Mar 2022</i></li><li><b>Datachamps</b> (FinTech) — Financial-analysis tool on PostgreSQL that lets analysts explore data through dashboards, with a desktop companion app and automated report generation that replaced manual reporting. <i>Dec 2021 – May 2022</i></li><li><b>DevTools</b> (Personal) — <a href="https://devtools.simarium.in">devtools.simarium.in</a> — Built an interactive developer-tools project featuring a Git visualizer that simulates commit graphs and operations such as merge, rebase, and cherry-pick. <i>Apr 2026 – Present</i></li></ul>
+  <p class="additional-intro">Other Nirmitee.io client engagements — check my portfolio for more details.</p>
+  <ul class="tight"><li class="add-item">
+        <div class="row add-row">
+          <span class="add-left"><span class="bullet">▪</span><span class="add-title"><b>WellCompanion</b> (Health &amp; Fitness)</span></span>
+          <span class="date">Jul 2025 – Nov 2025</span>
+        </div>
+        <span class="add-text">Health and fitness tracker that captures daily activity and applies AI analysis to surface personalised insights and trends — built solo, BRD to deployment.</span>
+      </li><li class="add-item">
+        <div class="row add-row">
+          <span class="add-left"><span class="bullet">▪</span><span class="add-title"><b>Boongg</b> (Mobility) — <a href="https://boongg.com">boongg.com</a></span></span>
+          <span class="date">Aug 2022 – Oct 2022</span>
+        </div>
+        <span class="add-text">Replaced Boongg’s slowest booking queries with reworked, optimised versions because they were the platform’s main latency bottleneck, cutting search time from ~6s to under 2s across 1M+ rides.</span>
+      </li><li class="add-item">
+        <div class="row add-row">
+          <span class="add-left"><span class="bullet">▪</span><span class="add-title"><b>Datachamps</b> (FinTech)</span></span>
+          <span class="date">Dec 2021 – May 2022</span>
+        </div>
+        <span class="add-text">Replaced Datachamps’ manual Power BI report generation with a Selenium-automated pipeline on AWS, eliminating a recurring manual step in the team’s financial reporting.</span>
+      </li><li class="add-item">
+        <div class="row add-row">
+          <span class="add-left"><span class="bullet">▪</span><span class="add-title"><b>GOAPI</b> (Sports Management)</span></span>
+          <span class="date">Mar 2023 – May 2023</span>
+        </div>
+        <span class="add-text">Sports-management platform connecting children, parents, coaches, managers and club owners with role-based access to schedules and activity tracking — built solo, concept to release.</span>
+      </li></ul>
 
   <h2>Education</h2>
   <div class="row">

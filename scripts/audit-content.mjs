@@ -24,7 +24,7 @@ const { roles } = await import("../content/experience.ts");
 const { profile, headlineStats } = await import("../content/profile.ts");
 const { skillGroups, marqueeSkills } = await import("../content/skills.ts");
 const { simarium } = await import("../content/simarium.ts");
-const { resume } = await import("../content/resume.ts");
+const { resume, resumePeriod } = await import("../content/resume.ts");
 const { lifecycle } = await import("../content/profile.ts");
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -130,12 +130,14 @@ for (const stat of headlineStats) {
 }
 
 // Any "<n> projects" or "<n> domains" claim in profile prose must match reality.
+// profile.achievements is checked separately below — its "client satisfaction"
+// line counts nirmitee-track projects only, not the site-wide total.
 const WORD_NUM = { one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12 };
 const asNumber = (token) => WORD_NUM[token.toLowerCase()] ?? Number(token.replace(/,/g, ""));
 
 const prose = [
   profile.intro, profile.tagline, profile.certification,
-  ...profile.achievements, ...profile.competencies,
+  ...profile.competencies,
   ...lifecycle.map((l) => l.body),
   ...headlineStats.map((s) => s.sub),
 ].join("  ");
@@ -147,10 +149,35 @@ for (const [, token, noun] of prose.matchAll(/\b([\w,]+)\s+(projects|domains)\b/
   if (n !== actual) fail(`copy claims "${token} ${noun}" but there are ${actual}`);
 }
 
+// profile.achievements' "delivered to client satisfaction" line: DevTools and
+// Dine In are personal builds with no client, so this counts nirmitee-track
+// projects only — a different denominator than the site-wide total above.
+const clientSlugs = new Set(
+  timeline.filter((e) => e.slug && e.track === "nirmitee").map((e) => e.slug),
+);
+const clientCount = projects.filter((p) => clientSlugs.has(p.slug)).length;
+const clientDomains = new Set(
+  projects.filter((p) => clientSlugs.has(p.slug)).map((p) => p.domain.split("·")[0].trim()),
+).size;
+
+const clientLine = profile.achievements.find((a) => /client satisfaction/i.test(a));
+if (clientLine) {
+  const claimedProjects = Number(clientLine.match(/(\d+)\s+projects/i)?.[1]);
+  const claimedDomains = Number(clientLine.match(/(\d+)\s+domains/i)?.[1]);
+  if (Number.isFinite(claimedProjects) && claimedProjects !== clientCount) {
+    fail(`achievement claims ${claimedProjects} client projects, there are ${clientCount} (nirmitee-track)`);
+  }
+  if (Number.isFinite(claimedDomains) && claimedDomains !== clientDomains) {
+    fail(`achievement claims ${claimedDomains} client domains, there are ${clientDomains} (nirmitee-track)`);
+  }
+} else {
+  warn('no achievement line matches /client satisfaction/i — the check above is now a no-op');
+}
+
 const deploy = headlineStats.find((s) => /deploy/i.test(s.label));
 if (deploy) {
   const modcart = projects.find((p) => p.slug === "modcart");
-  const backs = modcart?.highlights.some((h) => h.includes("10–15 seconds") || h.includes("8 minutes"));
+  const backs = modcart?.highlights.some((h) => h.includes("under 5 seconds") || h.includes("1 minute"));
   if (!backs) fail("headline deploy-downtime stat is not backed by any Modcart highlight");
 }
 
@@ -259,7 +286,7 @@ section("Résumé");
 // content/resume.ts holds the document's own prose, but every date on it must
 // still come from the timeline — that is the one thing the two must share.
 const resumeSlugs = [
-  ...resume.roles.flatMap((r) => r.projects.map((p) => p.slug)),
+  ...resume.majorProjects.map((p) => p.slug),
   ...resume.additional.map((a) => a.slug),
 ];
 
@@ -275,13 +302,15 @@ if (!existsSync(resumePath)) {
 } else {
   const built = readFileSync(resumePath, "utf8");
   for (const slug of resumeSlugs) {
-    const expected = periodFor(slug);
+    // resumePeriod collapses multi-phase timeline ranges to one overall span
+    // (ATS-readable); it is still derived from the timeline, never hand-typed.
+    const expected = resumePeriod(slug);
     if (!built.includes(expected)) {
       fail(`résumé shows a stale period for "${slug}" (timeline says "${expected}")`);
     }
   }
-  for (const role of resume.roles) {
-    if (!built.includes(role.period)) fail(`résumé omits role period "${role.period}"`);
+  for (const position of resume.positions) {
+    if (!built.includes(position.period)) fail(`résumé omits position period "${position.period}"`);
   }
   if (!built.includes(resume.education.period)) fail("résumé omits the education period");
   ok(`${resumeSlugs.length} résumé entries carry timeline dates`);
