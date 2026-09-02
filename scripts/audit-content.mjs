@@ -112,6 +112,52 @@ for (const project of projects) {
 }
 ok(`${roles.length} roles checked against project dates`);
 
+/* ------------------------------------------- experience bullet tech claims */
+section("Experience bullets vs their own projects' stacks");
+
+// A role's bullets are hand-written prose (like the résumé), so they can
+// silently cite a technology that belongs to a DIFFERENT role's projects.
+// Flag any named tech in a bullet that isn't in the stack of any project
+// actually listed under that role. Each skill's name AND its aliases count
+// as the same tech — "Express" the bullet-word and "Express.js" the
+// stack-spelling must not be treated as two different things.
+const skillEntries = skillGroups
+  .flatMap((g) => g.items)
+  .map((skill) => ({ spellings: [skill.name, ...(skill.aliases ?? [])] }))
+  .filter((s) => s.spellings.some((sp) => sp.length >= 4));
+// Longest spelling first, so "React Native" redacts before bare "React" is tested.
+skillEntries.sort(
+  (a, b) => Math.max(...b.spellings.map((s) => s.length)) - Math.max(...a.spellings.map((s) => s.length)),
+);
+
+for (const role of roles) {
+  const roleStack = new Set(
+    role.projects
+      .flatMap((slug) => projects.find((p) => p.slug === slug)?.stack ?? [])
+      .map((t) => t.toLowerCase()),
+  );
+  for (const bullet of role.bullets) {
+    let remaining = bullet;
+    for (const { spellings } of skillEntries) {
+      let m = null;
+      for (const spelling of spellings) {
+        const re = new RegExp(`\\b${spelling.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
+        m = remaining.match(re);
+        if (m) break;
+      }
+      if (!m) continue;
+      remaining = remaining.slice(0, m.index) + " ".repeat(m[0].length) + remaining.slice(m.index + m[0].length);
+      const covered = spellings.some((sp) => roleStack.has(sp.toLowerCase()));
+      if (!covered) {
+        fail(
+          `role "${role.title}" bullet names "${m[0]}" but no project under it (${role.projects.join(", ")}) lists ${spellings.map((s) => `"${s}"`).join("/")} in its stack: "${bullet}"`,
+        );
+      }
+    }
+  }
+}
+ok("role bullets cross-checked against their own projects' stacks");
+
 /* ----------------------------------------------------- hand-typed stats ---- */
 section("Hand-typed numbers in copy");
 

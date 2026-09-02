@@ -23,7 +23,7 @@ export const roles: Role[] = [
       "Revamped a legacy platform serving 160,000+ users with Next.js and TypeScript inside an Nx monorepo, improving performance, UX and developer productivity.",
       "Designed and built a scalable Node.js/Express modular service architecture, optimising inter-service communication and reliability.",
       "Built and optimised CI/CD pipelines with Docker on AWS for consistent multi-environment releases.",
-      "Improved scalability with Redis caching and Kafka event processing for real-time analytics and high-throughput workloads.",
+      "Set up Datadog and CloudWatch monitoring for a regulated FinTech platform, and led an AI-assisted log-analysis build on Azure AI Foundry for a sustainable-energy client.",
       "Led end-to-end feature delivery, collaborating closely with product, design and QA.",
     ],
     projects: ["estateguru", "nextdecade", "wellcompanion"],
@@ -39,7 +39,7 @@ export const roles: Role[] = [
     bullets: [
       "Built backend services in Node.js and Express, designing REST APIs and schemas across PostgreSQL and MongoDB.",
       "Developed features for a web and mobile platform serving 200,000+ users, including user management, payment-gateway and live-mapping integrations.",
-      "Implemented Redis caching and optimised database queries to improve response times.",
+      "Implemented Redis caching and Kafka-based real-time analytics, and optimised database queries to improve response times.",
       "Maintained responsive UI components across mobile, tablet and desktop breakpoints.",
       "Began the Estateguru revamp in this role and carried it through as SDE 2.",
     ],
