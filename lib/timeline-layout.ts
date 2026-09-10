@@ -47,6 +47,11 @@ const MILESTONE_ANCHOR = 10;
 const MIN_PX_PER_MONTH = 7;
 /** Two distinct event months never share a y closer than this. */
 const EVENT_GAP = 16;
+/** A finished stint's branch is never shorter than this, however brief the
+ *  engagement — a three-month project reads as a loop, not a blip (Dev,
+ *  2026-09-10: GOAPI). Year ticks follow the stretched scale, so time still
+ *  reads true, just not uniformly. */
+const MIN_SPAN_PX = 56;
 /** Junction dots on the spine keep at least this much clearance. */
 const JUNCTION_GAP = 12;
 const ELBOW = 26;
@@ -243,7 +248,19 @@ function collectEventMonths(): number[] {
  */
 function sweepEvents(anchors: Map<number, number>): EventPoint[] {
   const points: EventPoint[] = [];
+  const yOf = new Map<number, number>();
   let prev: EventPoint | null = null;
+
+  // Spans keyed by start month; their end months are swept first (the sweep
+  // runs present → past), so a start can be held MIN_SPAN_PX below its end.
+  const spansStarting = new Map<number, number[]>();
+  for (const entry of timeline) {
+    for (const span of entry.spans) {
+      if (!span.end) continue;
+      const start = monthIndex(span.start);
+      spansStarting.set(start, [...(spansStarting.get(start) ?? []), monthIndex(span.end)]);
+    }
+  }
 
   for (const month of collectEventMonths()) {
     let y = TOP_PAD;
@@ -252,9 +269,14 @@ function sweepEvents(anchors: Map<number, number>): EventPoint[] {
     }
     const anchored = anchors.get(month);
     if (anchored !== undefined) y = Math.max(y, anchored);
+    for (const end of spansStarting.get(month) ?? []) {
+      const endY = yOf.get(end);
+      if (endY !== undefined) y = Math.max(y, endY + MIN_SPAN_PX);
+    }
 
     const point = { month, y };
     points.push(point);
+    yOf.set(month, y);
     prev = point;
   }
 

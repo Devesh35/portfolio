@@ -197,6 +197,44 @@ body {
 }
 .marquee-host:hover .animate-marquee { animation-play-state: paused; }
 
+/* ------------------------------------------------------- system views */
+
+/* Boxes appear in dependency order: each waits on its rank (set by the
+   layout engine as --rank). Opacity only, so the measured layout never
+   moves. Reduced motion collapses this like everything else. */
+@keyframes arch-enter {
+  from { opacity: 0; }
+}
+.arch-enter {
+  animation: arch-enter 0.45s ease-out both;
+  animation-delay: calc(var(--rank, 0) * 90ms);
+}
+/* Hairline separators that fade out at both ends — between the two system
+   views (vertical) and above the node-detail panel (horizontal). */
+.rule-fade-y {
+  background: linear-gradient(to bottom, transparent, var(--color-line-bright) 18%, var(--color-line-bright) 82%, transparent);
+}
+.rule-fade-x {
+  background: linear-gradient(to right, transparent, var(--color-line-bright) 12%, var(--color-line-bright) 88%, transparent) top / 100% 1px no-repeat;
+}
+/* Quiet scrollbar — the page itself and any panel that scrolls inside it
+   (Dev, 2026-09-10: one style everywhere). */
+html,
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+.scroll-thin { scrollbar-gutter: stable; }
+html::-webkit-scrollbar,
+.scroll-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+html::-webkit-scrollbar-track,
+.scroll-thin::-webkit-scrollbar-track { background: transparent; }
+html::-webkit-scrollbar-thumb,
+.scroll-thin::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 3px; }
+html::-webkit-scrollbar-thumb:hover,
+.scroll-thin::-webkit-scrollbar-thumb:hover { background: var(--color-line-bright); }
+
+
 /* ------------------------------------------------------------------- links */
 
 .link-wipe {
@@ -370,28 +408,12 @@ body:has(dialog.resume-dialog[open]) { overflow: hidden; }
    own colour, but sit desaturated so a wall of 69 logos still reads as one
    surface; full colour arrives on hover and selection, where it is a signal.
    Chips opt in by clearing the filter — see [&_.skill-icon]:filter-none. */
-.skill-icon {
-  transition: transform 200ms var(--ease-snap);
-}
-
 /* Marks the generator measured as unreadable on this background. */
 .skill-icon-mono { filter: brightness(0) invert(1) opacity(0.92); }
 .skill-icon-lift { filter: brightness(2.1) saturate(1.15); }
 
-.chip:hover .skill-icon,
-.chip[aria-expanded="true"] .skill-icon {
-  transform: scale(1.12);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .skill-icon {
-    transition: none;
-  }
-  .chip:hover .skill-icon,
-  .chip[aria-expanded="true"] .skill-icon {
-    transform: none;
-  }
-}
+/* No hover scale on icons or chips (Dev, 2026-09-10) — the reveal highlight
+   is the only hover treatment. */
 
 /* -------------------------------------------------------------------- chips --
    Every tag on the site: skills, project stacks, competencies. A filled
@@ -413,11 +435,73 @@ body:has(dialog.resume-dialog[open]) { overflow: hidden; }
     transform 200ms var(--ease-snap);
 }
 
+/* -------------------------------------------------- reveal highlight --
+   Fluent-style reveal (the Windows 10 idiom), driven by
+   components/reveal-highlight.tsx writing --rx/--ry/--reveal-o onto items
+   near the cursor. The ring (::before) lights the border of every nearby
+   item; the fill (::after) shows only on the hovered one. Colour comes from
+   --reveal — ember by default, the node accent inside the systems tree. */
+/* Default light colour — nodes in the systems tree override --reveal with
+   their accent; declaring the default on :root (not on .chip) keeps that
+   inheritance working. */
+:root {
+  --reveal: var(--color-ember);
+}
+
+.chip,
+.btn,
+.reveal-item {
+  position: relative;
+}
+
+.chip::before,
+.btn::before,
+.reveal-item::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  background: radial-gradient(
+    9rem circle at var(--rx, 50%) var(--ry, 50%),
+    color-mix(in srgb, var(--reveal) 85%, transparent),
+    transparent 72%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: var(--reveal-o, 0);
+  pointer-events: none;
+  transition: opacity 150ms linear;
+}
+
+.chip::after,
+.btn::after,
+.reveal-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    7rem circle at var(--rx, 50%) var(--ry, 50%),
+    color-mix(in srgb, var(--reveal) 13%, transparent),
+    transparent 70%
+  );
+  transition: opacity 200ms var(--ease-snap);
+}
+
+.chip:hover::after,
+.btn:hover::after,
+.reveal-item:hover::after {
+  opacity: 1;
+}
+
 .chip:hover {
   background-color: var(--color-raised);
   border-color: var(--color-line-bright);
   color: var(--color-text);
-  transform: translateY(-1px);
 }
 
 .chip[aria-expanded="true"] {

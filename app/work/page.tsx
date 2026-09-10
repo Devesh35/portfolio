@@ -21,7 +21,7 @@ export default function WorkPage() {
   const peak = peakConcurrency();
 
   return (
-    <div className="mx-auto max-w-6xl px-5 pb-28 pt-36 sm:px-8 sm:pt-44">
+    <div className="mx-auto max-w-[87.5rem] px-5 pb-28 pt-36 sm:px-8 sm:pt-44">
       <header>
         <p className="animate-rise label">Nirmitee.io &amp; personal · 2021 – present</p>
         <h1

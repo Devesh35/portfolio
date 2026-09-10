@@ -117,7 +117,7 @@ export const resume = {
         "European property-lending platform operating across 8 countries. Phase 1 (Jun 2023 – Jun 2025) rebuilt the investor-facing web and mobile apps; Phase 2 (from Nov 2025) is new scope — the borrower-facing app.",
       bullets: [
         "Phase 1: joined as a full-stack developer for the revamp of the legacy investor portal.",
-        "Phase 2: rejoined as project lead, leading a team of 4 developers and 2 QA.",
+        "Phase 2: rejoined as project lead, leading a six-person team — 4 developers (2 frontend, 2 backend) and 2 QA.",
         "Revamped the legacy frontend to Next.js and TypeScript inside an Nx monorepo, rebuilding the investor dashboard, loan listings and auto-invest flows across the web app and React Native mobile app, with shared libraries, types and API clients.",
         "Migrated the backend to Node.js/Express modular services on MongoDB, designing the schemas and REST APIs for investor, loan and auto-invest data.",
         "Raised automated test coverage on the investor app from ~40% on the old platform to ~90% on the new one, using Jest and Cypress.",
@@ -132,7 +132,7 @@ export const resume = {
       context:
         "AI-assisted log analysis and monitoring platform for a sustainable-energy company, part of a larger operations-automation programme. Fixed-scope engagement, 6 weeks.",
       bullets: [
-        "Joined as project lead over a team of 4 developers and 1 QA — mostly backend and DevOps work, owning system design, code review and delivery.",
+        "Joined as project lead over a five-person team — 4 developers (2 frontend, 2 backend) and 1 QA — mostly backend and DevOps work, owning system design, code review and delivery.",
         "Built the AI-assisted log analysis platform end to end: ingested logs and metrics from multiple sources, and wired GPT-5.4 through Azure AI Foundry to explain failures and suggest fixes.",
         "Provisioned the Azure infrastructure with Terraform — App Service, Cosmos DB and Blob Storage — and set up CI/CD out of Azure Repos and Azure DevOps.",
         "Integrated single sign-on through Okta federated with Microsoft Entra ID, and governed privileged access with Microsoft Entra PIM.",
@@ -171,7 +171,7 @@ export const resume = {
       name: "Boongg",
       domain: "Mobility",
       url: "https://boongg.com",
-      text: "Replaced Boongg’s slowest booking queries with reworked, optimised versions because they were the platform’s main latency bottleneck, cutting search time from ~6s to under 2s across 1M+ rides.",
+      text: "Reworked Boongg’s slowest booking queries — the platform’s main latency bottleneck — cutting booking search time from ~6s to under 2s on a live rental platform (the client reports 1M+ rides completed).",
     },
     {
       slug: "datachamps",

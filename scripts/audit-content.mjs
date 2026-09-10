@@ -368,6 +368,41 @@ if (missing.length > 0) {
   warn(`on the site but not the résumé: ${missing.join(", ")} — intentional, the résumé keeps its original scope`);
 }
 
+/* -------------------------------------------------------- system views ---- */
+section("System views");
+
+const { buildViews, droppedKinds, KIND } = await import("../lib/architecture/index.ts");
+const { architectures } = await import("../content/architectures.ts");
+
+// Every node in every view is made only of tools in that project's stack —
+// the structural guarantee behind "every node is a real tool used here".
+// Also: an authored kind that resolved to nothing means the stack and the
+// view have drifted apart; a kind the registry doesn't know renders nothing.
+let viewCount = 0;
+for (const project of projects) {
+  const views = buildViews(project);
+  viewCount += views.length;
+  for (const view of views) {
+    for (const node of [...view.nodes, ...view.groups]) {
+      const foreign = node.items.filter((item) => !project.stack.includes(item));
+      if (foreign.length > 0) fail(`${project.slug} / ${view.id} / ${node.label}: not in stack — ${foreign.join(", ")}`);
+    }
+    for (const edge of view.edges) {
+      const ids = new Set([...view.nodes.map((n) => n.id), ...view.groups.map((g) => g.id)]);
+      if (!ids.has(edge.from) || !ids.has(edge.to)) fail(`${project.slug} / ${view.id}: dangling edge ${edge.from} → ${edge.to}`);
+    }
+  }
+  const dropped = droppedKinds(project);
+  if (dropped.length > 0) warn(`${project.slug}: authored nodes with no tool in the stack (not drawn): ${dropped.join(", ")}`);
+  for (const node of architectures[project.slug]?.app?.nodes ?? []) {
+    if (!KIND[node.kind]) fail(`${project.slug}: unknown node kind "${node.kind}" — add it to lib/architecture/kinds.ts`);
+  }
+}
+for (const slug of Object.keys(architectures)) {
+  if (!projects.some((p) => p.slug === slug)) fail(`architectures.ts has an entry for unknown project "${slug}"`);
+}
+if (failures.length === 0) ok(`${viewCount} views across ${projects.length} projects, every node filled only from its project's stack`);
+
 /* --------------------------------------------------------------- output ---- */
 console.log("");
 for (const w of warnings) console.log(`  WARN  ${w}`);

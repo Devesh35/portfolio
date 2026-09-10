@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import { projects, getProject } from "@/content/projects";
 import { isDevBuild } from "@/lib/env";
 import { groupStack } from "@/lib/stack-sections";
+import { buildViews } from "@/lib/architecture";
+import { ProjectSystems } from "@/components/architecture/project-systems";
 import { SkillIcon } from "@/components/skill-icon";
 import { OriginPanel } from "@/components/origin-tag";
 import { PhaseTags } from "@/components/phase-tags";
@@ -40,8 +42,12 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
   const index = projects.findIndex((p) => p.slug === project.slug);
   const next = projects[(index + 1) % projects.length];
 
+  // System views, derived from the stack — see lib/architecture/.
+  const views = buildViews(project);
+  const how = Object.fromEntries((project.skillsUsed ?? []).map((used) => [used.name, used.how]));
+
   return (
-    <article className="relative isolate mx-auto max-w-5xl px-5 pb-28 pt-36 sm:px-8 sm:pt-44">
+    <article className="relative isolate mx-auto max-w-[87.5rem] px-5 pb-28 pt-36 sm:px-8 sm:pt-44">
       {/* The project's own line art, ghosted behind the header. */}
       <div
         aria-hidden="true"
@@ -96,11 +102,9 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
       </header>
 
       {project.image.kind === "placeholder" || project.image.kind === "cover" ? (
-        /* Visitors see nothing here — the sidebar already links the live
-           site. The reminder renders on the dev server only (lib/env.ts). */
-        isDevBuild ? (
-          /* No real screenshot yet. Showing the generated card here would just
-             repeat the heading above it, so this carries the link instead. */
+        /* Internal note only — renders on the dev server, never in production
+           (lib/env.ts). Visitors get the system diagrams below. */
+        isDevBuild && (
           <div
             className="animate-rise mt-14 flex flex-wrap items-center justify-between gap-6 border border-line border-l-2 border-l-ember-dim bg-surface px-6 py-5"
             style={{ "--rise-delay": "240ms" } as React.CSSProperties}
@@ -120,7 +124,7 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
               </a>
             )}
           </div>
-        ) : null
+        )
       ) : (
         <figure
           className="animate-rise mt-14"
@@ -142,7 +146,16 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
         </figure>
       )}
 
-      <div className="mt-20 grid gap-16 lg:grid-cols-[1.55fr_1fr] lg:gap-20">
+      {/* ------------------------------------------------ system views --
+          DERIVED from the stack (lib/architecture/): a node exists only if
+          the project used one of its tools, an edge only if both ends exist,
+          a view only if it has something to show. Laid out automatically
+          unless the project's entry fixes a shape. */}
+      <div className="animate-rise mt-14" style={{ "--rise-delay": "260ms" } as React.CSSProperties}>
+        <ProjectSystems views={views} how={how} />
+      </div>
+
+      <div className="mt-28 grid gap-16 lg:grid-cols-[1.55fr_1fr] lg:gap-20">
         <div>
           <section data-reveal>
             <h2 className="label">The product</h2>
@@ -153,26 +166,6 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
             <h2 className="label">What I built</h2>
             <p className="prose-body mt-4 text-lg text-text/90">{project.contribution}</p>
           </section>
-
-          {project.skillsUsed && project.skillsUsed.length > 0 && (
-            <section data-reveal className="mt-14">
-              <h2 className="label">Skills used on this project</h2>
-              <dl className="mt-6 divide-y divide-line border-y border-line">
-                {project.skillsUsed.map((item) => (
-                  <div
-                    key={item.name}
-                    className="group/skill grid gap-1.5 py-4 sm:grid-cols-[11rem_1fr] sm:gap-6"
-                  >
-                    <dt className="flex items-center gap-2 font-mono text-sm text-steel transition-colors duration-300 group-hover/skill:text-ember group-hover/skill:[&_.skill-icon]:filter-none">
-                      <SkillIcon name={item.name} size={14} />
-                      {item.name}
-                    </dt>
-                    <dd className="text-[0.9375rem] leading-relaxed text-muted">{item.how}</dd>
-                  </div>
-                ))}
-              </dl>
-            </section>
-          )}
 
           {project.highlights.length > 0 && (
             <section data-reveal className="mt-14">
@@ -212,6 +205,8 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
               </dl>
             </div>
           )}
+          <DepthByArea stack={project.stack} />
+
           <div data-reveal>
             <h2 className="label">Stack</h2>
             <div className="mt-5 space-y-5">
@@ -224,7 +219,7 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
                     {section.items.map((tech) => (
                       <li
                         key={tech}
-                        className="border border-line px-2.5 py-1.5 font-mono text-[0.6875rem] text-muted"
+                        className="reveal-item border border-line px-2.5 py-1.5 font-mono text-[0.6875rem] text-muted"
                       >
                         <SkillIcon name={tech} size={12} className="mr-1.5 inline-block align-[-1px]" />
                         {tech}
@@ -261,5 +256,43 @@ export default async function ProjectPage(props: PageProps<"/work/[slug]">) {
         </Link>
       </nav>
     </article>
+  );
+}
+
+/**
+ * "Depth by area" — a per-project, server-rendered read of how many stack
+ * entries fall in each section, sized relative to the project's own busiest
+ * section (not compared across projects). No self-assigned ratings: every bar
+ * is a direct, checkable function of the stack list immediately below it.
+ */
+function DepthByArea({ stack }: { stack: readonly string[] }) {
+  const sections = groupStack(stack);
+  if (sections.length === 0) return null;
+
+  const maxCount = Math.max(...sections.map((section) => section.items.length));
+
+  return (
+    <div data-reveal>
+      <h2 className="label">Depth by area</h2>
+      <p className="mt-2 font-mono text-[0.625rem] leading-relaxed text-dim">
+        Relative, by tools used in each area — check against the stack list below.
+      </p>
+      <div className="mt-5 space-y-3">
+        {sections.map((section) => (
+          <div key={section.label}>
+            <div className="flex items-baseline justify-between font-mono text-[0.625rem] uppercase tracking-[0.1em] text-dim">
+              <span>{section.label}</span>
+              <span className="tabular">{section.items.length}</span>
+            </div>
+            <div className="mt-1.5 h-1 w-full bg-line">
+              <div
+                className="h-full bg-ember-dim"
+                style={{ width: `${(section.items.length / maxCount) * 100}%` }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

@@ -17,7 +17,7 @@ const PATHS: Record<string, React.ReactNode> = {
       <path d="M3 12.4h18" />
     </>
   ),
-  "/skills": (
+  "/systems": (
     <>
       <path d="M12 3.4 21 8l-9 4.6L3 8Z" />
       <path d="m3 12.6 9 4.6 9-4.6" />

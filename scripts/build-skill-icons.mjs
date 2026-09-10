@@ -101,6 +101,10 @@ const ICONS = {
   Terraform: "logos:terraform-icon",
   "GitHub Actions": "logos:github-actions",
   "GitLab CI/CD": "simple:gitlab",
+  "Nx Cloud": "simple:nx",
+  Vercel: "logos:vercel-icon",
+  "App Store": "logos:apple-app-store",
+  "Google Play": "logos:google-play-icon",
   Datadog: "logos:datadog-icon",
   "ELK Stack": "logos:elasticsearch",
 
@@ -118,12 +122,27 @@ const ICONS = {
   Razorpay: "simple:razorpay",
   "Google Maps": "logos:google-maps",
   "Meta Business APIs (WhatsApp, Facebook, Instagram)": "logos:meta-icon",
+  "Google Analytics": "logos:google-analytics",
+  "Meta Pixel": "logos:meta-icon",
+
+  /* design */
+  Figma: "logos:figma",
+  "draw.io": "simple:diagramsdotnet",
+  Mermaid: "simple:mermaid",
+  Storybook: "logos:storybook-icon",
+
+  /* AI tools */
+  Claude: "logos:claude-icon",
+  ChatGPT: "logos:openai-icon",
+  Codex: "logos:codex",
+  Gemini: "logos:google-gemini-icon",
 
   /* tooling */
   Git: "logos:git-icon",
   GitHub: "logos:github-icon",
   GitLab: "simple:gitlab",
   Bitbucket: "logos:bitbucket",
+  Postman: "logos:postman-icon",
   JIRA: "logos:jira",
   ESLint: "logos:eslint",
 };
@@ -136,6 +155,29 @@ const MONOGRAM = {
   "GPT-5.4": "AI",
   Canvas: "2D",
   "Simulation engines": "SIM",
+  "Design system": "DS",
+  Tally: "TLY",
+};
+
+/** Practices with no product behind them get a drawn line glyph in the site's
+ *  hairline style (24 × 24, stroke, currentColor) — Dev, 2026-09-10: every
+ *  skill gets an icon. */
+const S = 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
+const GLYPHS = {
+  "Responsive & cross-platform UI": `<g ${S}><rect x="2.5" y="4" width="15" height="11" rx="1.5"/><path d="M7 19h5"/><rect x="15.5" y="9" width="6" height="11" rx="1.5"/><path d="M18.5 17.5v.01"/></g>`,
+  "REST API design": `<g ${S}><path d="M8 7l-4 5 4 5M16 7l4 5-4 5M13.5 5l-3 14"/></g>`,
+  Microservices: `<g ${S}><rect x="3" y="3" width="6" height="6" rx="1.2"/><rect x="15" y="3" width="6" height="6" rx="1.2"/><rect x="9" y="15" width="6" height="6" rx="1.2"/><path d="M9 6h6M7.5 9l3 6M16.5 9l-3 6"/></g>`,
+  "Schema design": `<g ${S}><rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M3 9h18M9 9v11M15 9v11"/></g>`,
+  "Query optimisation & scaling": `<g ${S}><ellipse cx="10" cy="5.5" rx="6.5" ry="2.5"/><path d="M3.5 5.5v12c0 1.4 2.9 2.5 6.5 2.5M16.5 5.5v4"/><path d="M19 11l-3.5 5h4L16 21"/></g>`,
+  "node:test runner": `<g ${S}><path d="M12 2.5l8 4.6v9.3l-8 4.6-8-4.6V7.1z"/><path d="M8.5 12.2l2.4 2.4 4.8-4.8"/></g>`,
+  "Unit testing": `<g ${S}><path d="M9.5 3h5M10 3v6l-5.5 9.2A1.5 1.5 0 0 0 5.8 20.5h12.4a1.5 1.5 0 0 0 1.3-2.3L14 9V3"/><path d="M7.5 15.5h9"/></g>`,
+  "Integration testing": `<g ${S}><path d="M10 14a4 4 0 0 1 0-5.7l2.3-2.3a4 4 0 0 1 5.7 5.7l-1.2 1.2"/><path d="M14 10a4 4 0 0 1 0 5.7l-2.3 2.3a4 4 0 0 1-5.7-5.7l1.2-1.2"/></g>`,
+  "SSO / OAuth 2.0": `<g ${S}><circle cx="8" cy="9" r="4.5"/><path d="M11.5 12.5L20 21M17 18l2-2M14.5 15.5l2-2"/></g>`,
+  "CI/CD pipelines": `<g ${S}><path d="M20 12a8 8 0 0 1-14.3 4.9M4 12a8 8 0 0 1 14.3-4.9"/><path d="M4 21v-4.5h4.5M20 3v4.5h-4.5"/></g>`,
+  "Multi-environment deployments": `<g ${S}><path d="M12 3l9 4.5-9 4.5-9-4.5z"/><path d="M3 12l9 4.5 9-4.5M3 16.5L12 21l9-4.5"/></g>`,
+  "Blue-green deployment": `<g ${S}><circle cx="7" cy="12" r="4"/><circle cx="17" cy="12" r="4" stroke-dasharray="3.5 2.5"/><path d="M11 12h2"/></g>`,
+  "Rolling deployments": `<g ${S}><rect x="3" y="9" width="4.5" height="6" rx="1"/><rect x="9.75" y="9" width="4.5" height="6" rx="1"/><rect x="16.5" y="9" width="4.5" height="6" rx="1"/><path d="M6 4.5h11M14.5 2l2.5 2.5L14.5 7M18 19.5H7M9.5 17L7 19.5 9.5 22"/></g>`,
+  "Agile / Scrum": `<g ${S}><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4v4h-4"/><circle cx="12" cy="12" r="1.5"/></g>`,
 };
 
 /* ------------------------------------------------------------- extraction */
@@ -205,7 +247,8 @@ function luminance(hex) {
 
 function toneFor(body) {
   const cols = [...body.matchAll(/#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b/g)].map((m) => m[1]);
-  if (!cols.length) return null;
+  // No colour at all (Vercel's bare <path>) means SVG's default: black.
+  if (!cols.length) return /fill=/.test(body) ? null : "mono";
   const lums = cols.map(luminance);
   const brightest = Math.max(...lums);
   if (brightest >= 72) return null;
@@ -229,6 +272,7 @@ for (const name of names) {
   let icon = resolveIcon(ICONS[name]);
   if (!icon && ICONS[name]) unresolved.push(`${name} (${ICONS[name]})`);
   if (!icon && MONOGRAM[name]) icon = { kind: "monogram", text: MONOGRAM[name] };
+  if (!icon && GLYPHS[name]) icon = { kind: "glyph", body: GLYPHS[name].replace(/\s+/g, " ").trim() };
   if (icon?.kind === "markup") {
     const tone = toneFor(icon.body);
     if (tone) icon = { ...icon, tone };
@@ -241,7 +285,9 @@ const json = (v) => JSON.stringify(v);
 const lines = entries.map(([name, icon]) =>
   icon.kind === "markup"
     ? `  ${json(name)}: { kind: "markup", viewBox: ${json(icon.viewBox)},${icon.tone ? ` tone: ${json(icon.tone)},` : ""} body: ${json(icon.body)} },`
-    : `  ${json(name)}: { kind: "monogram", text: ${json(icon.text)} },`,
+    : icon.kind === "glyph"
+      ? `  ${json(name)}: { kind: "glyph", body: ${json(icon.body)} },`
+      : `  ${json(name)}: { kind: "monogram", text: ${json(icon.text)} },`,
 );
 
 writeFileSync(
@@ -250,6 +296,7 @@ writeFileSync(
 
 export type SkillIcon =
   | { kind: "markup"; viewBox: string; body: string; tone?: "mono" | "lift" }
+  | { kind: "glyph"; body: string }
   | { kind: "monogram"; text: string };
 
 export const skillIcons: Record<string, SkillIcon> = {

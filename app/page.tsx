@@ -2,6 +2,8 @@ import Link from "next/link";
 
 import {CountUp} from "@/components/count-up";
 import {GridBackdrop} from "@/components/grid-backdrop";
+import {HeroGlow} from "@/components/hero-glow";
+import {LifecycleExplorer, type LifecycleProjectLink} from "@/components/lifecycle-explorer";
 import {ProjectCard} from "@/components/project-card";
 import {ResumeButton} from "@/components/resume-button";
 import {ScrambleText} from "@/components/scramble-text";
@@ -9,19 +11,49 @@ import {SimariumSection} from "@/components/simarium-section";
 import {TechMarquee} from "@/components/tech-marquee";
 
 import {headlineStats, lifecycle, profile} from "@/content/profile";
-import {featuredProjects, projects} from "@/content/projects";
+import {PHASE_ORDER, featuredProjects, projects} from "@/content/projects";
+import {simarium} from "@/content/simarium";
 import {yearsSinceCareerStart} from "@/lib/experience";
+
+const FOOTPRINT = [
+  {
+    title: "Design",
+    body: "Architecture, database schemas, access models.",
+  },
+  {
+    title: "Delivery",
+    body: "CI/CD, Docker, Terraform, environments as code.",
+  },
+  {
+    title: "Production",
+    body: "Monitoring, migrations, rollback paths.",
+  },
+  {
+    title: "Leadership",
+    body: "Project lead on five- and six-person teams; system design, code review and delivery.",
+  },
+];
 
 export default function HomePage() {
   const years = yearsSinceCareerStart();
+
+  // Fully resolved server-side from the same ownership matrix the project
+  // pages already use — the lifecycle explorer invents nothing new.
+  const projectsByPhase: Record<string, LifecycleProjectLink[]> = {};
+  for (const phase of PHASE_ORDER) {
+    projectsByPhase[phase] = projects
+      .filter((project) => project.ownership.includes(phase))
+      .map((project) => ({ slug: project.slug, name: project.name, domain: project.domain, origin: project.origin }));
+  }
 
   return (
     <>
       {/* ---------------------------------------------------------------- hero */}
       <section className="relative flex min-h-[92svh] items-center overflow-hidden pt-16">
         <GridBackdrop />
+        <HeroGlow />
 
-        <div className="relative mx-auto w-full max-w-6xl px-5 py-20 sm:px-8">
+        <div className="relative mx-auto w-full max-w-[87.5rem] px-5 py-20 sm:px-8">
           <p
             className="animate-rise label flex flex-wrap items-center gap-x-3 gap-y-2"
             style={{"--rise-delay": "40ms"} as React.CSSProperties}>
@@ -70,11 +102,12 @@ export default function HomePage() {
             </a>
           </div>
 
-          {/* Dev's own outcomes. Client platform numbers stay on project pages. */}
+          {/* Dev's own outcomes. Client platform numbers stay on project pages.
+              CountUp renders the real value in the server HTML — see components/count-up.tsx. */}
           <dl
             className="animate-rise mt-20 grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-4"
             style={{"--rise-delay": "520ms"} as React.CSSProperties}>
-            <div className="bg-ground p-5">
+            <div className="reveal-item bg-ground p-5">
               <dt className="label min-h-[2.4em]">Building since 2021</dt>
               <dd className="mt-2 font-display text-3xl font-semibold">
                 <CountUp to={Number(years)} decimals={1} suffix=" yrs" />
@@ -85,7 +118,7 @@ export default function HomePage() {
             </div>
 
             {headlineStats.map((stat) => (
-              <div key={stat.label} className="bg-ground p-5">
+              <div key={stat.label} className="reveal-item bg-ground p-5">
                 <dt className="label min-h-[2.4em]">{stat.label}</dt>
                 <dd className="mt-2 font-display text-3xl font-semibold">
                   <CountUp to={stat.value} suffix={stat.suffix} />
@@ -99,49 +132,66 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ------------------------------------------------------------ lab teaser */}
+      <section className="border-t border-line">
+        <div className="mx-auto max-w-[87.5rem] px-5 py-10 sm:px-8">
+          <div
+            data-reveal
+            className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="prose-body max-w-2xl text-sm sm:text-base">
+              I also build simulations of the systems developers use every
+              day — the Git visualizer runs real merge, rebase and
+              cherry-pick on a modelled commit graph.
+            </p>
+            <a
+              href={simarium.url}
+              target="_blank"
+              rel="noreferrer"
+              className="link-wipe shrink-0 font-mono text-sm text-ember">
+              {simarium.name} ↗
+            </a>
+          </div>
+        </div>
+      </section>
+
       <TechMarquee />
 
       {/* ------------------------------------------------------------ lifecycle */}
-      <section className="mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
-        <div data-reveal className="flex items-baseline gap-4">
-          <h2 className="font-display text-3xl font-semibold sm:text-4xl">
-            Designed, led, built, tested, shipped, operated
-          </h2>
+      <section className="mx-auto max-w-[87.5rem] px-5 py-24 sm:px-8 sm:py-32">
+        <div data-reveal className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p className="label">Delivery lifecycle</p>
+            <h2 className="font-display mt-3 text-3xl font-semibold sm:text-4xl">
+              Designed, led, built, tested, shipped, operated
+            </h2>
+            <p className="prose-body mt-4 max-w-2xl">
+              The six parts of delivery I have personally handled on production
+              systems. Pick one to see where.
+            </p>
+          </div>
+          <p className="hidden border-l border-line pl-4 font-mono text-[0.6875rem] uppercase leading-relaxed tracking-[0.12em] text-dim lg:block">
+            Same systems.
+            <br />
+            Different stages.
+            <br />
+            Real ownership.
+          </p>
         </div>
-        <p data-reveal className="prose-body mt-4 max-w-2xl">
-          The six parts of delivery I have personally handled on production
-          systems. Every project below is tagged with the ones I was
-          responsible for.
-        </p>
-        <div data-rule className="rule-accent mt-8 w-full" />
 
-        <div className="mt-12 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-3">
-          {lifecycle.map((phase, i) => (
-            <div
-              key={phase.id}
-              data-reveal
-              style={{"--reveal-delay": `${i * 80}ms`} as React.CSSProperties}
-              className="bg-ground py-6 sm:p-7">
-              <h3 className="font-display text-2xl font-semibold">
-                {phase.title}
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted">
-                {phase.body}
-              </p>
-            </div>
-          ))}
+        <div data-reveal className="mt-10">
+          <LifecycleExplorer phases={lifecycle} projectsByPhase={projectsByPhase} defaultPhaseId="design" />
         </div>
       </section>
 
       {/* ---------------------------------------------------------- selected work */}
       <section className="border-t border-line bg-surface/40">
-        <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
+        <div className="mx-auto max-w-[87.5rem] px-5 py-24 sm:px-8 sm:py-32">
           <div
             data-reveal
             className="flex flex-wrap items-baseline justify-between gap-4">
             <div className="flex items-baseline gap-4">
               <h2 className="font-display text-3xl font-semibold sm:text-4xl">
-                Selected work
+                Shipped for real businesses
               </h2>
             </div>
             <Link
@@ -150,6 +200,9 @@ export default function HomePage() {
               All {projects.length} projects →
             </Link>
           </div>
+          <p data-reveal className="prose-body mt-3 max-w-2xl text-sm text-muted">
+            Client platforms I shipped, with the part of each I owned.
+          </p>
           <div data-rule className="rule-accent mt-6 w-full" />
 
           <div className="mt-14 grid gap-x-8 gap-y-16 md:grid-cols-2">
@@ -160,24 +213,29 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* -------------------------------------------------------------- simarium */}
+      {/* -------------------------------------------------------------- the lab */}
       <SimariumSection />
 
       {/* -------------------------------------------------------------- closing */}
-      <section className="mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
+      <section className="mx-auto max-w-[87.5rem] px-5 py-24 sm:px-8 sm:py-32">
         <div className="grid gap-12 md:grid-cols-[1.2fr_1fr] md:gap-16">
           <div data-reveal>
             <div className="flex items-baseline gap-4">
               <h2 className="font-display text-3xl font-semibold sm:text-4xl">
-                The short version
+                What I&apos;ve owned
               </h2>
             </div>
-            <p className="prose-body mt-8 text-base sm:text-lg">
-              {profile.intro}
-            </p>
+            <dl className="mt-8 grid gap-x-8 gap-y-7 sm:grid-cols-2">
+              {FOOTPRINT.map((group) => (
+                <div key={group.title}>
+                  <dt className="label">{group.title}</dt>
+                  <dd className="prose-body mt-2 text-sm sm:text-base">{group.body}</dd>
+                </div>
+              ))}
+            </dl>
             <Link
               href="/about"
-              className="link-wipe mt-6 inline-block font-mono text-sm text-ember">
+              className="link-wipe mt-8 inline-block font-mono text-sm text-ember">
               More about how I work →
             </Link>
           </div>

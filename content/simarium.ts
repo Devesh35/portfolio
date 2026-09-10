@@ -1,7 +1,8 @@
 /**
  * Simarium — Dev's own venture, kept separate from client work on purpose.
  * Everything here is either from the canonical résumé or observable on the
- * live site. Nothing is inferred.
+ * live site. Nothing is inferred. Statuses last checked against
+ * devtools.simarium.in on 2026-09-10.
  */
 
 export type ToolStatus = "live" | "partial" | "building";
@@ -28,9 +29,19 @@ export const simarium = {
       body: "Run add, commit, merge, rebase and cherry-pick against a modelled repository and watch the commit graph respond.",
     },
     {
+      name: "Kafka Playground",
+      status: "live" as ToolStatus,
+      body: "Design topics, then simulate the cluster — producers, partitions and consumer groups you can push events through.",
+    },
+    {
       name: "JavaScript Internals",
-      status: "partial" as ToolStatus,
-      body: "Event loop and array node canvas are live; the rest of the runtime model is in progress.",
+      status: "live" as ToolStatus,
+      body: "The event loop, call stack and queues, stepped through as code runs.",
+    },
+    {
+      name: "Docker World",
+      status: "building" as ToolStatus,
+      body: "Build containers and schedule them onto a simulated Kubernetes cluster.",
     },
     {
       name: "AWS Playground",
@@ -38,9 +49,9 @@ export const simarium = {
       body: "Cloud primitives as manipulable objects rather than console screenshots.",
     },
     {
-      name: "Kafka Playground",
+      name: "Database",
       status: "building" as ToolStatus,
-      body: "Producers, partitions and consumer groups you can push events through.",
+      body: "Schema builder and visualizer for SQL and NoSQL models.",
     },
     {
       name: "Web Communication",

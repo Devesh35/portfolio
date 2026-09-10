@@ -6,6 +6,10 @@ const STATUS_STYLE: Record<ToolStatus, string> = {
   building: "border-line text-dim",
 };
 
+// Statuses only — no percentages, no dates. If these read stale, the fix is
+// content/simarium.ts, not this component.
+const currentlyBuilding = simarium.tools.filter((tool) => tool.status !== "live");
+
 export function SimariumSection() {
   return (
     <section className="relative overflow-hidden border-y border-line bg-void">
@@ -18,15 +22,12 @@ export function SimariumSection() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto max-w-6xl px-5 py-24 sm:px-8 sm:py-32">
+      <div className="relative mx-auto max-w-[87.5rem] px-5 py-24 sm:px-8 sm:py-32">
         <div
           data-reveal
           className="flex flex-wrap items-baseline justify-between gap-4">
           <div className="flex items-baseline gap-4">
-            <h2 className="font-display text-3xl font-semibold sm:text-4xl">
-              {simarium.name}
-              <span className="text-dim"> — built for myself</span>
-            </h2>
+            <p className="label text-ember">The Lab</p>
           </div>
           <a
             href={simarium.url}
@@ -36,7 +37,28 @@ export function SimariumSection() {
             {simarium.url.replace(/^https?:\/\//, "")} ↗
           </a>
         </div>
+        <h2 data-reveal className="mt-2 font-display text-3xl font-semibold sm:text-4xl">
+          {simarium.name}
+          <span className="text-dim"> — built for myself</span>
+        </h2>
         <div data-rule className="rule-accent mt-6 w-full" />
+
+        {currentlyBuilding.length > 0 ? (
+          <div data-reveal className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2">
+            <p className="label shrink-0">Currently building</p>
+            <ul className="flex flex-wrap gap-x-5 gap-y-2">
+              {currentlyBuilding.map((tool) => (
+                <li key={tool.name} className="flex items-center gap-2 text-sm text-muted">
+                  <span
+                    className={`border px-1.5 py-0.5 font-mono text-[0.5625rem] uppercase tracking-widest ${STATUS_STYLE[tool.status]}`}>
+                    {STATUS_LABEL[tool.status]}
+                  </span>
+                  {tool.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
 
         <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-20">
           <div data-reveal className="lg:sticky lg:top-24 lg:self-start">

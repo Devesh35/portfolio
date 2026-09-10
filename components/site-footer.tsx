@@ -5,7 +5,7 @@ import { nav } from "@/content/site";
 export function SiteFooter() {
   return (
     <footer className="border-t border-line bg-void">
-      <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8">
+      <div className="mx-auto max-w-[87.5rem] px-5 py-16 sm:px-8">
         <div className="flex flex-col gap-12 md:flex-row md:justify-between">
           <div className="max-w-sm">
             <p className="label">Available for work</p>
@@ -26,12 +26,23 @@ export function SiteFooter() {
               <ul className="mt-4 space-y-2.5">
                 {nav.map((item) => (
                   <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="link-wipe font-mono text-sm text-muted hover:text-text"
-                    >
-                      {item.label}
-                    </Link>
+                    {"external" in item && item.external ? (
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="link-wipe font-mono text-sm text-muted hover:text-text"
+                      >
+                        {item.label} ↗
+                      </a>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className="link-wipe font-mono text-sm text-muted hover:text-text"
+                      >
+                        {item.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

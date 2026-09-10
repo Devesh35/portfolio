@@ -3,6 +3,15 @@ import { projects } from "@/content/projects";
 /**
  * Everything Dev works with, merged from all four résumés.
  *
+ * Groups are the SYSTEMS PAGE node taxonomy (SYSTEMS-PAGE-PLAN.md, 2026-09-09):
+ * each group is one node in the build-to-production tree at /systems, read top
+ * to bottom the way a build reaches production. Every skill has exactly one
+ * home group (its primary chip); a few are additionally cross-listed into a
+ * second node via `alsoIn`, rendered dimmed there so nothing looks
+ * double-counted. Project stacks are unaffected by the grouping —
+ * lib/stack-sections.ts and scripts/sync-stacks.mjs classify by skill NAME,
+ * never by these group ids.
+ *
  * Evidence — which projects prove a skill — resolves in one of two ways:
  *   1. `projects`: an explicit list, in Dev's own words (2026-08-29). This is
  *      the source of truth wherever it is set.
@@ -19,6 +28,16 @@ export interface Skill {
   note?: string;
   /** Explicit evidence — project slugs, overriding stack derivation. */
   projects?: string[];
+  /** Group ids this skill ALSO renders in, dimmed, beside its one primary
+   *  chip (e.g. a managed database shown under Data too). Presentational
+   *  only — evidence and the audit's once-per-skill check use the home
+   *  group. */
+  alsoIn?: string[];
+  /** Sub-heading inside a node's chip list (Integrations: Identity/Services). */
+  subgroup?: string;
+  /** New entry with no project evidence yet — renders dashed until Dev
+   *  supplies the projects it should claim. */
+  pending?: boolean;
 }
 
 export interface SkillGroup {
@@ -40,11 +59,26 @@ const ON_AWS = ["estateguru", "modcart", "boongg", "goapi", "datachamps", "trade
 /** Everything with a database — devtools runs entirely client-side. */
 const WITH_DB = ALL.filter((slug) => slug !== "devtools");
 
+const DESIGN_NOTE = "Used across design work — not tied to one project here yet.";
+const AI_TOOL_NOTE = "Everyday AI tooling — not tied to one project here.";
+
 export const skillGroups: SkillGroup[] = [
   {
-    id: "frontend",
-    label: "Frontend & Mobile",
-    note: "Where most of the delivery happens.",
+    id: "design",
+    label: "Design",
+    note: "Where systems start",
+    items: [
+      { name: "Figma", note: DESIGN_NOTE, pending: true },
+      { name: "draw.io", note: DESIGN_NOTE, pending: true },
+      { name: "Mermaid", note: DESIGN_NOTE, pending: true },
+      { name: "Storybook", projects: ["estateguru"] },
+      { name: "Design system", projects: ["estateguru"] },
+    ],
+  },
+  {
+    id: "web",
+    label: "Web",
+    note: "Client applications",
     items: [
       { name: "Next.js", projects: ["estateguru", "devtools"] },
       { name: "React", aliases: ["React.js"], projects: ["nextdecade", "modcart", "boongg", "datachamps", "tradegully", "bestosys", "dine-in"] },
@@ -61,9 +95,9 @@ export const skillGroups: SkillGroup[] = [
     ],
   },
   {
-    id: "backend",
-    label: "Backend",
-    note: "Modular services, not monoliths.",
+    id: "api",
+    label: "API",
+    note: "Backend services",
     items: [
       { name: "Node.js" },
       { name: "Express.js", aliases: ["Express"], projects: WITH_DB },
@@ -72,16 +106,12 @@ export const skillGroups: SkillGroup[] = [
       { name: "WebSocket" },
       { name: "Apache Kafka", aliases: ["Kafka"] },
       { name: "Swagger / OpenAPI" },
-      { name: "SSO / OAuth 2.0", aliases: ["SSO"], projects: ["estateguru", "nextdecade", "modcart", "wellcompanion", "dine-in"] },
-      { name: "Google Sign-In", aliases: ["Google OAuth"], projects: ["estateguru", "modcart", "wellcompanion", "dine-in"] },
-      { name: "Meta Login", aliases: ["Facebook Login"] },
-      { name: "Sign in with Apple", aliases: ["Apple Sign-In"] },
     ],
   },
   {
     id: "data",
-    label: "Databases & Caching",
-    note: "Schema design, and the migrations between them.",
+    label: "Data",
+    note: "Storage & query",
     items: [
       { name: "MongoDB" },
       { name: "PostgreSQL" },
@@ -97,86 +127,9 @@ export const skillGroups: SkillGroup[] = [
     ],
   },
   {
-    id: "aws",
-    label: "AWS",
-    note: "Grouped by what they do: compute, storage, data, edge, messaging, operations.",
-    items: [
-      { name: "AWS", aliases: ["AWS (EC2, S3, RDS, IAM, CloudWatch, Lambda)"], projects: ON_AWS },
-
-      { name: "Amazon EC2", aliases: ["EC2"], note: "Compute — the instances application services run on.", projects: ["boongg", "datachamps"] },
-      { name: "AWS Elastic Beanstalk", aliases: ["Elastic Beanstalk"], note: "Managed application environments.", projects: ["modcart", "goapi", "tradegully", "bestosys"] },
-      { name: "Amazon ECS", aliases: ["ECS"], note: "Container orchestration for the services.", projects: ["estateguru"] },
-      { name: "AWS Lambda", aliases: ["Lambda"], note: "Event-driven functions off the request path." },
-
-      { name: "Amazon S3", aliases: ["S3"], note: "Object storage — assets, artefacts, backups.", projects: ON_AWS },
-
-      { name: "Amazon RDS", aliases: ["RDS"], note: "Managed relational databases.", projects: ["goapi", "datachamps"] },
-      { name: "Amazon DynamoDB", aliases: ["DynamoDB"], note: "Managed key-value store.", projects: ["tradegully"] },
-
-      { name: "Amazon Route 53", aliases: ["Route 53", "Route53"], note: "DNS and record management.", projects: ON_AWS },
-      { name: "Elastic Load Balancing", aliases: ["ELB"], note: "Traffic distribution across instances.", projects: ON_AWS },
-      { name: "Amazon CloudFront", aliases: ["CloudFront"], note: "CDN in front of the application.", projects: ["estateguru", "modcart", "bestosys"] },
-
-      { name: "Amazon SNS", aliases: ["SNS"], note: "Pub/sub notifications between services.", projects: ["estateguru", "boongg"] },
-      { name: "Amazon SQS", aliases: ["SQS"], note: "Queues that decouple slow work from requests.", projects: ["estateguru", "boongg"] },
-
-      { name: "AWS IAM", aliases: ["IAM"], note: "Roles and policies scoping what each service can touch.", projects: ON_AWS },
-      { name: "Amazon CloudWatch", aliases: ["CloudWatch"], projects: ON_AWS },
-    ],
-  },
-  {
-    id: "azure",
-    label: "Azure",
-    note: "The second cloud — where the observability platform lives.",
-    items: [
-      { name: "Azure", aliases: ["Azure (VMs, App Services, DevOps, Repos)"], projects: ["nextdecade", "wellcompanion"] },
-      { name: "Azure App Service", projects: ["nextdecade", "wellcompanion"] },
-      { name: "Azure Blob Storage", aliases: ["Blob Storage", "Storage containers"] },
-      { name: "Azure Cosmos DB", aliases: ["Cosmos DB", "Cosmos"] },
-      { name: "Azure AI Foundry" },
-      { name: "Microsoft Entra ID", aliases: ["Entra ID", "Azure AD"] },
-      { name: "Microsoft Entra PIM", aliases: ["PIM", "Privileged Identity Management"] },
-      { name: "Azure DevOps" },
-      { name: "Azure Repos" },
-    ],
-  },
-  {
-    id: "containers",
-    label: "Containers & Monorepo",
-    note: "The half of the job most full-stack engineers skip.",
-    items: [
-      { name: "Docker", projects: ["estateguru", "goapi"] },
-      { name: "Docker Compose", projects: ["estateguru", "goapi"] },
-      { name: "Nx Monorepo", aliases: ["Nx", "NX Monorepo"], projects: ["estateguru"] },
-    ],
-  },
-  {
-    id: "iac",
-    label: "Infrastructure & Deployment",
-    note: "Environments defined in a repo, not in a console.",
-    items: [
-      { name: "Terraform" },
-      { name: "CloudFormation" },
-      { name: "Multi-environment deployments", projects: NIRMITEE },
-      { name: "Blue-green deployment", projects: ["estateguru", "modcart"] },
-      { name: "Rolling deployments", projects: ["nextdecade", "goapi", "wellcompanion"] },
-    ],
-  },
-  {
-    id: "cicd",
-    label: "CI/CD & Monitoring",
-    note: "Ship often, roll back fast, know when it breaks.",
-    items: [
-      { name: "CI/CD pipelines", aliases: ["CI/CD"], projects: ["estateguru", "nextdecade", "modcart", "goapi", "wellcompanion"] },
-      { name: "GitHub Actions", projects: ["estateguru"] },
-      { name: "GitLab CI/CD", projects: ["modcart", "goapi", "wellcompanion"] },
-      { name: "Datadog" },
-    ],
-  },
-  {
-    id: "testing",
-    label: "Testing & QA",
-    note: "Coverage that catches regressions before release.",
+    id: "test",
+    label: "Test",
+    note: "The gate before shipping",
     items: [
       { name: "Jest", projects: ["estateguru", "modcart", "datachamps"] },
       { name: "node:test runner", aliases: ["node:test"], projects: ["estateguru", "modcart", "goapi", "wellcompanion", "datachamps"] },
@@ -186,31 +139,126 @@ export const skillGroups: SkillGroup[] = [
     ],
   },
   {
-    id: "ai",
-    label: "AI & Integrations",
-    note: "Third-party surfaces, wired end to end.",
+    id: "integrations",
+    label: "Integrations",
+    note: "Plugged into Web & API",
     items: [
-      { name: "GPT-5.4" },
-      { name: "Okta" },
-      { name: "Razorpay" },
-      { name: "Google Maps", projects: ["estateguru", "boongg"] },
-      { name: "Lokalise" },
-      { name: "Meta Business APIs (WhatsApp, Facebook, Instagram)", projects: ["modcart"] },
+      { name: "SSO / OAuth 2.0", aliases: ["SSO"], subgroup: "Identity", projects: ["estateguru", "nextdecade", "modcart", "wellcompanion", "dine-in"] },
+      { name: "Google Sign-In", aliases: ["Google OAuth"], subgroup: "Identity", projects: ["estateguru", "modcart", "wellcompanion", "dine-in"] },
+      { name: "Meta Login", aliases: ["Facebook Login"], subgroup: "Identity" },
+      { name: "Sign in with Apple", aliases: ["Apple Sign-In"], subgroup: "Identity" },
+      { name: "Okta", subgroup: "Identity" },
+      { name: "Microsoft Entra ID", aliases: ["Entra ID", "Azure AD"], subgroup: "Identity" },
+      { name: "Razorpay", subgroup: "Services" },
+      { name: "Google Maps", subgroup: "Services", projects: ["estateguru", "boongg"] },
+      { name: "Meta Business APIs (WhatsApp, Facebook, Instagram)", subgroup: "Services", projects: ["modcart"] },
+      { name: "Lokalise", subgroup: "Services" },
+      { name: "GPT-5.4", subgroup: "Services" },
+      { name: "Google Analytics", aliases: ["GA4", "GA"], subgroup: "Services", note: "Page and event tracking on the web apps.", projects: ["estateguru", "modcart"] },
+      { name: "Meta Pixel", aliases: ["Facebook Pixel"], subgroup: "Services", note: "Conversion tracking on the embedded stores and shoppable ads.", projects: ["modcart"] },
+      { name: "Tally", subgroup: "Services", note: "Accounting system integrated through its desktop companion.", projects: ["datachamps"] },
     ],
   },
   {
-    id: "tools",
-    label: "Tooling & Automation",
-    note: "How the work gets organised — and automated.",
+    id: "container",
+    label: "Container & build",
+    note: "Package and run anywhere",
     items: [
-      { name: "Selenium", note: "Browser automation, not testing — the scripted Power BI report runs.", projects: ["datachamps"] },
+      { name: "Docker", projects: ["estateguru", "goapi"] },
+      { name: "Docker Compose", projects: ["estateguru", "goapi"] },
+      { name: "Nx Monorepo", aliases: ["Nx", "NX Monorepo"], projects: ["estateguru"] },
+      { name: "Nx Cloud", projects: ["estateguru"] },
+    ],
+  },
+  {
+    id: "cicd",
+    label: "CI/CD & infra as code",
+    note: "Automate and deploy",
+    items: [
+      { name: "CI/CD pipelines", aliases: ["CI/CD"], projects: ["estateguru", "nextdecade", "modcart", "goapi"] },
+      { name: "GitHub Actions", projects: ["estateguru"] },
+      { name: "GitLab CI/CD", projects: ["modcart", "goapi", "boongg", "tradegully", "bestosys", "datachamps"] },
+      { name: "App Store", projects: ["estateguru", "wellcompanion", "goapi"] },
+      { name: "Google Play", projects: ["estateguru", "wellcompanion", "goapi", "boongg"] },
+      { name: "Vercel", projects: ["devtools"] },
+      { name: "Terraform" },
+      { name: "CloudFormation" },
+      { name: "Multi-environment deployments", projects: NIRMITEE },
+      { name: "Blue-green deployment", projects: ["estateguru", "modcart"] },
+      { name: "Rolling deployments", projects: ["nextdecade", "goapi", "wellcompanion"] },
+    ],
+  },
+  {
+    id: "cloud",
+    label: "Cloud",
+    note: "Infrastructure and managed services",
+    items: [
+      { name: "AWS", aliases: ["AWS (EC2, S3, RDS, IAM, CloudWatch, Lambda)"], subgroup: "AWS", projects: ON_AWS },
+
+      { name: "Amazon EC2", aliases: ["EC2"], subgroup: "AWS", note: "Compute — the instances application services run on.", projects: ["boongg", "datachamps", "modcart"] },
+      { name: "AWS Elastic Beanstalk", aliases: ["Elastic Beanstalk"], subgroup: "AWS", note: "Managed application environments.", projects: ["modcart", "goapi", "tradegully", "bestosys"] },
+      { name: "Amazon ECS", aliases: ["ECS"], subgroup: "AWS", note: "Container orchestration for the services.", projects: ["estateguru"] },
+      { name: "AWS Lambda", aliases: ["Lambda"], subgroup: "AWS", note: "Event-driven functions off the request path." },
+
+      { name: "Amazon S3", aliases: ["S3"], subgroup: "AWS", note: "Object storage — assets, artefacts, backups.", projects: ON_AWS },
+
+      { name: "Amazon RDS", aliases: ["RDS"], subgroup: "AWS", note: "Managed relational databases.", projects: ["goapi", "datachamps"], alsoIn: ["data"] },
+      { name: "Amazon DynamoDB", aliases: ["DynamoDB"], subgroup: "AWS", note: "Managed key-value store.", projects: ["tradegully"], alsoIn: ["data"] },
+
+      { name: "Amazon Route 53", aliases: ["Route 53", "Route53"], subgroup: "AWS", note: "DNS and record management.", projects: ON_AWS },
+      { name: "Elastic Load Balancing", aliases: ["ELB"], subgroup: "AWS", note: "Traffic distribution across instances.", projects: ON_AWS },
+      { name: "Amazon CloudFront", aliases: ["CloudFront"], subgroup: "AWS", note: "CDN in front of the application.", projects: ["estateguru", "modcart", "bestosys"] },
+
+      { name: "Amazon SNS", aliases: ["SNS"], subgroup: "AWS", note: "Pub/sub notifications between services.", projects: ["estateguru", "boongg"] },
+      { name: "Amazon SQS", aliases: ["SQS"], subgroup: "AWS", note: "Queues that decouple slow work from requests.", projects: ["estateguru", "boongg"] },
+
+      { name: "AWS IAM", aliases: ["IAM"], subgroup: "AWS", note: "Roles and policies scoping what each service can touch.", projects: ON_AWS },
+
+      { name: "Azure", aliases: ["Azure (VMs, App Services, DevOps, Repos)"], subgroup: "Azure", projects: ["nextdecade", "wellcompanion"] },
+      { name: "Azure App Service", subgroup: "Azure", projects: ["nextdecade", "wellcompanion"] },
+      { name: "Azure Blob Storage", aliases: ["Blob Storage", "Storage containers"], subgroup: "Azure" },
+      { name: "Azure Cosmos DB", aliases: ["Cosmos DB", "Cosmos"], subgroup: "Azure", alsoIn: ["data"] },
+      { name: "Azure AI Foundry", aliases: ["AI Foundry"], subgroup: "Azure", note: "Managed model hosting the services call for inference.", projects: ["nextdecade"] },
+      // Live here (Dev, 2026-09-10); cross-listed where they are used.
+      { name: "Microsoft Entra PIM", aliases: ["PIM", "Privileged Identity Management"], subgroup: "Azure", note: "Time-bound, requested elevation for privileged roles on the subscription.", projects: ["nextdecade"], alsoIn: ["integrations/Identity"] },
+      { name: "Azure DevOps", subgroup: "Azure", note: "Pipelines for the Azure-hosted platform.", projects: ["nextdecade"], alsoIn: ["cicd"] },
+      { name: "Azure Repos", subgroup: "Azure", note: "Source control beside the pipelines.", projects: ["nextdecade"], alsoIn: ["workbench"] },
+    ],
+  },
+  {
+    id: "production",
+    label: "Production",
+    note: "Monitor · operate · improve",
+    items: [
+      { name: "Datadog" },
+      { name: "Amazon CloudWatch", aliases: ["CloudWatch"], projects: ON_AWS, alsoIn: ["cloud/AWS"] },
+    ],
+  },
+  {
+    id: "workbench",
+    label: "Workbench",
+    note: "Everyday tooling, outside the pipeline",
+    items: [
       { name: "Git" },
-      { name: "GitHub" },
+      { name: "GitHub", projects: ["devtools"] },
       { name: "GitLab" },
       { name: "Bitbucket" },
+      { name: "Postman", note: "API collections for every backend — the contract the frontends build against.", projects: ["estateguru", "nextdecade", "modcart", "boongg", "goapi", "wellcompanion", "datachamps", "tradegully", "bestosys", "dine-in"] },
       { name: "JIRA" },
       { name: "Agile / Scrum" },
-      { name: "ESLint" },
+      { name: "ESLint", projects: ["estateguru"] },
+      { name: "Selenium", note: "Browser automation, not testing — the scripted Power BI report runs.", projects: ["datachamps"] },
+    ],
+  },
+  {
+    id: "ai-tools",
+    label: "AI Tools",
+    note: "Everyday assistants, outside the pipeline",
+    items: [
+      { name: "Claude", note: AI_TOOL_NOTE },
+      { name: "ChatGPT", note: AI_TOOL_NOTE },
+      { name: "Codex", note: AI_TOOL_NOTE },
+      { name: "Gemini", note: AI_TOOL_NOTE },
     ],
   },
 ];

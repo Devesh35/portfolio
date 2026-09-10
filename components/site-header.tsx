@@ -55,7 +55,7 @@ export function SiteHeader() {
             : "border-b border-transparent bg-transparent"
         }`}
       >
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
+        <div className="mx-auto flex h-16 max-w-[87.5rem] items-center justify-between px-5 sm:px-8">
           <Link
             href="/"
             className="group flex items-center gap-2.5 font-mono text-sm tracking-tight"
@@ -66,23 +66,27 @@ export function SiteHeader() {
           </Link>
 
           <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
-            {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={isActive(item.href) ? "page" : undefined}
-                className={`link-wipe font-mono text-[0.8125rem] transition-colors duration-300 ${
-                  isActive(item.href) ? "text-ember" : "text-muted hover:text-text"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {/* External entries (Lab) render as buttons beside Résumé below,
+                not as inline nav links. */}
+            {nav
+              .filter((item) => !("external" in item && item.external))
+              .map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  className={`link-wipe font-mono text-[0.8125rem] transition-colors duration-300 ${
+                    isActive(item.href) ? "text-ember" : "text-muted hover:text-text"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
             <button
               type="button"
               onClick={() => window.dispatchEvent(new CustomEvent(OPEN_SEARCH_EVENT))}
               aria-label="Search projects and skills"
-              className="flex items-center gap-2 border border-line px-2.5 py-1.5 font-mono text-[0.6875rem] text-dim transition-colors duration-300 hover:border-line-bright hover:text-text"
+              className="flex h-9 items-center gap-2 border border-line px-3 font-mono text-[0.6875rem] text-dim transition-colors duration-300 hover:border-line-bright hover:text-text"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" strokeWidth="2" />
@@ -90,6 +94,19 @@ export function SiteHeader() {
               </svg>
               Ctrl K
             </button>
+            {nav
+              .filter((item) => "external" in item && item.external)
+              .map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn !h-9 !px-3.5 !py-0 !text-xs"
+                >
+                  {item.label} ↗
+                </a>
+              ))}
             <a
               href={profile.resume.href}
               download={profile.resume.downloadAs}
@@ -98,7 +115,7 @@ export function SiteHeader() {
                 event.preventDefault();
                 openResume();
               }}
-              className="btn btn-primary !px-3.5 !py-2 !text-xs"
+              className="btn btn-primary !h-9 !px-3.5 !py-0 !text-xs"
             >
               Résumé
             </a>
@@ -164,18 +181,14 @@ export function SiteHeader() {
 
         <nav aria-label="Mobile" className="flex flex-col px-5 pt-4">
           {nav.map((item, i) => {
-            const active = isActive(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={closeMenu}
-                aria-current={active ? "page" : undefined}
-                style={{ "--rise-delay": `${i * 45}ms` } as React.CSSProperties}
-                className={`animate-rise flex items-center justify-between gap-4 border-b border-line py-4 ${
-                  active ? "text-ember" : "text-text"
-                }`}
-              >
+            const external = "external" in item && item.external;
+            const active = !external && isActive(item.href);
+            const rowClassName = `animate-rise flex items-center justify-between gap-4 border-b border-line py-4 ${
+              active ? "text-ember" : "text-text"
+            }`;
+            const rowStyle = { "--rise-delay": `${i * 45}ms` } as React.CSSProperties;
+            const content = (
+              <>
                 <span className="flex items-center gap-4">
                   <NavIcon
                     href={item.href}
@@ -183,11 +196,37 @@ export function SiteHeader() {
                   />
                   <span className="font-display text-[2rem] font-medium leading-none">
                     {item.label}
+                    {external && <span className="ml-2 text-lg text-dim">↗</span>}
                   </span>
                 </span>
                 {active && (
                   <span className="h-1.5 w-1.5 shrink-0 bg-ember" aria-hidden="true" />
                 )}
+              </>
+            );
+
+            return external ? (
+              <a
+                key={item.href}
+                href={item.href}
+                target="_blank"
+                rel="noreferrer"
+                onClick={closeMenu}
+                style={rowStyle}
+                className={rowClassName}
+              >
+                {content}
+              </a>
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={closeMenu}
+                aria-current={active ? "page" : undefined}
+                style={rowStyle}
+                className={rowClassName}
+              >
+                {content}
               </Link>
             );
           })}

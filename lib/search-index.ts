@@ -3,8 +3,8 @@ import { skillGroups } from "@/content/skills";
 
 /**
  * The site search index — built on the server, small enough to hand to the
- * client whole. Projects link to their page; skills link to the skills
- * explorer, which reads ?skill= and opens the matching chip.
+ * client whole. Projects link to their page; skills link to the systems
+ * tree, which reads ?skill= and opens the matching chip.
  */
 
 export interface SearchEntry {
@@ -31,7 +31,7 @@ export function buildSearchIndex(): SearchEntry[] {
       type: "skill" as const,
       label: skill.name,
       sub: group.label,
-      href: `/skills?skill=${encodeURIComponent(skill.name)}`,
+      href: `/systems?skill=${encodeURIComponent(skill.name)}`,
       keywords: (skill.aliases ?? []).map((alias) => alias.toLowerCase()),
     })),
   );

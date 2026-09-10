@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="mx-auto flex min-h-[70svh] max-w-5xl flex-col justify-center px-5 py-32 sm:px-8">
+    <div className="mx-auto flex min-h-[70svh] max-w-[87.5rem] flex-col justify-center px-5 py-32 sm:px-8">
       <p className="label">404</p>
       <h1 className="font-display mt-5 text-[clamp(2.75rem,9vw,6rem)] font-bold">
         No route here

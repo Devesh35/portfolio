@@ -11,15 +11,30 @@ interface CountUpProps {
   decimals?: number;
 }
 
-/** Counts once, when it first scrolls into view. Never re-runs. */
+/**
+ * Renders the real value immediately — server HTML carries the truth, so
+ * crawlers, link previews, print, slow devices and fast scrollers all see the
+ * actual number, never a placeholder "0". The count-up from 0 is purely a
+ * progressive enhancement layered on top the first time it scrolls into view;
+ * it never runs under `prefers-reduced-motion`, and it never re-runs.
+ */
 export function CountUp({ to, prefix = "", suffix = "", duration = 1100, decimals = 0 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const started = useRef(false);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(to);
+
+  // The widest this span will ever need to be — animation only counts up
+  // toward `to`, never past it — so reserving this width up front means the
+  // animation (or reduced-motion's no-op) never shifts surrounding layout.
+  const finalText = `${prefix}${to.toFixed(decimals)}${suffix}`;
 
   useEffect(() => {
     const node = ref.current;
     if (!node || started.current) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -27,11 +42,7 @@ export function CountUp({ to, prefix = "", suffix = "", duration = 1100, decimal
         started.current = true;
         observer.disconnect();
 
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-          setValue(to);
-          return;
-        }
-
+        setValue(0);
         const start = performance.now();
         const tick = (now: number) => {
           const progress = Math.min((now - start) / duration, 1);
@@ -50,7 +61,11 @@ export function CountUp({ to, prefix = "", suffix = "", duration = 1100, decimal
   }, [to, duration]);
 
   return (
-    <span ref={ref} className="tabular">
+    <span
+      ref={ref}
+      className="tabular"
+      style={{ display: "inline-block", minWidth: `${finalText.length}ch` }}
+    >
       {prefix}
       {value.toFixed(decimals)}
       {suffix}

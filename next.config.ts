@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
       // Short links land on the file, which is named what it downloads as.
       { source: "/resume", destination: "/Devesh_Singh_Resume.pdf", permanent: false },
       { source: "/resume.pdf", destination: "/Devesh_Singh_Resume.pdf", permanent: false },
+      // The skills page became the Systems tree (2026-09-09). Permanent, and
+      // the query string carries over, so old ?skill= deep links keep working.
+      { source: "/skills", destination: "/systems", permanent: true },
     ];
   },
   async headers() {

@@ -73,7 +73,7 @@ export const timeline: TimelineEntry[] = [
       { start: "2023-06", end: "2025-06" },
       { start: "2025-11", end: null },
     ],
-    note: "Phase 1: investor-facing app, shipped Jun 2025. Phase 2: borrower-facing app, from Nov 2025",
+    note: "Phase 1: investor-facing app, shipped Jun 2025. Phase 2: borrower-facing app as project lead, from Nov 2025",
   },
   {
     slug: "wellcompanion",

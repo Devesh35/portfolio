@@ -12,8 +12,8 @@ import { iconFor } from "@/content/skill-icons";
  * Razorpay) are lifted while keeping their hue.
  *
  * Practices that were never a product ("Schema design", "Blue-green
- * deployment") get a neutral dot so the chips stay aligned; tools with no mark
- * in any open set get a short monogram.
+ * deployment") get a drawn line glyph in the current text colour; tools with
+ * no mark in any open set get a short monogram.
  */
 function aspect(viewBox: string): number {
   const [, , w, h] = viewBox.split(/\s+/).map(Number);
@@ -40,6 +40,20 @@ export function SkillIcon({
       >
         <span className="block h-1 w-1 rounded-full bg-current opacity-40" />
       </span>
+    );
+  }
+
+  if (icon.kind === "glyph") {
+    // Drawn line glyphs for practices: stroke in the current text colour.
+    return (
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        viewBox="0 0 24 24"
+        className={`skill-icon shrink-0 ${className}`}
+        style={{ height: size, width: size }}
+        dangerouslySetInnerHTML={{ __html: icon.body }}
+      />
     );
   }
 
