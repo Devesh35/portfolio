@@ -126,7 +126,7 @@ export default function SystemsPage() {
         >
           <p><span className="text-muted">dimmed ·</span> — cross-listed, lives elsewhere</p>
           <p><span className="text-muted">chip click</span> — opens its projects</p>
-          <p><span className="text-muted">/ or Ctrl K</span> — search</p>
+          <p><span className="text-muted">Ctrl K</span> — search</p>
         </div>
       </header>
 

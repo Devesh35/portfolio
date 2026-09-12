@@ -26,13 +26,6 @@ const CHANNELS = [
     primary: true,
   },
   {
-    label: "Phone",
-    value: profile.phone,
-    href: `tel:${profile.phone.replace(/\s+/g, "")}`,
-    note: "Calls and WhatsApp, IST working hours.",
-    primary: true,
-  },
-  {
     label: "LinkedIn",
     value: "in/devesh-singh",
     href: profile.links.linkedin,
@@ -101,7 +94,7 @@ export default function ContactPage() {
                   key={channel.label}
                   data-reveal
                   style={style(i * 70)}
-                  className={`border-b border-r border-line ${"primary" in channel && channel.primary ? "sm:col-span-3" : "sm:col-span-2"}`}
+                  className={`border-b border-r border-line ${"primary" in channel && channel.primary ? "sm:col-span-6" : "sm:col-span-2"}`}
                 >
                   <a
                     href={channel.href}

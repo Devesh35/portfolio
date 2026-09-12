@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import {ArchitectureMobile} from "@/components/architecture-mobile";
+import {ArchitectureSceneGate} from "@/components/architecture-scene-loader";
 import {CountUp} from "@/components/count-up";
 import {GridBackdrop} from "@/components/grid-backdrop";
 import {HeroGlow} from "@/components/hero-glow";
@@ -54,81 +56,103 @@ export default function HomePage() {
         <HeroGlow />
 
         <div className="relative mx-auto w-full max-w-[87.5rem] px-5 py-20 sm:px-8">
-          <p
-            className="animate-rise label flex flex-wrap items-center gap-x-3 gap-y-2"
-            style={{"--rise-delay": "40ms"} as React.CSSProperties}>
-            <span className="inline-flex items-center gap-2 text-ember">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember opacity-50" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-ember" />
-              </span>
-              Available for work
-            </span>
-            <span aria-hidden="true" className="text-dim">·</span>
-            <span>{profile.location} — {profile.currentRole}</span>
-          </p>
-
-          <h1
-            className="animate-rise font-display mt-6 text-[clamp(3.4rem,13vw,8.5rem)] font-bold"
-            style={{"--rise-delay": "120ms"} as React.CSSProperties}>
-            Devesh
-            <br />
-            <span className="text-dim">Singh</span>
-          </h1>
-
-          <p
-            className="animate-rise mt-6 font-mono text-sm text-ember sm:text-base"
-            style={{"--rise-delay": "260ms"} as React.CSSProperties}>
-            <ScrambleText text={profile.title} />
-          </p>
-
-          <p
-            className="animate-rise prose-body mt-8 text-lg sm:text-xl"
-            style={{"--rise-delay": "340ms"} as React.CSSProperties}>
-            {profile.tagline}
-          </p>
-
-          <div
-            className="animate-rise mt-10 flex flex-wrap gap-3"
-            style={{"--rise-delay": "420ms"} as React.CSSProperties}>
-            <Link href="/work" className="btn btn-primary">
-              See the work
-            </Link>
-            <ResumeButton className="btn">View résumé</ResumeButton>
-            <a
-              href={`mailto:${profile.email}`}
-              className="link-wipe w-full self-center pt-1 font-mono text-sm text-muted hover:text-text sm:w-auto sm:pt-0">
-              {profile.email}
-            </a>
-          </div>
-
-          {/* Dev's own outcomes. Client platform numbers stay on project pages.
-              CountUp renders the real value in the server HTML — see components/count-up.tsx. */}
-          <dl
-            className="animate-rise mt-20 grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-4"
-            style={{"--rise-delay": "520ms"} as React.CSSProperties}>
-            <div className="reveal-item bg-ground p-5">
-              <dt className="label min-h-[2.4em]">Building since 2021</dt>
-              <dd className="mt-2 font-display text-3xl font-semibold">
-                <CountUp to={Number(years)} decimals={1} suffix=" yrs" />
-              </dd>
-              <p className="mt-1 font-mono text-[0.6875rem] text-dim">
-                Full-stack and DevOps
+          <div className="min-[992px]:grid min-[992px]:grid-cols-[1.05fr_0.95fr] min-[992px]:items-stretch min-[992px]:gap-12">
+            <div>
+              <p
+                className="animate-rise label flex flex-wrap items-center gap-x-3 gap-y-2"
+                style={{"--rise-delay": "40ms"} as React.CSSProperties}>
+                <span className="inline-flex items-center gap-2 text-ember">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember opacity-50" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-ember" />
+                  </span>
+                  Available for work
+                </span>
+                <span aria-hidden="true" className="text-dim">·</span>
+                <span>{profile.location} — {profile.currentRole}</span>
               </p>
+
+              <h1
+                className="animate-rise font-display mt-6 text-[clamp(3.4rem,13vw,8.5rem)] font-bold"
+                style={{"--rise-delay": "120ms"} as React.CSSProperties}>
+                Devesh
+                <br />
+                <span className="text-dim">Singh</span>
+              </h1>
+
+              <p
+                className="animate-rise mt-6 font-mono text-sm text-ember sm:text-base"
+                style={{"--rise-delay": "260ms"} as React.CSSProperties}>
+                <ScrambleText text={profile.title} />
+              </p>
+
+              <p
+                className="animate-rise prose-body mt-8 text-lg sm:text-xl"
+                style={{"--rise-delay": "340ms"} as React.CSSProperties}>
+                {profile.tagline}
+              </p>
+
+              <div
+                className="animate-rise mt-10 flex flex-wrap gap-3"
+                style={{"--rise-delay": "420ms"} as React.CSSProperties}>
+                <Link href="/work" className="btn btn-primary">
+                  See the work
+                </Link>
+                <ResumeButton className="btn">View résumé</ResumeButton>
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="link-wipe w-full self-center pt-1 font-mono text-sm text-muted hover:text-text sm:w-auto sm:pt-0">
+                  {profile.email}
+                </a>
+              </div>
+
+              {/* Below 992px the 3D scene isn't inline — a still of it sits
+                  here and opens the live scene in a full-screen modal. */}
+              <div className="min-[992px]:hidden">
+                <ArchitectureMobile />
+              </div>
+
+              {/* Dev's own outcomes. Client platform numbers stay on project pages.
+                  CountUp renders the real value in the server HTML — see components/count-up.tsx. */}
+              <dl
+                className="animate-rise mt-20 grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-4"
+                style={{"--rise-delay": "520ms"} as React.CSSProperties}>
+                <div className="reveal-item bg-ground p-5">
+                  <dt className="label min-h-[2.4em]">Building since 2021</dt>
+                  <dd className="mt-2 font-display text-3xl font-semibold">
+                    <CountUp to={Number(years)} decimals={1} suffix=" yrs" />
+                  </dd>
+                  <p className="mt-1 font-mono text-[0.6875rem] text-dim">
+                    Full-stack and DevOps
+                  </p>
+                </div>
+
+                {headlineStats.map((stat) => (
+                  <div key={stat.label} className="reveal-item bg-ground p-5">
+                    <dt className="label min-h-[2.4em]">{stat.label}</dt>
+                    <dd className="mt-2 font-display text-3xl font-semibold">
+                      <CountUp to={stat.value} suffix={stat.suffix} />
+                    </dd>
+                    <p className="mt-1 font-mono text-[0.6875rem] text-dim">
+                      {stat.sub}
+                    </p>
+                  </div>
+                ))}
+              </dl>
             </div>
 
-            {headlineStats.map((stat) => (
-              <div key={stat.label} className="reveal-item bg-ground p-5">
-                <dt className="label min-h-[2.4em]">{stat.label}</dt>
-                <dd className="mt-2 font-display text-3xl font-semibold">
-                  <CountUp to={stat.value} suffix={stat.suffix} />
-                </dd>
-                <p className="mt-1 font-mono text-[0.6875rem] text-dim">
-                  {stat.sub}
-                </p>
-              </div>
-            ))}
-          </dl>
+            {/* Software architecture, drawn as a rotatable 3D line-art
+                building cutaway: frontend floors above ground, an elevator
+                shaft standing in for the API, a server-room basement for the
+                backend, colour-coded utility pipes for third-party
+                integrations, and a foundation for infra. Drag to orbit —
+                see components/architecture-scene.tsx. */}
+            <div
+              className="animate-rise hidden min-[992px]:block min-[992px]:h-full"
+              style={{"--rise-delay": "460ms"} as React.CSSProperties}>
+              <ArchitectureSceneGate />
+            </div>
+          </div>
         </div>
       </section>
 

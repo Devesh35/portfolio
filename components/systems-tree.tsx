@@ -33,24 +33,6 @@ export interface TreeGroup {
   skills: TreeSkill[];
 }
 
-/** Category filter chips. Dimming only — the tree never collapses. */
-const FILTERS: { label: string; ids: string[] | null }[] = [
-  { label: "All", ids: null },
-  { label: "Design", ids: ["design"] },
-  { label: "Web", ids: ["web"] },
-  { label: "API", ids: ["api"] },
-  { label: "Data", ids: ["data"] },
-  { label: "Test", ids: ["test"] },
-  { label: "Integrations", ids: ["integrations"] },
-  { label: "Deploy", ids: ["container", "cicd"] },
-  { label: "Cloud", ids: ["cloud", "production"] },
-  { label: "Workbench", ids: ["workbench"] },
-  { label: "AI Tools", ids: ["ai-tools"] },
-];
-
-/** "cicd" finds "CI/CD pipelines" — same squash the site search uses. */
-const squash = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");
-
 /** Per-node accent colours. The colour lives in the node chrome — icon tile,
  *  border tint, top wash, subgroup labels — never on the chips themselves
  *  (Dev: every chip keeps the same border). */
@@ -151,6 +133,28 @@ function NodeGlyph({ id }: { id: string }) {
       className="shrink-0"
     >
       {NODE_ICON[id] ?? <circle cx="12" cy="12" r="8" />}
+    </svg>
+  );
+}
+
+/** Decorative opening-quote mark, drawn to the same hairline weight as the
+ *  node icons — used on the pull-quote card under the right rail. */
+function QuoteGlyph() {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 32 22"
+      width="34"
+      height="23"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="text-line-bright"
+    >
+      <path d="M4.5 13.2c0-4.6 2.7-7.6 6.6-8.6M4.5 13.2c0 2.9 1.9 4.7 4.5 4.7s4.5-1.8 4.5-4.7-1.9-4.6-4.5-4.6" />
+      <path d="M18.5 13.2c0-4.6 2.7-7.6 6.6-8.6M18.5 13.2c0 2.9 1.9 4.7 4.5 4.7s4.5-1.8 4.5-4.7-1.9-4.6-4.5-4.6" />
     </svg>
   );
 }
@@ -268,17 +272,13 @@ interface SystemsTreeProps {
  * The Systems page's working surface: the stack as one build-to-production
  * tree. Every chip is a button — selecting it shows which projects used the
  * tool and what it did there, in the right rail on wide screens and inline
- * under the node otherwise. Search and the category chips dim what doesn't
- * match; the shape of the system never disappears.
+ * under the node otherwise.
  *
  * Plain useState; data arrives fully resolved from the server component.
  * ?skill= deep links (from site search) select and scroll to the chip.
  */
 export function SystemsTree({ groups }: SystemsTreeProps) {
-  const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<string>("All");
   const [active, setActive] = useState<string | null>(null);
-  const searchRef = useRef<HTMLInputElement>(null);
   const treeRef = useRef<HTMLDivElement>(null);
   const params = useSearchParams();
 
@@ -313,34 +313,12 @@ export function SystemsTree({ groups }: SystemsTreeProps) {
     return () => clearTimeout(timer);
   }, [params]);
 
-  /* "/" focuses the filter input, unless the reader is already typing. */
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key !== "/" || event.metaKey || event.ctrlKey) return;
-      const target = event.target as HTMLElement | null;
-      if (target && /^(input|textarea|select)$/i.test(target.tagName)) return;
-      event.preventDefault();
-      searchRef.current?.focus();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  const activeFilterIds = FILTERS.find((f) => f.label === filter)?.ids ?? null;
-  const flatQuery = squash(query.trim());
-
-  const chipMatches = (skill: TreeSkill) =>
-    !flatQuery || squash(skill.name).includes(flatQuery);
-  const groupInFilter = (id: string) =>
-    !activeFilterIds || activeFilterIds.includes(id);
-
   const select = (name: string) => setActive((current) => (current === name ? null : name));
 
   /* ------------------------------------------------------------ rendering */
 
   const chip = (groupId: string, skill: TreeSkill) => {
     const isActive = skill.name === active;
-    const faded = !groupInFilter(groupId) || !chipMatches(skill);
     return (
       <li key={`${groupId}-${skill.name}`}>
         <button
@@ -351,7 +329,7 @@ export function SystemsTree({ groups }: SystemsTreeProps) {
           title={skill.dimmed ? `Cross-listed — lives under ${skill.homeLabel}` : undefined}
           className={`chip px-2.5 py-1.5 font-mono text-[0.75rem] transition-opacity ${
             skill.dimmed ? "opacity-50" : ""
-          } ${faded ? "opacity-25" : ""}`}
+          }`}
         >
           <SkillIcon name={skill.name} size={13} />
           {skill.name}
@@ -434,9 +412,7 @@ export function SystemsTree({ groups }: SystemsTreeProps) {
     return (
       <section
         aria-label={group.label}
-        className={`rounded-md border border-line bg-surface p-5 sm:p-6 ${
-          groupInFilter(group.id) ? "" : "opacity-60"
-        } transition-opacity`}
+        className="rounded-md border border-line bg-surface p-5 sm:p-6"
         style={{
           ["--reveal" as string]: color,
           borderTopWidth: 2,
@@ -479,7 +455,7 @@ export function SystemsTree({ groups }: SystemsTreeProps) {
         aria-label={group.label}
         className={`rounded-md border bg-surface p-5 sm:p-6 ${
           options?.fit ? "mx-auto w-fit min-w-[min(100%,24rem)] max-w-full" : ""
-        } ${groupInFilter(group.id) ? "" : "opacity-60"} transition-opacity`}
+        }`}
         style={{
           ["--reveal" as string]: color,
           borderTopWidth: 2,
@@ -515,42 +491,8 @@ export function SystemsTree({ groups }: SystemsTreeProps) {
 
   return (
     <div ref={treeRef}>
-      {/* ------------------------------------------------- search + filters */}
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
-        <label className="flex w-full max-w-sm items-baseline gap-3 border-b border-line-bright pb-2 focus-within:border-ember">
-          <span className="font-mono text-xs text-dim" aria-hidden="true">/</span>
-          <input
-            ref={searchRef}
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Filter tools…"
-            className="w-full bg-transparent font-mono text-sm text-text placeholder:text-dim focus:outline-none"
-            aria-label="Filter skills"
-          />
-        </label>
-        <ul className="flex flex-wrap gap-1.5">
-          {FILTERS.map((entry) => (
-            <li key={entry.label}>
-              <button
-                type="button"
-                onClick={() => setFilter(entry.label)}
-                aria-pressed={filter === entry.label}
-                className={`reveal-item border px-3 py-1.5 font-mono text-[0.6875rem] transition-colors ${
-                  filter === entry.label
-                    ? "border-ember bg-ember/10 text-ember"
-                    : "border-line text-muted hover:border-line-bright hover:text-text"
-                }`}
-              >
-                {entry.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
       {/* --------------------------------------------------- tree + rail */}
-      <div className="mt-10 grid gap-8 xl:grid-cols-[minmax(0,1fr)_21rem]">
+      <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_21rem]">
         <div className="min-w-0">
           {node("design", { fit: true })}
 
@@ -581,8 +523,9 @@ export function SystemsTree({ groups }: SystemsTreeProps) {
           {node("production", { fit: true })}
         </div>
 
-        {/* Right rail — wide screens only; below xl the detail is inline. */}
-        <aside className="hidden xl:block">
+        {/* Right rail — wide screens only; below xl the detail is inline.
+            Sticky so it tracks the reader down the (much taller) tree column. */}
+        <aside className="hidden xl:sticky xl:top-28 xl:block xl:self-start">
           <div>
             {activeSkill ? (
               <SkillDetail
@@ -599,6 +542,14 @@ export function SystemsTree({ groups }: SystemsTreeProps) {
                 </p>
               </div>
             )}
+          </div>
+
+          <div className="panel mt-6 p-6">
+            <QuoteGlyph />
+            <p className="mt-4 font-display text-[1.0625rem] font-medium leading-snug text-text">
+              A good stack doesn’t just build features. It enables team velocity and long-term maintainability.
+            </p>
+            <p className="mt-4 text-right font-mono text-[0.6875rem] text-dim">— Devesh Singh</p>
           </div>
         </aside>
       </div>
