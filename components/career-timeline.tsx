@@ -2,7 +2,8 @@ import Link from "next/link";
 
 import { formatSpans, entryMonths, type Track, type Emphasis } from "@/content/timeline";
 import { buildTimelineLayout, SPINE_X, YEAR_COL } from "@/lib/timeline-layout";
-import { getProject } from "@/content/projects";
+import { getProject, ORIGIN_LABEL } from "@/content/projects";
+import { SkillIcon } from "@/components/skill-icon";
 import { TimelineFocus } from "@/components/timeline-focus";
 
 const TRACK_COLOR: Record<Track, string> = {
@@ -32,6 +33,21 @@ const EMPHASIS_LABEL: Partial<Record<Emphasis, string>> = {
   main: "Main assignment",
   support: "Support",
 };
+
+/* Round 70 (Dev): the card carries the branch's weight, not just a tag —
+   main assignments get a heavier spine and a brighter title, support work a
+   dashed spine and a quieter one. */
+const SPINE: Record<Emphasis, string> = {
+  main: "border-l-[3px]",
+  standard: "border-l-2",
+  support: "border-l border-dashed",
+};
+const TITLE: Record<Emphasis, string> = {
+  main: "text-text",
+  standard: "text-text/90",
+  support: "text-muted",
+};
+const STACK_CHIPS = 4;
 
 export function CareerTimeline() {
   const layout = buildTimelineLayout();
@@ -82,9 +98,9 @@ export function CareerTimeline() {
                 d={leader}
                 stroke="var(--color-line-bright)"
                 strokeWidth={1}
-                strokeDasharray="1 5"
+                strokeDasharray="2 4"
                 strokeLinecap="round"
-                opacity={0.7}
+                opacity={0.9}
               />
             ),
         )}
@@ -140,7 +156,7 @@ export function CareerTimeline() {
               key={item.entry.label}
               data-reveal
               data-tl={item.key}
-              style={{ "--reveal-delay": `${item.lane * 90}ms` } as React.CSSProperties}
+              style={{ "--reveal-delay": `${item.lane * 90}ms`, "--branch-color": color } as React.CSSProperties}
             >
               {/* leader from branch to card, under everything of this entry */}
               <path
@@ -164,6 +180,7 @@ export function CareerTimeline() {
                 ) : (
                   <path
                     key={`${item.entry.label}-seg-${i}`}
+                    data-branch
                     className={emphasis === "support" ? undefined : "branch-path"}
                     style={{ "--len": segment.length } as React.CSSProperties}
                     d={segment.d}
@@ -252,7 +269,9 @@ export function CareerTimeline() {
               {milestone.label}
             </span>
             {milestone.detail && (
-              <span className="font-mono text-[0.6875rem] text-dim/70">{milestone.detail}</span>
+              <span className={`font-mono text-[0.6875rem] ${milestone.kind === "now" ? "text-muted" : "text-dim/70"}`}>
+                {milestone.detail}
+              </span>
             )}
           </div>
         ))}
@@ -262,42 +281,76 @@ export function CareerTimeline() {
           const project = entry.slug ? getProject(entry.slug) : undefined;
           const months = entryMonths(entry);
 
+          // Outcome line: the project's first recorded metric where one exists;
+          // otherwise how the work started (origin) — real data only, no
+          // invented numbers (round 70).
+          const metric = project?.metrics[0];
+          const outcome = metric ? `${metric.value} ${metric.label}` : project ? ORIGIN_LABEL[project.origin] : null;
+
           const body = (
-            <>
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <h3
-                  className={`font-display text-xl font-semibold ${
-                    project ? "transition-colors duration-300 group-hover/row:text-ember" : ""
-                  }`}
-                >
-                  {entry.label}
-                </h3>
-                <span className={`font-mono text-[0.625rem] uppercase tracking-[0.14em] ${TRACK_TEXT[entry.track]}`}>
-                  {TRACK_LABEL[entry.track]}
-                </span>
-                {entry.track !== "personal" && EMPHASIS_LABEL[entry.emphasis] && (
-                  <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-dim">
-                    {EMPHASIS_LABEL[entry.emphasis]}
+            <div className="grid gap-x-8 gap-y-3 lg:grid-cols-[minmax(0,1fr)_15rem]">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <h3
+                    className={`font-display text-xl font-semibold ${TITLE[entry.emphasis]} ${
+                      project ? "transition-colors duration-300 group-hover/row:text-ember" : ""
+                    }`}
+                  >
+                    {entry.label}
+                  </h3>
+                  <span className={`font-mono text-[0.625rem] uppercase tracking-[0.14em] ${TRACK_TEXT[entry.track]}`}>
+                    {TRACK_LABEL[entry.track]}
                   </span>
+                  {entry.track !== "personal" && EMPHASIS_LABEL[entry.emphasis] && (
+                    <span className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-dim">
+                      {EMPHASIS_LABEL[entry.emphasis]}
+                    </span>
+                  )}
+                </div>
+
+                <p className="mt-1.5 font-mono text-xs text-muted tabular">
+                  {formatSpans(entry.spans)}
+                  <span className="text-dim"> · {months} mo</span>
+                </p>
+
+                <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted">
+                  {project?.summary ?? "Client engagement at Nirmitee.io."}
+                </p>
+
+                {outcome ? (
+                  // ember is reserved for a real number; an origin label stays quiet
+                  <p className={`mt-2 font-mono text-[0.6875rem] uppercase tracking-[0.12em] ${metric ? "text-ember/90" : "text-dim"}`}>
+                    {outcome}
+                  </p>
+                ) : (
+                  <p className="mt-2 font-mono text-[0.6875rem] text-dim">{entry.note ?? "No case study yet"}</p>
                 )}
               </div>
 
-              <p className="mt-1.5 font-mono text-xs text-muted tabular">
-                {formatSpans(entry.spans)}
-                <span className="text-dim"> · {months} mo</span>
-              </p>
-
-              <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted">
-                {project?.summary ?? "Client engagement at Nirmitee.io."}
-              </p>
-
-              <span className="mt-2 inline-block font-mono text-[0.6875rem] text-dim transition-colors duration-300 group-hover/row:text-ember">
-                {project ? "Read the case study →" : (entry.note ?? "No case study yet")}
-              </span>
-            </>
+              {/* Meta column (round 70): role, stack, and the way in. */}
+              {project && (
+                <div className="hidden min-w-0 border-l border-line/60 pl-5 lg:block">
+                  <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-dim">Role</p>
+                  <p className="mt-1 font-mono text-xs leading-snug text-muted">{project.role}</p>
+                  <ul className="mt-3 flex flex-wrap gap-1.5">
+                    {project.stack.slice(0, STACK_CHIPS).map((tech) => (
+                      <li key={tech} className="flex items-center gap-1.5 border border-line px-1.5 py-0.5 font-mono text-[0.625rem] text-dim">
+                        <SkillIcon name={tech} size={11} />
+                        {tech}
+                      </li>
+                    ))}
+                    {project.stack.length > STACK_CHIPS && (
+                      <li className="px-1 py-0.5 font-mono text-[0.625rem] text-dim/70">+{project.stack.length - STACK_CHIPS}</li>
+                    )}
+                  </ul>
+                </div>
+              )}
+            </div>
           );
 
-          const shell = `group/row block border-l-2 pl-5 ${TRACK_BORDER[entry.track]}`;
+          // -my-3 py-3: the hover wash and the spine get breathing room above the
+          // title without moving it (the leader is aimed at the title's centre)
+          const shell = `group/row -my-3 block py-3 pl-5 ${SPINE[entry.emphasis]} ${TRACK_BORDER[entry.track]}`;
 
           return (
             <div

@@ -2,7 +2,13 @@ import type { Metadata } from "next";
 
 import { CareerTimeline } from "@/components/career-timeline";
 import { CareerTimelineMobile } from "@/components/career-timeline-mobile";
+import { projects } from "@/content/projects";
 import { longestRun, peakConcurrency, timeline } from "@/content/timeline";
+
+// Counts come from the project data so the intro can't drift from the cards.
+const WORDS = ["none", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+const word = (n: number) => WORDS[n] ?? String(n);
+const countOrigin = (origin: (typeof projects)[number]["origin"]) => projects.filter((p) => p.origin === origin).length;
 
 export const metadata: Metadata = {
   title: "Work",
@@ -19,6 +25,10 @@ const LEGEND = [
 export default function WorkPage() {
   const longest = longestRun();
   const peak = peakConcurrency();
+  const greenfield = countOrigin("greenfield");
+  const rebuilt = countOrigin("rebuild");
+  const inherited = countOrigin("inherited") + countOrigin("support");
+  const led = projects.filter((p) => p.ownership.includes("lead")).length;
 
   return (
     <div className="mx-auto max-w-[87.5rem] px-5 pb-28 pt-36 sm:px-8 sm:pt-44">
@@ -34,18 +44,21 @@ export default function WorkPage() {
           className="animate-rise prose-body mt-6 text-lg"
           style={{ "--rise-delay": "180ms" } as React.CSSProperties}
         >
-          {timeline.length} engagements since 2021, across property lending, advertising,
-          bike rentals, dental software, sports clubs and an AI-assisted observability
-          platform. Often more than one at a time — at the busiest, {peak} ran in
-          parallel.
+          {timeline.length} engagements since 2021: {word(greenfield)} started from an empty
+          repository, {word(rebuilt)} replaced a live product, {word(inherited)} joined codebases
+          that were already running. Property lending, advertising, bike rentals, dental
+          practices, sports clubs, health tracking, financial analysis and an AI-assisted
+          observability platform — rarely the same domain twice.
         </p>
         <p
           className="animate-rise prose-body mt-4 text-lg"
           style={{ "--rise-delay": "220ms" } as React.CSSProperties}
         >
-          The longest ran {longest} months, including a pause; the shortest was two. On
-          most of them I handled everything from requirements and system design to
-          deployment and monitoring.
+          Often more than one at a time — at the busiest, {peak} ran in parallel. The
+          longest ran {longest} months across two phases; the shortest, two. On most of
+          them the work went end to end: requirements, system design, build, deployment and
+          the monitoring afterwards. {word(led).charAt(0).toUpperCase() + word(led).slice(1)} of
+          them I led.
         </p>
 
         <ul

@@ -1,6 +1,6 @@
 import type { Kit } from "./kit";
 import { LINE, LINE_DIM, LINE_FAINT } from "./palette";
-import { FLOOR_H, FLOOR_LEVELS, MAIN_D, MAIN_W, MAIN_X, MAIN_X0, MAIN_X1, MAIN_Z0, MAIN_Z1, N_FLOORS, SHAFT_W, SHAFT_X, SLAB } from "./layout";
+import { DECK_ROOF_Y, DECK_Y0, FLOOR_H, FLOOR_LEVELS, MAIN_D, MAIN_W, MAIN_X, MAIN_X0, MAIN_X1, MAIN_Z0, MAIN_Z1, N_FLOORS, SHAFT_W, SHAFT_X, SLAB } from "./layout";
 import { DOOR_H, DOOR_W, frontendDoorZs } from "./elevators";
 
 /**
@@ -110,6 +110,16 @@ export function buildFrontendShell(kit: Kit) {
     const ty = fy + h * 0.68;
     pts.push(MAIN_X0, ty, MAIN_Z0, MAIN_X0, ty, MAIN_Z1, MAIN_X0, ty, MAIN_Z0, MAIN_X1, ty, MAIN_Z0, MAIN_X0, ty, MAIN_Z1, MAIN_X1, ty, MAIN_Z1);
     world.add(lines(pts, LINE_FAINT, 0.7));
+  }
+  // Round 65 (Dev: "3rd floor, add the east wall"): the terrace deck gets the
+  // same solid lift-side wall as the floors below, doors at the outer
+  // shafts; its other three edges stay open behind the railing.
+  {
+    const fy = DECK_Y0 + 0.02;
+    const ceil = DECK_ROOF_Y - SLAB;
+    const h = ceil - fy;
+    world.add(boxAt(MAIN_X1 - WALL_T / 2, fy + h / 2, 0, WALL_T, h, MAIN_D - COL * 2, LINE, 0.75));
+    doorZs.forEach((z) => world.add(doorGlyph(kit, MAIN_X1 - WALL_T - 0.01, fy, z, -1, LINE_DIM)));
   }
   // Round 22 (Dev: "connect the elevator to the floor structure ... at
   // every elevator door"): a hollow vestibule bridges the gap between the

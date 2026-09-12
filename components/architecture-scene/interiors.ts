@@ -54,9 +54,10 @@ function lobby(kit: Kit) {
   F.chair(kit, -1.0, fy, 0.3, -Math.PI / 2);
   F.cupboard(kit, E - 0.23, fy, 0.7, 1.6, 0.9, 0.45, -Math.PI / 2);
   F.wallClock(kit, E, fy + 2.2, 0.6, EAST_NORMAL);
-  // visitor chairs by the desk
-  F.chair(kit, -2.9, fy, -0.9, Math.PI / 2);
-  F.chair(kit, -2.9, fy, -0.2, Math.PI / 2);
+  // visitor chairs, centred on the counter's front (the counter runs
+  // z -0.8..1.4, centre 0.3 — round 66, Dev: "align them")
+  F.chair(kit, -2.45, fy, -0.1, Math.PI / 2);
+  F.chair(kit, -2.45, fy, 0.7, Math.PI / 2);
   // sitting area (SW): one sofa facing a low table — the second sofa sat
   // in the entrance path and was removed (round 21)
   F.sofa(kit, -4.5, fy, 2.5, 1.8, Math.PI);

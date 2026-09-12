@@ -15,7 +15,8 @@ interface NodeDetailsProps {
 export function NodeDetails({ shown, how }: NodeDetailsProps) {
   return (
     <div className="rule-fade-x mt-8 pt-5">
-      <div className="scroll-thin h-52 overflow-y-auto" aria-live="polite">
+      {/* Taller on phones: the idle art stacks above its caption there. */}
+      <div className="scroll-thin h-72 overflow-y-auto sm:h-52" aria-live="polite">
       {shown ? (
         <>
           <DetailHeader shown={shown} />
@@ -64,11 +65,12 @@ function DetailRow({ tool, how }: { tool: string; how?: string }) {
  *  instruction that matters. Decorative — the caption carries the meaning. */
 function IdleArt() {
   return (
-    <div className="flex h-full items-center gap-6">
+    <div className="flex h-full flex-col justify-center gap-4 sm:flex-row sm:items-center sm:gap-6">
+      {/* Phones: full width, height from the aspect ratio; wider: full height, width from it. */}
       <svg
         aria-hidden="true"
         viewBox="0 0 320 150"
-        className="h-full w-auto shrink-0 text-line-bright"
+        className="w-full max-w-[18rem] shrink-0 text-line-bright sm:h-full sm:w-auto sm:max-w-none"
         fill="none"
         stroke="currentColor"
         strokeWidth="1"
@@ -117,8 +119,15 @@ function IdleArt() {
       <div className="min-w-0">
         <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-dim">Node detail</p>
         <p className="mt-1.5 font-sans text-base font-semibold tracking-[-0.01em] text-text">Pick a box</p>
+        {/* Two copies, one per input: phones get the tap wording, wider
+            screens the hover/click one — a CSS toggle, so no hydration split. */}
         <p className="mt-1 max-w-[34rem] text-[13px] leading-relaxed text-muted">
-          Hover any box in the diagrams to see the tools behind it and what each one did on this project. Click to keep it open; Esc lets go. On a touch screen, tap.
+          <span className="sm:hidden">
+            Tap any box in the diagrams to see the tools behind it and what each one did on this project. Tap again to let go.
+          </span>
+          <span className="hidden sm:inline">
+            Hover any box in the diagrams to see the tools behind it and what each one did on this project. Click to keep it open; Esc lets go. On a touch screen, tap.
+          </span>
         </p>
       </div>
     </div>

@@ -366,6 +366,17 @@ html::-webkit-scrollbar-thumb:hover,
    themselves) so this never fights the reveal system's own transitions. */
 [data-tl] > * { transition: opacity 0.3s ease; }
 [data-hot] [data-tl]:not(.tl-hot) > * { opacity: 0.35; }
+/* Round 70: the hot branch also lights up — thicker, with a glow in its own
+   colour (the group sets --branch-color) — and its card gets a faint wash. */
+[data-hot] .tl-hot path[data-branch] {
+  stroke-width: 3.5;
+  filter: drop-shadow(0 0 4px var(--branch-color, currentColor));
+  transition: stroke-width 0.2s ease, filter 0.2s ease;
+}
+[data-hot] .tl-hot > a,
+[data-hot] .tl-hot > div {
+  background: linear-gradient(to right, color-mix(in srgb, var(--color-line) 35%, transparent), transparent 70%);
+}
 
 /* ------------------------------------------------------------ résumé viewer */
 

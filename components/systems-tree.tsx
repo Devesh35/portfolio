@@ -151,7 +151,7 @@ function QuoteGlyph() {
       strokeWidth="1.3"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="text-line-bright"
+      className="text-current"
     >
       <path d="M4.5 13.2c0-4.6 2.7-7.6 6.6-8.6M4.5 13.2c0 2.9 1.9 4.7 4.5 4.7s4.5-1.8 4.5-4.7-1.9-4.6-4.5-4.6" />
       <path d="M18.5 13.2c0-4.6 2.7-7.6 6.6-8.6M18.5 13.2c0 2.9 1.9 4.7 4.5 4.7s4.5-1.8 4.5-4.7-1.9-4.6-4.5-4.6" />
@@ -544,13 +544,34 @@ export function SystemsTree({ groups }: SystemsTreeProps) {
             )}
           </div>
 
-          <div className="panel mt-6 p-6">
-            <QuoteGlyph />
-            <p className="mt-4 font-display text-[1.0625rem] font-medium leading-snug text-text">
-              A good stack doesn’t just build features. It enables team velocity and long-term maintainability.
-            </p>
-            <p className="mt-4 text-right font-mono text-[0.6875rem] text-dim">— Devesh Singh</p>
-          </div>
+          {/* Pull-quote: the panel plus an ember spine, corner ticks, a faint
+              hairline grid behind the glyph and the two key phrases in the
+              accent — same vocabulary as the tree, one notch louder. */}
+          <figure className="panel group relative mt-6 overflow-hidden p-6 pl-7">
+            <span aria-hidden="true" className="absolute inset-y-4 left-0 w-px bg-ember/70" />
+            <span aria-hidden="true" className="absolute right-0 top-0 h-3 w-3 border-r border-t border-ember/60" />
+            <span aria-hidden="true" className="absolute bottom-0 left-0 h-3 w-3 border-b border-l border-ember/60" />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-2 -top-2 h-24 w-24 opacity-40 [mask-image:radial-gradient(circle_at_top_right,#000,transparent_70%)]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(to right, var(--color-line) 1px, transparent 1px), linear-gradient(to bottom, var(--color-line) 1px, transparent 1px)",
+                backgroundSize: "8px 8px",
+              }}
+            />
+            <div className="flex items-center justify-between">
+              <span className="text-ember/80">
+                <QuoteGlyph />
+              </span>
+              <span className="label text-dim">Principle</span>
+            </div>
+            <blockquote className="mt-4 font-display text-[1.125rem] font-medium leading-snug tracking-[-0.01em] text-text">
+              A good stack doesn’t just build features. It enables{" "}
+              <span className="text-ember">team velocity</span> and{" "}
+              <span className="text-ember">long-term maintainability</span>.
+            </blockquote>
+          </figure>
         </aside>
       </div>
 

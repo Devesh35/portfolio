@@ -27,9 +27,9 @@ export function buildDeckTerrace(kit: Kit) {
   // counter stands ~0.6 clear of the back counter (round 34)
   world.add(boxAt(MAIN_X1 - 1.5, fy + 0.52, barZ, 0.55, 1.04, barLen, LINE, 0.75));
   world.add(boxAt(MAIN_X1 - 1.5, fy + 1.07, barZ, 0.7, 0.06, barLen + 0.1, LINE_DIM, 0.7));
-  world.add(boxAt(MAIN_X1 - 0.35, fy + 0.45, barZ, 0.5, 0.9, barLen, LINE, 0.7));
-  world.add(boxAt(MAIN_X1 - 0.35, fy + 1.15, barZ - 0.6, 0.4, 0.5, 0.45, LINE_DIM, 0.7)); // coffee machine
-  world.add(boxAt(MAIN_X1 - 0.35, fy + 1.05, barZ + 0.5, 0.35, 0.3, 0.6, LINE_DIM, 0.6)); // cups / stack
+  world.add(boxAt(MAIN_X1 - 0.45, fy + 0.45, barZ, 0.5, 0.9, barLen, LINE, 0.7));
+  world.add(boxAt(MAIN_X1 - 0.45, fy + 1.15, barZ - 0.6, 0.4, 0.5, 0.45, LINE_DIM, 0.7)); // coffee machine
+  world.add(boxAt(MAIN_X1 - 0.45, fy + 1.05, barZ + 0.5, 0.35, 0.3, 0.6, LINE_DIM, 0.6)); // cups / stack
   [-0.75, 0, 0.75].forEach((dz) => F.stool(kit, MAIN_X1 - 2.15, fy, barZ + dz));
   F.pendant(kit, MAIN_X1 - 1.5, ceil, barZ - 0.7);
   F.pendant(kit, MAIN_X1 - 1.5, ceil, barZ + 0.7);

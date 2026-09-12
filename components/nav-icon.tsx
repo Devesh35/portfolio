@@ -1,8 +1,11 @@
 /**
  * Line icons for the mobile menu, drawn to match the site's hairline weight
  * (1.25px stroke on a 24px grid) rather than pulled from an icon library.
- * Five icons is not worth a dependency, and a library's default 2px stroke
+ * Six icons is not worth a dependency, and a library's default 2px stroke
  * would sit heavier than every other line on the page.
+ *
+ * Keyed by route; the external Lab entry has no route, so it's keyed
+ * "external" (a flask) and the header passes that key for it.
  */
 const PATHS: Record<string, React.ReactNode> = {
   "/": (
@@ -34,6 +37,14 @@ const PATHS: Record<string, React.ReactNode> = {
     <>
       <rect x="3" y="5.2" width="18" height="13.6" rx="1.4" />
       <path d="m3.6 6.4 8.4 6 8.4-6" />
+    </>
+  ),
+  // Lab: an Erlenmeyer flask, liquid line inside
+  external: (
+    <>
+      <path d="M9.5 3.6h5" />
+      <path d="M10.2 3.6v5.2L4.6 18.6a1.3 1.3 0 0 0 1.1 2h12.6a1.3 1.3 0 0 0 1.1-2L13.8 8.8V3.6" />
+      <path d="M7.2 15.2h9.6" />
     </>
   ),
 };

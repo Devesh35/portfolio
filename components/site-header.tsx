@@ -191,7 +191,7 @@ export function SiteHeader() {
               <>
                 <span className="flex items-center gap-4">
                   <NavIcon
-                    href={item.href}
+                    href={external ? "external" : item.href}
                     className={active ? "text-ember" : "text-dim"}
                   />
                   <span className="font-display text-[2rem] font-medium leading-none">

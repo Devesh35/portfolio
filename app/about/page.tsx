@@ -153,9 +153,12 @@ export default function AboutPage() {
                   style={style(i * 60)}
                   className="border-t border-line py-6"
                 >
-                  <h3 className="font-display text-lg font-semibold">
-                    <span aria-hidden="true" className="mr-3 inline-block h-px w-5 translate-y-[-3px] bg-ember" />
-                    {principle.title}
+                  {/* The dash is a flex sibling, so a wrapped title keeps its
+                      left edge under the first line instead of sliding under
+                      the dash (round 75, phones). */}
+                  <h3 className="flex items-start gap-3 font-display text-lg font-semibold">
+                    <span aria-hidden="true" className="mt-[0.8em] h-px w-5 shrink-0 bg-ember" />
+                    <span className="min-w-0">{principle.title}</span>
                   </h3>
                   <p className="mt-2.5 pl-8 text-[0.9rem] leading-relaxed text-muted">{principle.body}</p>
                 </li>
