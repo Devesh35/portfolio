@@ -10,7 +10,19 @@ import { resume as base } from "@/content/resume";
  */
 export const suffix = "IC";
 
-export function apply(resume: typeof base): typeof base {
+/** `resume` is declared `as const`, so its string and tuple types are literal.
+ *  A variant edits those strings and drops contact rows, so it returns the
+ *  structurally-widened shape instead — the build script only reads fields. */
+type Resume = typeof base;
+export type VariantResume = Omit<Resume, "header" | "summary" | "additionalIntro"> & {
+  header: Omit<Resume["header"], "contact"> & {
+    contact: readonly { label: string; value: string; href?: string }[];
+  };
+  summary: string;
+  additionalIntro: string;
+};
+
+export function apply(resume: Resume): VariantResume {
   const majorProjects = resume.majorProjects.map((project) => {
     if (project.slug === "estateguru") {
       return {
