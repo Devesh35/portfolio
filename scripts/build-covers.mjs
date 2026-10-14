@@ -314,7 +314,7 @@ const covers = [
   { slug: "tradegully", name: "Tradegully", domain: "E-commerce", track: "client" },
   { slug: "bestosys", name: "Bestosys", domain: "HealthTech", track: "client" },
   { slug: "dine-in", name: "Dine In", domain: "Hospitality", track: "personal" },
-  { slug: "devtools", name: "DevTools", domain: "Developer Tools · Simarium", track: "personal" },
+  { slug: "devtools", name: "Simarium", domain: "Developer Tools", track: "personal" },
 ];
 
 /** Motif only, transparent — the ghosted background art on project pages.

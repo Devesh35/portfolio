@@ -51,7 +51,6 @@ const personJsonLd = {
   url: site.url,
   address: { "@type": "PostalAddress", addressLocality: "Pune", addressCountry: "IN" },
   alumniOf: { "@type": "CollegeOrUniversity", name: profile.education.school },
-  worksFor: { "@type": "Organization", name: "Nirmitee.io" },
   sameAs: [profile.links.github, profile.links.linkedin, profile.links.devtools],
 };
 

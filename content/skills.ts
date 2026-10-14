@@ -245,6 +245,7 @@ export const skillGroups: SkillGroup[] = [
       { name: "Bitbucket" },
       { name: "Postman", note: "API collections for every backend — the contract the frontends build against.", projects: ["estateguru", "nextdecade", "modcart", "boongg", "goapi", "wellcompanion", "datachamps", "tradegully", "bestosys", "dine-in"] },
       { name: "JIRA" },
+      { name: "Linear", note: "Issue tracking for the Estateguru team — sprints, cycles and the roadmap lived here.", projects: ["estateguru"] },
       { name: "Agile / Scrum" },
       { name: "ESLint", projects: ["estateguru"] },
       { name: "Selenium", note: "Browser automation, not testing — the scripted Power BI report runs.", projects: ["datachamps"] },

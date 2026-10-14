@@ -13,6 +13,7 @@ import {
 } from "@/content/timeline";
 import { getProject, ORIGIN_LABEL } from "@/content/projects";
 import { SkillIcon } from "@/components/skill-icon";
+import { headlineStack } from "@/lib/stack-headline";
 
 const TRACK_DOT: Record<Track, string> = {
   personal: "bg-ember",
@@ -123,7 +124,7 @@ export function CareerTimelineMobile() {
               <span className="text-dim"> · {entryMonths(entry)} mo</span>
             </p>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              {project?.summary ?? "Client engagement at Nirmitee.io."}
+              {project?.summary ?? entry.summary ?? "Client engagement at Nirmitee.io."}
             </p>
             {outcome && (
               <p className={`mt-2 font-mono text-[0.6875rem] uppercase tracking-[0.12em] ${metric ? "text-ember/90" : "text-dim"}`}>
@@ -134,7 +135,7 @@ export function CareerTimelineMobile() {
               <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                 <span className="font-mono text-[0.6875rem] text-muted">{project.role}</span>
                 <ul className="flex flex-wrap gap-1.5">
-                  {project.stack.slice(0, STACK_CHIPS).map((tech) => (
+                  {headlineStack(project).slice(0, STACK_CHIPS).map((tech) => (
                     <li key={tech} className="flex items-center gap-1.5 border border-line px-1.5 py-0.5 font-mono text-[0.625rem] text-dim">
                       <SkillIcon name={tech} size={11} />
                       {tech}

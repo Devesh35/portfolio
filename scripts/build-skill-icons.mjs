@@ -144,6 +144,7 @@ const ICONS = {
   Bitbucket: "logos:bitbucket",
   Postman: "logos:postman-icon",
   JIRA: "logos:jira",
+  Linear: "simple:linear",
   ESLint: "logos:eslint",
 };
 

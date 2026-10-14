@@ -106,13 +106,13 @@ export const projects: Project[] = [
     period: periodFor("estateguru"),
     url: "https://estateguru.co",
     summary:
-      "European property-lending marketplace connecting investors with secured real-estate loans across 8 countries. Phase 2 adds a separate borrower-facing app.",
+      "Tallinn, Estonia-based property-backed lending marketplace: borrowers raise loans secured against real estate, and investors fund them, across 8 European countries. Phase 2 added a separate borrower-facing app.",
     contribution:
-      "Phase 1 (investor-facing app): joined as a full-stack developer on a team of 5 developers, 3 QA, 1 project lead and 1 DevOps — rebuilding the dashboard, loan listings and auto-invest flows in Next.js and React Native inside an Nx monorepo, and migrating backend services to Node.js on MongoDB. Worked in the existing Lokalise setup that ships the product in 6 languages, documented the APIs in Swagger, and owned the Docker, Terraform and GitHub Actions pipeline plus the Datadog alerting that keeps it running. Phase 1 shipped in June 2025. Phase 2 (from November 2025) is new scope — the borrower-facing app — where I rejoined as project lead, leading a team of 4 developers (2 frontend, 2 backend) and 2 QA.",
+      "Phase 1 (investor-facing app): joined as a full-stack developer on a team of 5 developers, 3 QA, 1 project lead and 1 DevOps — rebuilding the dashboard, loan listings and auto-invest flows in Next.js and React Native inside an Nx monorepo, and migrating backend services to Node.js on MongoDB. Worked in the existing Lokalise setup that ships the product in 6 languages, documented the APIs in Swagger, and owned the Docker, Terraform and GitHub Actions pipeline plus the Datadog alerting that keeps it running. Phase 1 shipped in June 2025. Phase 2 (November 2025 – September 2026) was new scope — the borrower-facing app — where I rejoined as project lead, leading a team of 4 developers (2 frontend, 2 backend) and 2 QA, until I left Nirmitee.io.",
     ownership: ["design", "lead", "build", "test", "ship", "operate"],
     origin: "rebuild",
     originNote:
-      "Phase 1: the old platform stayed live while the new investor-facing web app, mobile app and backend services were written to replace it — a rewrite, not a patch job. Phase 2 is new scope, started after Phase 1 shipped: the borrower-facing app.",
+      "Phase 1: the old platform stayed live while the new investor-facing web app, mobile app and backend services were written to replace it — a rewrite, not a patch job. Phase 2 was new scope, started after Phase 1 shipped: the borrower-facing app.",
     metrics: [
       { label: "investors", value: "160,000+", source: "estateguru.co" },
       { label: "loans facilitated", value: "€951M+", source: "estateguru.co" },
@@ -218,16 +218,16 @@ export const projects: Project[] = [
     period: periodFor("nextdecade"),
     url: null,
     summary:
-      "AI-assisted log analysis and monitoring platform for a sustainable-energy company, part of a wider operations-automation programme.",
+      "AI-assisted log analysis and monitoring platform for NextDecade, a Houston, Texas-based energy company, part of a wider operations-automation programme.",
     contribution:
-      "Project lead on a fixed-scope, 6-week engagement with a team of 4 developers and 1 QA — mostly backend and DevOps work. Owned system design, code review and delivery; built the log ingestion and analysis platform on Azure App Service, Cosmos DB and Blob Storage, wired GPT-5.4 through Azure AI Foundry to explain failures, wired sign-in through Okta federated with Microsoft Entra ID, governed privileged access with Microsoft Entra PIM, and provisioned the infrastructure with Terraform from Azure Repos.",
+      "Project lead on the engagement with a team of 4 developers and 1 QA — mostly backend and DevOps work. Owned system design, code review and delivery; built the log ingestion and analysis platform on Azure App Service, Cosmos DB and Blob Storage, integrated 50+ live systems and the LNG plant's operational metrics into one view, wired GPT-5.4 through Azure AI Foundry to explain failures, wired sign-in through Okta federated with Microsoft Entra ID, governed privileged access with Microsoft Entra PIM, and provisioned the infrastructure with Terraform from Azure Repos.",
     ownership: ["design", "lead", "build", "ship", "operate"],
     origin: "greenfield",
-    metrics: [],
+    metrics: [{ label: "systems integrated", value: "50+", source: "engagement scope" }],
     highlights: [
-      "Project lead on a fixed-scope engagement (6 weeks) with a five-person team — 4 developers (2 frontend, 2 backend) and 1 QA — owning system design, code review and delivery, working mostly on backend and DevOps.",
+      "Project lead with a five-person team — 4 developers (2 frontend, 2 backend) and 1 QA — owning system design, code review and delivery, working mostly on backend and DevOps.",
       "Built an AI-assisted log analysis and monitoring platform that surfaces issues and suggested fixes directly from application logs.",
-      "Integrated logs and metrics from multiple sources through their APIs into one view.",
+      "Integrated 50+ real, running systems — their logs, APIs and the operational metrics of the LNG plant — into one view.",
       "Used GPT-5.4 through Azure AI Foundry to analyse logs across the stages of the process lifecycle, producing plain explanations and suggested fixes so teams resolve incidents faster.",
       "Provisioned Azure infrastructure with Terraform — App Service for the platform, Cosmos DB for stored logs and analyses, Blob Storage containers for raw log payloads.",
       "Integrated single sign-on: Okta as the identity provider, federated with Microsoft Entra ID, so engineers reach the platform with their existing corporate account and no separate password.",
@@ -266,7 +266,7 @@ export const projects: Project[] = [
       { name: "Azure", how: "Where the platform runs." },
       { name: "TypeScript", how: "Typed end to end — the ingestion services, the analysis pipeline and the monitoring UI share one set of types." },
       { name: "JavaScript (ES6+)", how: "The language underneath the TypeScript codebase." },
-      { name: "Tailwind CSS", how: "Utility styling for the monitoring UI, so a 6-week build did not need a design system of its own." },
+      { name: "Tailwind CSS", how: "Utility styling for the monitoring UI, so the build did not need a design system of its own." },
       { name: "Responsive & cross-platform UI", how: "A monitoring UI that holds up on an engineer's laptop and on a wall display." },
       { name: "REST API design", how: "The platform's own endpoints over ingested logs, analyses and metrics." },
       { name: "Schema design", how: "Cosmos DB document shapes for stored logs and their GPT analyses; Blob layout for raw payloads." },
@@ -290,7 +290,7 @@ export const projects: Project[] = [
     period: periodFor("modcart"),
     url: "https://modcart.io",
     summary:
-      "Advertising platform with embeddable single-page stores and real-time campaign analytics.",
+      "Advertising platform for a Jakarta, Indonesia-based company — embeddable single-page stores and real-time campaign analytics.",
     contribution:
       "Joined as a full-stack developer (frontend and backend) on a team of 3 developers, 1 QA and 1 project lead, and took on DevOps after 6 months. Carried the platform's major enhancement work: designed the architecture and schemas for the interactive single-page stores, built access control, Razorpay payments and Kafka-backed analytics, took initial load from about 4 seconds to under 1, added a WebSocket inbox with Meta integrations, and defined every environment as code with CloudFormation, automating the deployment process — including the blue-green cutover that took deployment downtime from about one minute to under five seconds.",
     ownership: ["design", "build", "test", "ship", "operate"],
@@ -529,7 +529,7 @@ export const projects: Project[] = [
     period: periodFor("wellcompanion"),
     url: null,
     summary:
-      "Health and fitness tracker that captures user activity and applies AI analysis to surface personalised insights and trends.",
+      "Health and fitness tracker for a Singapore-based company — captures user activity and applies AI analysis to surface personalised insights and trends.",
     contribution:
       "Full ownership as a solo developer — frontend, backend and DevOps — on a short, fixed-scope engagement. Built the cross-platform mobile app in React Native with a native Kotlin module for activity tracking, the Node.js app-side services, and the deployment pipeline. The Python and AI/ML data-processing pipeline behind the insights was owned by the client.",
     ownership: ["design", "build", "test", "ship", "operate"],
@@ -814,8 +814,8 @@ export const projects: Project[] = [
 
   {
     slug: "devtools",
-    name: "DevTools",
-    domain: "Developer Tools · Simarium",
+    name: "Simarium",
+    domain: "Developer Tools",
     role: "Creator — solo",
     period: periodFor("devtools"),
     url: "https://devtools.simarium.in",
@@ -854,7 +854,7 @@ export const projects: Project[] = [
     image: {
       src: "/projects/devtools.png",
       kind: "cover",
-      alt: "DevTools — stylized cover art",
+      alt: "Simarium — stylized cover art",
       note: "Dev's own product — no permission concerns. Highest-priority image to replace.",
     },
     featured: true,

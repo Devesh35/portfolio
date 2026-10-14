@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>Devesh Singh — résumé</title>
+<style>
+  /* Type metrics measured from Devesh_Singh_Resume.pdf with pdfplumber:
+     A4 595x842pt, 45pt margins, 503.6pt text column, Carlito (Calibri metrics).
+     Body 9.22pt on a 13.85pt line (1.502). Small text 8.07pt on 12.1pt.
+     Name 20.17pt. Contact 7.49pt on 10.4pt. Section rules 0.58pt. */
+
+  @page { size: A4; margin: 45pt; }
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: Calibri, Carlito, "Segoe UI", sans-serif;
+    font-size: 9.22pt;
+    line-height: 13.85pt;   /* measured: 13.8pt between body lines */
+    color: #1a1a1a;
+    margin: 0;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  a { color: #a8481c; text-decoration: underline; }
+
+  /* ------------------------------------------------------------- masthead */
+  .masthead { display: flex; justify-content: space-between; align-items: flex-start; gap: 18pt; margin-bottom: 10.7pt; }
+  h1 { font-size: 20.17pt; font-weight: 700; color: #7a3316; line-height: 1; margin: 0 0 6.3pt; }
+  .tagline { font-size: 9.22pt; color: #b8511f; margin: 0 0 1.2pt; }
+  .headline-stack { font-size: 9.22pt; font-weight: 700; color: #b8511f; margin: 0; }
+  .contact {
+    text-align: right; font-size: 7.49pt; line-height: 10.4pt;
+    white-space: nowrap; padding-top: 1pt;
+  }
+
+  /* ------------------------------------------------------------- sections */
+  h2 {
+    font-size: 9.22pt; font-weight: 700; text-transform: uppercase; color: #b8511f;
+    margin: 11.8pt 0 9.7pt; padding: 0; border-bottom: 0.58pt solid #f0c3a8;
+  }
+  p { margin: 0; }
+  .summary { margin: 0 0 4.6pt; text-align: justify; }
+
+  /* --------------------------------------------------------------- skills */
+  .skill-row { display: flex; margin-bottom: 4.05pt; }
+  .skill-label { flex: 0 0 94.1pt; font-weight: 700; color: #7a3316; }
+  .skill-items { flex: 1; }
+
+  /* ----------------------------------------------------------- experience */
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 14pt; }
+  .date { font-style: italic; color: #333; white-space: nowrap; }
+
+  /* Company header — printed once above every position held there. */
+  .company-header { margin-bottom: 1.2pt; }
+  .company-name { font-size: 11.6pt; font-weight: 700; text-transform: uppercase; color: #7a3316; letter-spacing: 0.02em; }
+  .company-header .date { font-size: 9.22pt; font-weight: 700; font-style: normal; color: #7a3316; }
+  .company-blurb { font-size: 7.8pt; line-height: 10.8pt; color: #555; font-style: italic; margin: 1.5pt 0 6pt; }
+
+  /* Position — a title held at the company above. Deliberately larger than
+     body text so SDE 2 and Graduate Consultant both read as distinct roles,
+     not sub-labels of the company line (Dev, 2026-09-01). No border-left here
+     on purpose: a box border drawn on an element that spans a page break
+     renders as a stray rule down the blank rest of the page — plain spacing
+     avoids that failure mode. */
+  .position { margin-top: 6.5pt; margin-bottom: 0; }
+  .position-title { font-size: 10.5pt; font-weight: 700; color: #1a1a1a; }
+  .position .date { font-size: 9.22pt; }
+  .role-summary { margin-top: 2.6pt; }
+
+  /* Small labelled break between the positions and the major-project write-ups
+     that follow them (Dev, 2026-09-01 — projects are no longer nested under
+     a position). Same accent as h2, lighter weight, no border. */
+  .subhead { font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #7a3316; margin: 11pt 0 2pt; }
+
+  .proj { margin-top: 7.45pt; }
+  .proj-title { font-size: 9.22pt; font-weight: 700; color: #7a3316; }
+  .proj-title a { font-weight: 400; font-size: 8.07pt; }
+  .proj .date { font-size: 8.07pt; }
+  .context { font-size: 8.07pt; line-height: 12.1pt; margin-top: 1.35pt; page-break-after: avoid; }
+  .proj .row { page-break-after: avoid; }
+  .stack { font-size: 8.07pt; line-height: 12.1pt; margin-top: 1.35pt; }
+  .context b, .stack b { color: #7a3316; }
+
+  /* -------------------------------------------------------------- bullets */
+  ul { list-style: none; margin: 1.5pt 0 0; padding-left: 0; }
+  /* The list itself CAN break across a page (Dev, 2026-09-01 — fills pages
+     instead of leaving blank space), but a single bullet's own text should
+     not split mid-sentence across that break. */
+  li { margin-bottom: 3.45pt; page-break-inside: avoid; padding-left: 9.2pt; text-indent: -9.2pt; }
+  .bullet { display: inline-block; width: 9.2pt; text-indent: 0; color: #d1662f; font-size: 8.5pt; }
+  .position > ul { margin-top: 2.6pt; }
+  .tight { margin-top: 4pt; }
+  .additional-intro { font-size: 8.07pt; line-height: 12.1pt; color: #555; font-style: italic; margin-bottom: 4pt; }
+  .add-item { padding-left: 0; text-indent: 0; }
+  .add-row { margin-bottom: 0.5pt; }
+  .add-title { font-size: 9.22pt; }
+  .add-title a { font-size: 8.07pt; font-weight: 400; }
+  .tight .date { font-size: 8.07pt; }
+  .add-text { display: block; margin-left: 9.2pt; }
+
+  /* ------------------------------------------------------------ education */
+  .edu-line { font-size: 9.22pt; }
+
+  /* On screen the document sits on a page; in print @page owns the margins. */
+  @media screen {
+    html { background: #eceff2; }
+    body {
+      max-width: 595pt;
+      width: 100%;
+      margin: 0 auto;
+      padding: 45pt;
+      background: #fff;
+    }
+  }
+</style></head>
+<body>
+  <header class="masthead">
+    <div>
+      <h1>DEVESH SINGH</h1>
+      <p class="tagline">Pune, India | Full Stack &amp; DevOps Engineer | Nearly 5 Years Experience</p>
+      <p class="headline-stack">Next.js | Node.js | MongoDB | CI/CD | AWS</p>
+    </div>
+    <div class="contact">
+      <div><b>Email:</b> <a href="mailto:devesh46singh@gmail.com">devesh46singh@gmail.com</a></div><div><b>Phone:</b> +91 78751 77354</div><div><b>LinkedIn:</b> <a href="https://linkedin.com/in/devesh-singh-769249129">linkedin.com/in/devesh-singh-769249129</a></div>
+    </div>
+  </header>
+
+  <p class="summary">Full Stack &amp; DevOps Engineer based in Pune, India. I take products from requirements and system design through to production, and stay responsible for them once they're live — the infrastructure side is as much my job as the application code. Currently on the next phase of a European property-lending platform, after most recently building a fixed-scope AI-assisted observability platform.</p>
+  <p class="summary">Solo project: <a href="https://devtools.simarium.in">devtools.simarium.in</a>, an interactive developer-infrastructure simulator with a live Git visualizer (merge, rebase, cherry-pick on a modelled commit graph).</p>
+
+  <h2>Technical Skills</h2>
+  
+      <div class="skill-row">
+        <span class="skill-label">Frontend &amp; Mobile:</span>
+        <span class="skill-items">Next.js, React.js, React Native, TypeScript, Android (Java, Kotlin)</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Backend:</span>
+        <span class="skill-items">Node.js, Express.js, RESTful API Design, WebSocket, Apache Kafka, SSO / OAuth 2.0</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Databases &amp; Caching:</span>
+        <span class="skill-items">MongoDB, PostgreSQL, Redis</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Cloud:</span>
+        <span class="skill-items">AWS, Azure</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Infrastructure:</span>
+        <span class="skill-items">Docker, Docker Compose, Terraform, CloudFormation, Nx Monorepo</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">CI/CD &amp; Monitoring:</span>
+        <span class="skill-items">GitHub Actions, Docker-based multi-environment pipelines, Blue-Green Deployment, Datadog, CloudWatch</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Testing:</span>
+        <span class="skill-items">Jest, Cypress</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Integrations:</span>
+        <span class="skill-items">Razorpay, Google Maps, Meta Business APIs (WhatsApp, Facebook, Instagram)</span>
+      </div>
+
+  <h2>Professional Experience</h2>
+  <div class="company-header row">
+    <span class="company-name">Nirmitee.io</span>
+    <span class="date">Nov 2021 – Present</span>
+  </div>
+  <p class="company-blurb">Nirmitee.io is a software consultancy — every engagement below is a client project delivered as a Nirmitee employee.</p>
+  
+    <div class="position">
+      <div class="row">
+        <span class="position-title">Software Development Engineer II (SDE 2)</span>
+        <span class="date">Apr 2024 – Present</span>
+      </div>
+      <p class="role-summary">Promoted from Software Engineer; I own full-stack and DevOps delivery for client platforms end to end, from system design through to production.</p>
+    </div>
+    <div class="position">
+      <div class="row">
+        <span class="position-title">Software Engineer (Consultant Graduate)</span>
+        <span class="date">Nov 2021 – Apr 2024</span>
+      </div>
+      <p class="role-summary">Delivered production web and mobile applications for multiple clients, and began the Estateguru engagement that I carried through as SDE 2.</p>
+    </div>
+  <p class="subhead">Major Projects</p>
+  
+      <div class="proj">
+        <div class="row">
+          <span class="proj-title">Estateguru — Full Stack Web &amp; Mobile Revamp (FinTech / Real Estate) <a href="https://estateguru.co">estateguru.co</a></span>
+          <span class="date">Jun 2023 – Present</span>
+        </div>
+        <p class="context"><b>Context:</b> European property-lending platform operating across 8 countries. Phase 1 (Jun 2023 – Jun 2025) rebuilt the investor-facing web and mobile apps; Phase 2 (from Nov 2025) is new scope — the borrower-facing app.</p>
+        <p class="stack"><b>Stack:</b> Next.js, Node.js, MongoDB, AWS, CI/CD, Terraform, Docker, Nx, SSO / OAuth 2.0, Jest, Cypress, Datadog</p>
+        <ul><li><span class="bullet">▪</span>Phase 1: joined as a full-stack developer for the revamp of the legacy investor portal.</li><li><span class="bullet">▪</span>Phase 2: rejoined for the borrower-facing app, working across the frontend, backend and infrastructure.</li><li><span class="bullet">▪</span>Revamped the legacy frontend to Next.js and TypeScript inside an Nx monorepo, rebuilding the investor dashboard, loan listings and auto-invest flows across the web app and React Native mobile app, with shared libraries, types and API clients.</li><li><span class="bullet">▪</span>Migrated the backend to Node.js/Express modular services on MongoDB, designing the schemas and REST APIs for investor, loan and auto-invest data.</li><li><span class="bullet">▪</span>Raised automated test coverage on the investor app from ~40% on the old platform to ~90% on the new one, using Jest and Cypress.</li><li><span class="bullet">▪</span>Delivered role-based access control and social login end to end, and documented the APIs in Swagger so web, mobile and backend build against one contract.</li><li><span class="bullet">▪</span>Owned the CI/CD pipeline and Datadog alerting that keep the platform running, provisioned with Docker and Terraform across development, staging and production.</li></ul>
+      </div>
+      <div class="proj">
+        <div class="row">
+          <span class="proj-title">NextDecade Observability Platform (AIOps) — Full Stack Developer</span>
+          <span class="date">Jun 2026 – Jul 2026</span>
+        </div>
+        <p class="context"><b>Context:</b> AI-assisted log analysis and monitoring platform for a sustainable-energy company, part of a larger operations-automation programme. Fixed-scope engagement, 6 weeks.</p>
+        <p class="stack"><b>Stack:</b> React, Node.js, Express, MongoDB, CI/CD, Terraform, Azure, Azure AI Foundry (GPT-5.4), SSO / OAuth 2.0</p>
+        <ul><li><span class="bullet">▪</span>Joined as a full-stack developer — mostly backend and DevOps work, contributing to system design, code review and delivery.</li><li><span class="bullet">▪</span>Built the AI-assisted log analysis platform end to end: ingested logs and metrics from multiple sources, and wired GPT-5.4 through Azure AI Foundry to explain failures and suggest fixes.</li><li><span class="bullet">▪</span>Provisioned the Azure infrastructure with Terraform — App Service, Cosmos DB and Blob Storage — and set up CI/CD out of Azure Repos and Azure DevOps.</li><li><span class="bullet">▪</span>Integrated single sign-on through Okta federated with Microsoft Entra ID, and governed privileged access with Microsoft Entra PIM.</li></ul>
+      </div>
+      <div class="proj">
+        <div class="row">
+          <span class="proj-title">Modcart — Advertising Platform with Real-time Analytics (AdTech) <a href="https://modcart.io">modcart.io</a></span>
+          <span class="date">Jun 2022 – May 2023</span>
+        </div>
+        <p class="context"><b>Context:</b> Advertising platform with embeddable single-page stores and real-time campaign analytics; the platform has since moved to a coupon-based model.</p>
+        <p class="stack"><b>Stack:</b> React.js, Node.js, Express, MongoDB, Redis, Apache Kafka, SSO / OAuth 2.0, AWS, CloudFormation</p>
+        <ul><li><span class="bullet">▪</span>Joined as a full-stack developer and took on DevOps after 6 months.</li><li><span class="bullet">▪</span>Owned the architecture and schemas for the single-page stores, and cut initial load from ~4s to under 1s.</li><li><span class="bullet">▪</span>Built role-based access control, social login, Razorpay payments, and Kafka-backed real-time analytics with Redis caching.</li><li><span class="bullet">▪</span>Built a WebSocket-based real-time chat with Meta integrations (WhatsApp, Facebook, Instagram).</li><li><span class="bullet">▪</span>Automated the deployment process and defined every environment as code with CloudFormation, adding blue-green deployment that cut downtime from ~1 minute to under 5 seconds.</li></ul>
+      </div>
+
+  <h2>Additional Projects</h2>
+  <p class="additional-intro">Other Nirmitee.io client engagements.</p>
+  <ul class="tight"><li class="add-item">
+        <div class="row add-row">
+          <span class="add-left"><span class="bullet">▪</span><span class="add-title"><b>WellCompanion</b> (Health &amp; Fitness)</span></span>
+          <span class="date">Jul 2025 – Nov 2025</span>
+        </div>
+        <span class="add-text">Health and fitness tracker that captures daily activity and applies AI analysis to surface personalised insights and trends — built solo, BRD to deployment.</span>
+      </li><li class="add-item">
+        <div class="row add-row">
+          <span class="add-left"><span class="bullet">▪</span><span class="add-title"><b>Boongg</b> (Mobility) — <a href="https://boongg.com">boongg.com</a></span></span>
+          <span class="date">Aug 2022 – Oct 2022</span>
+        </div>
+        <span class="add-text">Reworked Boongg’s slowest booking queries — the platform’s main latency bottleneck — cutting booking search time from ~6s to under 2s on a live rental platform (the client reports 1M+ rides completed).</span>
+      </li><li class="add-item">
+        <div class="row add-row">
+          <span class="add-left"><span class="bullet">▪</span><span class="add-title"><b>Datachamps</b> (FinTech)</span></span>
+          <span class="date">Dec 2021 – May 2022</span>
+        </div>
+        <span class="add-text">Replaced Datachamps’ manual Power BI report generation with a Selenium-automated pipeline on AWS, eliminating a recurring manual step in the team’s financial reporting.</span>
+      </li><li class="add-item">
+        <div class="row add-row">
+          <span class="add-left"><span class="bullet">▪</span><span class="add-title"><b>GOAPI</b> (Sports Management)</span></span>
+          <span class="date">Mar 2023 – May 2023</span>
+        </div>
+        <span class="add-text">Sports-management platform connecting children, parents, coaches, managers and club owners with role-based access to schedules and activity tracking — built solo, concept to release.</span>
+      </li></ul>
+
+  <h2>Education</h2>
+  <div class="row">
+    <span class="proj-title">Bachelor of Engineering <span style="font-weight:400;color:#b8511f">– Datta Meghe College of Engineering</span></span>
+    <span class="date">Jul 2016 – Oct 2020</span>
+  </div>
+  <div class="row">
+    <span class="edu-line">University of Mumbai | Airoli, Maharashtra, India</span>
+    <span class="date">CGPA: 7.86</span>
+  </div>
+</body></html>

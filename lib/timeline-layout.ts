@@ -3,6 +3,7 @@ import {
   TIMELINE_START,
   compareEntries,
   entryEnd,
+  entryResumed,
   entryStart,
   isOngoing,
   milestones,
@@ -135,7 +136,8 @@ type StackItem = EntryItem | MilestoneItem;
 /**
  * Top-to-bottom order of everything in the right-hand column. Still-running
  * work is pinned at the top under the "Present" label (month: null); the rest
- * interleaves finished projects and milestones by date, newest first.
+ * interleaves finished projects and milestones by date, newest first — a
+ * project is dated by the start of its most recent span (see compareEntries).
  */
 function readingOrder(): StackItem[] {
   const now = milestones.find((m) => m.kind === "now");
@@ -146,7 +148,7 @@ function readingOrder(): StackItem[] {
         (entry): EntryItem => ({
           kind: "entry",
           entry,
-          month: entryStart(entry),
+          month: entryResumed(entry),
           height: CARD_H,
           anchorOffset: CARD_ANCHOR,
         }),
@@ -162,7 +164,10 @@ function readingOrder(): StackItem[] {
           anchorOffset: MILESTONE_ANCHOR,
         }),
       ),
-  ].sort((a, b) => (b.month ?? 0) - (a.month ?? 0) || (a.kind === "entry" ? -1 : 1));
+  // Same month: the milestone reads first ("Joined", then the training stint
+  // that began that month), so its label can sit level with its dot while
+  // the card below takes the elbow.
+  ].sort((a, b) => (b.month ?? 0) - (a.month ?? 0) || (a.kind === "milestone" ? -1 : 1));
 
   return [
     ...(now
@@ -284,6 +289,16 @@ function sweepEvents(anchors: Map<number, number>): EventPoint[] {
 }
 
 /** Monotonic month→y interpolation over the swept control points. */
+/**
+ * Where a span's end sits on the lane. A span that starts and ends in the
+ * same month (the Nov 2021 onboarding stint) has no height on the axis, so
+ * its end is lifted MIN_SPAN_PX above its start — the loop still reads as a
+ * loop, the way GOAPI's three months do.
+ */
+function spanEndY(scale: (month: number) => number, start: number, end: number): number {
+  return end === start ? scale(start) - MIN_SPAN_PX : scale(end);
+}
+
 function makeScale(points: EventPoint[]): (month: number) => number {
   return (month) => {
     const first = points[0];
@@ -336,15 +351,47 @@ function assignLanes(): Map<TimelineEntry, number> {
 
 /* ------------------------------------------------------------------ layout */
 
-export function buildTimelineLayout(): TimelineLayout {
-  const items = readingOrder();
-  const anchors = stackAnchors(items);
+/**
+ * Milestone leaders are horizontal: the label sits level with its dot. A
+ * milestone's dot is also spaced off any branch junction sharing its month
+ * (Left Nirmitee.io lands on the Estateguru and NextDecade end junctions), so
+ * its leader never runs through a branch elbow.
+ */
+const MILESTONE_JUNCTION_GAP = 18;
+
+interface Placement {
+  scale: (month: number) => number;
+  tops: Map<StackItem, number>;
+  junctionYByKey: Map<string, number>;
+  milestoneDotY: Map<Milestone, number>;
+}
+
+function place(items: StackItem[], anchors: Map<number, number>): Placement {
   const scale = makeScale(sweepEvents(anchors));
 
-  const laneOf = assignLanes();
-  const laneCount = Math.max(...laneOf.values(), 1);
-  const graphWidth = SPINE_X + (laneCount + 1) * LANE_GAP;
-  const cardX = graphWidth + 44;
+  // Spine junctions (and milestone dots), nudged apart when they share a y.
+  const junctionYByKey = new Map<string, number>();
+  const milestoneDotY = new Map<Milestone, number>();
+  const rawJunctions: { key: string; y: number; milestone?: Milestone }[] = timeline.flatMap((entry) => {
+    const out = [{ key: `${entry.label}:out`, y: scale(entryStart(entry)) }];
+    if (!isOngoing(entry)) out.push({ key: `${entry.label}:in`, y: spanEndY(scale, entryStart(entry), entryEnd(entry)) });
+    return out;
+  });
+  for (const milestone of milestones) {
+    if (milestone.kind === "now") continue;
+    rawJunctions.push({ key: `milestone:${milestone.at}`, y: scale(monthIndex(milestone.at)), milestone });
+  }
+  rawJunctions.sort((a, b) => a.y - b.y);
+  let prevJunctionY = -Infinity;
+  let prevWasMilestone = false;
+  for (const junction of rawJunctions) {
+    const gap = junction.milestone || prevWasMilestone ? MILESTONE_JUNCTION_GAP : JUNCTION_GAP;
+    const y = Math.max(junction.y, prevJunctionY + gap);
+    if (junction.milestone) milestoneDotY.set(junction.milestone, y);
+    else junctionYByKey.set(junction.key, y);
+    prevJunctionY = y;
+    prevWasMilestone = Boolean(junction.milestone);
+  }
 
   // Final placement: same stacking, but each dated item now snaps to the
   // fitted scale, so cards sit exactly beside their moment on the graph.
@@ -352,26 +399,54 @@ export function buildTimelineLayout(): TimelineLayout {
   let cursor = TOP_PAD - MILESTONE_H;
   for (const item of items) {
     let top = cursor;
-    if (item.month !== null) top = Math.max(top, scale(item.month) - item.anchorOffset);
+    if (item.month !== null) {
+      const moment =
+        item.kind === "milestone"
+          ? (milestoneDotY.get(item.milestone) ?? scale(item.month))
+          : scale(item.month);
+      top = Math.max(top, moment - item.anchorOffset);
+    }
     tops.set(item, top);
     cursor = top + item.height + CARD_GAP;
   }
 
-  // Spine junctions, nudged apart when two share the same month's y.
-  const junctionYByKey = new Map<string, number>();
-  const rawJunctions = timeline
-    .flatMap((entry) => {
-      const out = [{ key: `${entry.label}:out`, y: scale(entryStart(entry)) }];
-      if (!isOngoing(entry)) out.push({ key: `${entry.label}:in`, y: scale(entryEnd(entry)) });
-      return out;
-    })
-    .sort((a, b) => a.y - b.y);
-  let prevJunctionY = -Infinity;
-  for (const junction of rawJunctions) {
-    const y = Math.max(junction.y, prevJunctionY + JUNCTION_GAP);
-    junctionYByKey.set(junction.key, y);
-    prevJunctionY = y;
+  return { scale, tops, junctionYByKey, milestoneDotY };
+}
+
+export function buildTimelineLayout(): TimelineLayout {
+  const items = readingOrder();
+  const anchors = stackAnchors(items);
+
+  // A milestone label pushed below its dot by the cards above it would need a
+  // diagonal leader. Feed the label's y back as that month's anchor and
+  // re-fit until every milestone sits level with its dot (y only ever grows,
+  // so this settles in a few rounds).
+  // A month that also starts a card is never fed back: card and label would
+  // push each other down the page without end.
+  const cardMonths = new Set(items.filter((i) => i.kind === "entry").map((i) => i.month));
+  let placement = place(items, anchors);
+  for (let round = 0; round < 8; round += 1) {
+    let moved = false;
+    for (const item of items) {
+      if (item.kind !== "milestone" || item.month === null || cardMonths.has(item.month)) continue;
+      const dotY = placement.milestoneDotY.get(item.milestone);
+      const labelY = placement.tops.get(item);
+      if (dotY === undefined || labelY === undefined) continue;
+      if (labelY + item.anchorOffset > dotY + 0.5) {
+        anchors.set(item.month, Math.max(anchors.get(item.month) ?? 0, labelY + item.anchorOffset));
+        moved = true;
+      }
+    }
+    if (!moved) break;
+    placement = place(items, anchors);
   }
+  const { scale, tops, junctionYByKey, milestoneDotY } = placement;
+
+  const laneOf = assignLanes();
+  const laneCount = Math.max(...laneOf.values(), 1);
+  const graphWidth = SPINE_X + (laneCount + 1) * LANE_GAP;
+  const cardX = graphWidth + 44;
+
 
   const entries: LaidOutEntry[] = items
     .filter((item): item is EntryItem => item.kind === "entry")
@@ -382,13 +457,13 @@ export function buildTimelineLayout(): TimelineLayout {
       const cardY = tops.get(item) ?? TOP_PAD;
       const open = isOngoing(entry);
       const yOut = junctionYByKey.get(`${entry.label}:out`) ?? scale(entryStart(entry));
-      const yIn = open ? null : (junctionYByKey.get(`${entry.label}:in`) ?? scale(entryEnd(entry)));
+      const yIn = open ? null : (junctionYByKey.get(`${entry.label}:in`) ?? spanEndY(scale, entryStart(entry), entryEnd(entry)));
 
       // Spans as vertical extents on the lane, earliest (lowest) first.
       const parts = entry.spans
         .map((span) => ({
           yBottom: scale(monthIndex(span.start)),
-          yTop: span.end ? scale(monthIndex(span.end)) : TOP_PAD,
+          yTop: span.end ? spanEndY(scale, monthIndex(span.start), monthIndex(span.end)) : TOP_PAD,
         }))
         .sort((a, b) => b.yBottom - a.yBottom);
 
@@ -471,17 +546,25 @@ export function buildTimelineLayout(): TimelineLayout {
     .map((item) => {
       const { milestone } = item;
       const labelY = tops.get(item) ?? TOP_PAD;
-      const dotY = milestone.kind === "now" ? TOP_PAD : scale(monthIndex(milestone.at));
+      const dotY =
+        milestone.kind === "now"
+          ? TOP_PAD
+          : (milestoneDotY.get(milestone) ?? scale(monthIndex(milestone.at)));
+      // Horizontal by construction (see buildTimelineLayout); the elbow is
+      // only a safety net if the fit ever fails to settle.
       const leader =
         milestone.kind === "now"
           ? null
-          : `M ${SPINE_X + 7} ${dotY} L ${cardX - 14} ${labelY + MILESTONE_ANCHOR}`;
+          : Math.abs(labelY + MILESTONE_ANCHOR - dotY) < 1
+            ? `M ${SPINE_X + 7} ${dotY} H ${cardX - 14}`
+            : `M ${SPINE_X + 7} ${dotY} H ${cardX - 30} V ${labelY + MILESTONE_ANCHOR} H ${cardX - 14}`;
       return { milestone, dotY, labelY, leader };
     });
 
   const spineTop = TOP_PAD;
   const spineBottom = scale(START_M);
-  const height = Math.max(spineBottom + 80, cursor + 24);
+  const stackBottom = Math.max(...items.map((item) => (tops.get(item) ?? TOP_PAD) + item.height));
+  const height = Math.max(spineBottom + 80, stackBottom + CARD_GAP + 24);
 
   const years: YearTick[] = [];
   let lastTickY = -Infinity;

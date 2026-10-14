@@ -12,7 +12,7 @@ export const site = {
 export const nav = [
   { href: "/", label: "Home" },
   { href: "/work", label: "Work" },
-  { href: "/systems", label: "Systems" },
+  { href: "/systems", label: "Skills" },
   { href: "https://devtools.simarium.in", label: "Lab", external: true },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },

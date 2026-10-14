@@ -195,7 +195,7 @@ for (const [, token, noun] of prose.matchAll(/\b([\w,]+)\s+(projects|domains)\b/
   if (n !== actual) fail(`copy claims "${token} ${noun}" but there are ${actual}`);
 }
 
-// profile.achievements' "delivered to client satisfaction" line: DevTools and
+// profile.achievements' "delivered to client satisfaction" line: Simarium and
 // Dine In are personal builds with no client, so this counts nirmitee-track
 // projects only — a different denominator than the site-wide total above.
 const clientSlugs = new Set(
@@ -321,7 +321,7 @@ for (const tool of simarium.tools) {
   const mentioned = [devtools?.contribution, ...(devtools?.highlights ?? [])].join(" ");
   const key = tool.name.split(" ")[0];
   if (!new RegExp(key, "i").test(mentioned)) {
-    warn(`simarium tool "${tool.name}" is not reflected in the DevTools project content`);
+    warn(`simarium tool "${tool.name}" is not reflected in the Simarium project content`);
   }
 }
 ok("intro, lifecycle and Simarium claims cross-checked");

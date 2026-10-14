@@ -27,6 +27,8 @@ export interface TimelineEntry {
   /** More than one span means the work paused and resumed — Estateguru's phase 2. */
   spans: Span[];
   note?: string;
+  /** Card body for an entry with no project page (slug null) — a stint, not a case study. */
+  summary?: string;
 }
 
 /** Point-in-time events that sit on the spine rather than on a branch. */
@@ -38,31 +40,29 @@ export interface Milestone {
 }
 
 export const TIMELINE_START = "2020-10"; // graduation
-export const TIMELINE_END = "2026-08"; // present
+export const TIMELINE_END = "2026-10"; // present
 
 export const milestones: Milestone[] = [
-  { at: "2026-08", label: "Present", detail: "SDE 2 at Nirmitee.io", kind: "now" },
+  { at: "2026-10", label: "Present", detail: "Open to full-stack & DevOps roles", kind: "now" },
+  { at: "2026-09", label: "Left Nirmitee.io", detail: "4 years 10 months, SDE 2", kind: "event" },
   { at: "2024-04", label: "Promoted to SDE 2", kind: "event" },
-  { at: "2021-11", label: "Joined Nirmitee.io", detail: "Training, then first client assignment", kind: "event" },
   { at: "2020-10", label: "Graduated", detail: "BE, Datta Meghe College of Engineering", kind: "start" },
 ];
 
 export const timeline: TimelineEntry[] = [
   {
     slug: "devtools",
-    label: "DevTools",
+    label: "Simarium",
     track: "personal",
     emphasis: "main",
     spans: [{ start: "2026-04", end: null }],
-    note: "Simarium",
   },
   {
     slug: "nextdecade",
-    label: "Observability Platform",
+    label: "NextDecade Observability",
     track: "nirmitee",
     emphasis: "main",
-    spans: [{ start: "2026-06", end: "2026-07" }],
-    note: "Fixed-scope engagement, 6 weeks",
+    spans: [{ start: "2026-06", end: "2026-09" }],
   },
   {
     slug: "estateguru",
@@ -71,9 +71,9 @@ export const timeline: TimelineEntry[] = [
     emphasis: "main",
     spans: [
       { start: "2023-06", end: "2025-06" },
-      { start: "2025-11", end: null },
+      { start: "2025-11", end: "2026-09" },
     ],
-    note: "Phase 1: investor-facing app, shipped Jun 2025. Phase 2: borrower-facing app as project lead, from Nov 2025",
+    note: "Phase 1: investor-facing app, shipped Jun 2025. Phase 2: borrower-facing app as project lead, Nov 2025 until leaving Nirmitee.io in Sep 2026",
   },
   {
     slug: "wellcompanion",
@@ -125,6 +125,15 @@ export const timeline: TimelineEntry[] = [
     spans: [{ start: "2021-12", end: "2022-05" }],
   },
   {
+    slug: null,
+    label: "Joined Nirmitee.io",
+    track: "nirmitee",
+    emphasis: "support",
+    spans: [{ start: "2021-11", end: "2021-11" }],
+    summary: "Consultant-graduate onboarding and training before the first client assignment.",
+    note: "Training phase"
+  },
+  {
     slug: "dine-in",
     label: "Dine In",
     track: "personal",
@@ -147,14 +156,22 @@ export const formatMonth = (ym: string) => {
   return `${MONTH_NAMES[month - 1]} ${year}`;
 };
 
-/** "Jun 2023 – Jun 2025 · Nov 2025 – Present" */
+/** "Jun 2023 – Jun 2025 · Nov 2025 – Present"; a single-month span is just "Nov 2021". */
 export const formatSpans = (spans: Span[]) =>
   spans
-    .map((s) => `${formatMonth(s.start)} – ${s.end ? formatMonth(s.end) : "Present"}`)
+    .map((s) =>
+      s.end === s.start
+        ? formatMonth(s.start)
+        : `${formatMonth(s.start)} – ${s.end ? formatMonth(s.end) : "Present"}`,
+    )
     .join(" · ");
 
 export const entryStart = (entry: TimelineEntry) =>
   Math.min(...entry.spans.map((s) => monthIndex(s.start)));
+
+/** Start of the most recent span — where a paused-and-resumed project re-enters the story. */
+export const entryResumed = (entry: TimelineEntry) =>
+  Math.max(...entry.spans.map((s) => monthIndex(s.start)));
 
 export const entryEnd = (entry: TimelineEntry) =>
   Math.max(...entry.spans.map((s) => monthIndex(s.end ?? TIMELINE_END)));
@@ -173,8 +190,9 @@ export const isOngoing = (entry: TimelineEntry) => entry.spans.some((s) => s.end
  *
  * Still running comes first — a current assignment is the thing a reader wants
  * at the top, regardless of when it began. Within that, the client assignment
- * leads the personal project. Everything finished then follows by start date,
- * newest first, so an earlier start is always further down.
+ * leads the personal project. Everything finished then follows by the start of
+ * its most recent span, newest first — so Estateguru, resumed for Phase 2 in
+ * Nov 2025, sits with the 2025–26 work rather than back at its 2023 start.
  */
 export function orderRank(entry: TimelineEntry): number {
   if (!isOngoing(entry)) return 0;
@@ -182,7 +200,7 @@ export function orderRank(entry: TimelineEntry): number {
 }
 
 export const compareEntries = (a: TimelineEntry, b: TimelineEntry) =>
-  orderRank(b) - orderRank(a) || entryStart(b) - entryStart(a);
+  orderRank(b) - orderRank(a) || entryResumed(b) - entryResumed(a);
 
 export const getEntry = (slug: string) => timeline.find((e) => e.slug === slug);
 

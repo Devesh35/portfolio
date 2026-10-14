@@ -9,7 +9,7 @@ import { profile } from "@/content/profile";
 import { yearsSinceCareerStart } from "@/lib/experience";
 
 export const metadata: Metadata = {
-  title: "Systems",
+  title: "Skills",
   description:
     "Every tool Devesh Singh works with, laid out the way a system flows — design to production — and linked to the projects that used it.",
   alternates: { canonical: "/systems" },
@@ -103,7 +103,7 @@ export default function SystemsPage() {
             className="animate-rise font-display mt-6 text-[clamp(2.75rem,8vw,5.5rem)] font-bold leading-[1.02]"
             style={{ "--rise-delay": "100ms" } as React.CSSProperties}
           >
-            Systems
+            Skills
             <br />
             <span className="text-muted">
               from idea to <span className="text-ember">production.</span>

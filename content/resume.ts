@@ -67,7 +67,7 @@ export const resume = {
 
   // 3 sentences, no numbers — who Dev is, not a metrics recap (Dev, 2026-09-01).
   summary:
-    "Full Stack & DevOps Engineer based in Pune, India. I take products from requirements and system design through to production, and stay responsible for them once they're live — the infrastructure side is as much my job as the application code. Currently leading the next phase of a European property-lending platform, after most recently leading a fixed-scope AI-assisted observability build.",
+    "Full Stack & DevOps Engineer based in Pune, India. I take products from requirements and system design through to production, and stay responsible for them once they're live — the infrastructure side is as much my job as the application code. Most recently led the next phase of a European property-lending platform, alongside an AI-assisted observability build.",
 
   soloProject: {
     url: profile.links.devtools,
@@ -77,7 +77,7 @@ export const resume = {
   /** Shown once above the positions below — every position here is at this one company. */
   company: {
     name: "Nirmitee.io",
-    period: "Nov 2021 – Present",
+    period: "Nov 2021 – Sep 2026",
     blurb:
       "Nirmitee.io is a software consultancy — every engagement below is a client project delivered as a Nirmitee employee.",
   },
@@ -96,9 +96,9 @@ export const resume = {
   positions: [
     {
       title: "Software Development Engineer II (SDE 2)",
-      period: "Apr 2024 – Present",
+      period: "Apr 2024 – Sep 2026",
       summary:
-        "Promoted from Software Engineer; I own full-stack and DevOps delivery for client platforms end to end, from system design through to production.",
+        "Promoted from Software Engineer; I owned full-stack and DevOps delivery for client platforms end to end, from system design through to production.",
     },
     {
       title: "Software Engineer (Consultant Graduate)",
@@ -114,7 +114,7 @@ export const resume = {
       heading: "Estateguru — Full Stack Web & Mobile Revamp (FinTech / Real Estate)",
       url: "https://estateguru.co",
       context:
-        "European property-lending platform operating across 8 countries. Phase 1 (Jun 2023 – Jun 2025) rebuilt the investor-facing web and mobile apps; Phase 2 (from Nov 2025) is new scope — the borrower-facing app.",
+        "Tallinn, Estonia-based property-backed lending marketplace — borrowers raise loans secured against real estate and investors fund them — operating across 8 European countries. Phase 1 (Jun 2023 – Jun 2025) rebuilt the investor-facing web and mobile apps; Phase 2 (Nov 2025 – Sep 2026) was new scope — the borrower-facing app.",
       bullets: [
         "Phase 1: joined as a full-stack developer for the revamp of the legacy investor portal.",
         "Phase 2: rejoined as project lead, leading a six-person team — 4 developers (2 frontend, 2 backend) and 2 QA.",
@@ -130,10 +130,10 @@ export const resume = {
       slug: "nextdecade",
       heading: "NextDecade Observability Platform (AIOps) — Project Lead",
       context:
-        "AI-assisted log analysis and monitoring platform for a sustainable-energy company, part of a larger operations-automation programme. Fixed-scope engagement, 6 weeks.",
+        "AI-assisted log analysis and monitoring platform for NextDecade, a Houston, Texas-based energy company, part of a wider operations-automation programme.",
       bullets: [
         "Joined as project lead over a five-person team — 4 developers (2 frontend, 2 backend) and 1 QA — mostly backend and DevOps work, owning system design, code review and delivery.",
-        "Built the AI-assisted log analysis platform end to end: ingested logs and metrics from multiple sources, and wired GPT-5.4 through Azure AI Foundry to explain failures and suggest fixes.",
+        "Built the AI-assisted log analysis platform end to end: integrated 50+ live systems and the LNG plant's operational metrics into one view, and wired GPT-5.4 through Azure AI Foundry to explain failures and suggest fixes.",
         "Provisioned the Azure infrastructure with Terraform — App Service, Cosmos DB and Blob Storage — and set up CI/CD out of Azure Repos and Azure DevOps.",
         "Integrated single sign-on through Okta federated with Microsoft Entra ID, and governed privileged access with Microsoft Entra PIM.",
       ],
@@ -144,7 +144,7 @@ export const resume = {
       heading: "Modcart — Advertising Platform with Real-time Analytics (AdTech)",
       url: "https://modcart.io",
       context:
-        "Advertising platform with embeddable single-page stores and real-time campaign analytics; the platform has since moved to a coupon-based model.",
+        "Advertising platform for a Jakarta, Indonesia-based company — embeddable single-page stores and real-time campaign analytics; the platform has since moved to a coupon-based model.",
       bullets: [
         "Joined as a full-stack developer and took on DevOps after 6 months.",
         "Owned the architecture and schemas for the single-page stores, and cut initial load from ~4s to under 1s.",
@@ -164,7 +164,7 @@ export const resume = {
       slug: "wellcompanion",
       name: "WellCompanion",
       domain: "Health & Fitness",
-      text: "Health and fitness tracker that captures daily activity and applies AI analysis to surface personalised insights and trends — built solo, BRD to deployment.",
+      text: "Health and fitness tracker for a Singapore-based company — captures daily activity and applies AI analysis to surface personalised insights and trends; built solo, BRD to deployment.",
     },
     {
       slug: "boongg",

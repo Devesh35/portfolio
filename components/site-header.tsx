@@ -265,7 +265,7 @@ export function SiteHeader() {
               GitHub
             </a>
             <a href={profile.links.devtools} target="_blank" rel="noreferrer">
-              DevTools
+              Simarium
             </a>
           </div>
         </div>

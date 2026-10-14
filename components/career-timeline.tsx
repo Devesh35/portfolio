@@ -4,6 +4,7 @@ import { formatSpans, entryMonths, type Track, type Emphasis } from "@/content/t
 import { buildTimelineLayout, SPINE_X, YEAR_COL } from "@/lib/timeline-layout";
 import { getProject, ORIGIN_LABEL } from "@/content/projects";
 import { SkillIcon } from "@/components/skill-icon";
+import { headlineStack } from "@/lib/stack-headline";
 import { TimelineFocus } from "@/components/timeline-focus";
 
 const TRACK_COLOR: Record<Track, string> = {
@@ -47,7 +48,7 @@ const TITLE: Record<Emphasis, string> = {
   standard: "text-text/90",
   support: "text-muted",
 };
-const STACK_CHIPS = 4;
+const STACK_CHIPS = 5;
 
 export function CareerTimeline() {
   const layout = buildTimelineLayout();
@@ -314,7 +315,7 @@ export function CareerTimeline() {
                 </p>
 
                 <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted">
-                  {project?.summary ?? "Client engagement at Nirmitee.io."}
+                  {project?.summary ?? entry.summary ?? "Client engagement at Nirmitee.io."}
                 </p>
 
                 {outcome ? (
@@ -333,7 +334,7 @@ export function CareerTimeline() {
                   <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-dim">Role</p>
                   <p className="mt-1 font-mono text-xs leading-snug text-muted">{project.role}</p>
                   <ul className="mt-3 flex flex-wrap gap-1.5">
-                    {project.stack.slice(0, STACK_CHIPS).map((tech) => (
+                    {headlineStack(project).slice(0, STACK_CHIPS).map((tech) => (
                       <li key={tech} className="flex items-center gap-1.5 border border-line px-1.5 py-0.5 font-mono text-[0.625rem] text-dim">
                         <SkillIcon name={tech} size={11} />
                         {tech}

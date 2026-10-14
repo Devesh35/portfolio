@@ -15,7 +15,7 @@ export const STATUS_LABEL: Record<ToolStatus, string> = {
 
 export const simarium = {
   name: "Simarium",
-  product: "DevTools",
+  product: "Simarium",
   url: "https://devtools.simarium.in",
   tagline: "The systems developers rely on every day, turned into interactive simulations.",
   body:

@@ -10,13 +10,15 @@ import { timeline } from "@/content/timeline";
  */
 
 export const CAREER_START = new Date("2021-11-01");
+/** Left Nirmitee.io on 30 Sep 2026 — the experience clock stops here. */
+export const CAREER_END = new Date("2026-09-30");
 // The computations live in lib/experience.ts (yearsSinceCareerStart,
 // experienceLabel) — one clock, read from everywhere.
 
 /** Distinct domains worked in, counted rather than claimed. */
 const domainCount = new Set(projects.map((p) => p.domain.split("·")[0].trim())).size;
 
-/** Client engagements only — DevTools and Dine In are personal builds with no
+/** Client engagements only — Simarium and Dine In are personal builds with no
  *  client (Dine In predates Nirmitee.io entirely), so they don't belong in a
  *  "delivered to client satisfaction" count. Cross-referenced against
  *  content/timeline.ts's `track`, the same distinction content/experience.ts
@@ -32,7 +34,7 @@ export const profile = {
   name: "Devesh Singh",
   /** Single public title. Do not vary this across the site. */
   title: "Full Stack & DevOps Engineer",
-  currentRole: "SDE 2 at Nirmitee.io",
+  currentRole: "Open to work · SDE 2 at Nirmitee.io until Sep 2026",
   location: "Pune, India",
 
   /** The hero line. One sentence, no adjectives that can't be checked. */
@@ -40,7 +42,7 @@ export const profile = {
     "I build web and mobile products end to end — and the pipelines that ship them.",
 
   intro:
-    "Next.js and React Native front ends, Node.js services on MongoDB and PostgreSQL, and the Docker, Terraform and CI/CD that put them into production on AWS and Azure. Currently project lead on Phase 2 of a European property-lending platform (the borrower-facing app); most recently project lead on a fixed-scope AI-assisted observability platform.",
+    "Next.js and React Native front ends, Node.js services on MongoDB and PostgreSQL, and the Docker, Terraform and CI/CD that put them into production on AWS and Azure. Most recently at Nirmitee.io (Nov 2021 – Sep 2026): project lead on Phase 2 of a European property-lending platform (the borrower-facing app) and on an AI-assisted observability platform.",
 
   email: "devesh46singh@gmail.com",
   phone: "+91 78751 77354",
@@ -55,7 +57,7 @@ export const profile = {
   resume: {
     href: "/Devesh_Singh_Resume.pdf",
     downloadAs: "Devesh_Singh_Resume.pdf",
-    updated: "September 2026",
+    updated: "October 2026",
   },
 
   education: {
@@ -172,7 +174,7 @@ export const lifecycle = [
     headline: "Carry a team from scope to release.",
     tools: ["Agile / Scrum", "JIRA", "Azure DevOps", "GitLab", "Git"],
     title: "Lead",
-    body: "Project lead on fixed-scope and phase engagements: system design, code review and delivery — a five-person team (4 developers, 1 QA) on an AI-assisted observability platform, and a six-person team (4 developers, 2 QA) on a property-lending platform's borrower-facing app across frontend and backend.",
+    body: "Project lead on client engagements: system design, code review and delivery — a five-person team (4 developers, 1 QA) on an AI-assisted observability platform, and a six-person team (4 developers, 2 QA) on a property-lending platform's borrower-facing app across frontend and backend.",
   },
   {
     id: "build",

@@ -18,7 +18,16 @@ import { fileURLToPath } from "node:url";
 // Teach Node the app's "@/" alias before any content module is pulled in.
 register("./alias-hook.mjs", import.meta.url);
 
-const { resume, resumePeriod } = await import("../content/resume.ts");
+const { resume: baseResume, resumePeriod } = await import("../content/resume.ts");
+
+// `--variant <name>` applies content/resume-variants/<name>.ts on top of the
+// public résumé and writes the result under its own file names, next to —
+// never over — the public one (Dev, 2026-09-16: an IC-framed copy).
+const variantIndex = process.argv.indexOf("--variant");
+const variantName = variantIndex === -1 ? null : process.argv[variantIndex + 1];
+const variant = variantName ? await import(`../content/resume-variants/${variantName}.ts`) : null;
+const resume = variant ? variant.apply(baseResume) : baseResume;
+const fileSuffix = variant ? `_${variant.suffix ?? variantName}` : "";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT_DIR = resolve(ROOT, "public");
@@ -26,7 +35,7 @@ const OUT_DIR = resolve(ROOT, "public");
 /** The résumé is stored under the name it should save as, so every route to it
  *  — the download button, a right-click save, opening the URL directly —
  *  produces the same filename without relying on the `download` attribute. */
-const PDF_NAME = "Devesh_Singh_Resume.pdf";
+const PDF_NAME = `Devesh_Singh_Resume${fileSuffix}.pdf`;
 
 const esc = (value) =>
   String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -256,8 +265,11 @@ const html = `<!doctype html>
   </div>
 </body></html>`;
 
-mkdirSync(OUT_DIR, { recursive: true });
-const htmlPath = resolve(OUT_DIR, "resume.html");
+// Variants are not published: they go to resume-variants/ at the repo root,
+// outside public/, and are sent by hand.
+const outDir = variant ? resolve(ROOT, "resume-variants") : OUT_DIR;
+mkdirSync(outDir, { recursive: true });
+const htmlPath = resolve(outDir, `resume${fileSuffix.toLowerCase()}.html`);
 writeFileSync(htmlPath, html, "utf8");
 console.log("wrote", htmlPath);
 
@@ -267,11 +279,11 @@ if (process.argv.includes("--pdf")) {
   const page = await browser.newPage();
   await page.setContent(html, { waitUntil: "load" });
   await page.pdf({
-    path: resolve(OUT_DIR, PDF_NAME),
+    path: resolve(outDir, PDF_NAME),
     printBackground: true,
     // @page in the stylesheet owns size and margins — one source, not two.
     preferCSSPageSize: true,
   });
   await browser.close();
-  console.log("wrote", resolve(OUT_DIR, PDF_NAME));
+  console.log("wrote", resolve(outDir, PDF_NAME));
 }

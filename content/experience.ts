@@ -14,11 +14,11 @@ export const roles: Role[] = [
   {
     company: "Nirmitee.io",
     title: "Software Development Engineer II",
-    period: "Apr 2024 – Present",
+    period: "Apr 2024 – Sep 2026",
     start: "2024-04",
-    end: null,
+    end: "2026-09",
     summary:
-      "Own full-stack and DevOps delivery for client platforms, from requirements and system design through deployment and monitoring.",
+      "Owned full-stack and DevOps delivery for client platforms, from requirements and system design through deployment and monitoring.",
     bullets: [
       "Revamped a legacy platform serving 160,000+ users with Next.js and TypeScript inside an Nx monorepo, improving performance, UX and developer productivity.",
       "Designed and built a scalable Node.js/Express modular service architecture, optimising inter-service communication and reliability.",

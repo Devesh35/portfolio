@@ -53,7 +53,7 @@ export function SiteFooter() {
                 {[
                   { href: profile.links.github, label: "GitHub" },
                   { href: profile.links.linkedin, label: "LinkedIn" },
-                  { href: profile.links.devtools, label: "DevTools" },
+                  { href: profile.links.devtools, label: "Simarium" },
                   { href: `mailto:${profile.email}`, label: "Email" },
                 ].map((item) => (
                   <li key={item.label}>

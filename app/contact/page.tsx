@@ -38,7 +38,7 @@ const CHANNELS = [
     note: "Code, when it is mine to share.",
   },
   {
-    label: "DevTools",
+    label: "Simarium",
     value: "devtools.simarium.in",
     href: profile.links.devtools,
     note: "The tooling I build outside work.",
