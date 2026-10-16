@@ -10,7 +10,7 @@ import { experienceLabel, yearsSinceCareerStart } from "@/lib/experience";
 
 export const metadata: Metadata = {
   title: "About",
-  description: `Full Stack & DevOps Engineer in Pune with ${experienceLabel().toLowerCase()} across FinTech, AdTech, mobility, HealthTech and AIOps platforms.`,
+  description: `Full Stack & DevOps Engineer in Mumbai with ${experienceLabel().toLowerCase()} across FinTech, AdTech, mobility, HealthTech and AIOps platforms.`,
   alternates: { canonical: "/about" },
 };
 

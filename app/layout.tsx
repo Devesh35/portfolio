@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   description: site.description,
   keywords: [
     "Full Stack Developer", "DevOps Engineer", "Next.js", "React Native",
-    "Node.js", "Terraform", "AWS", "Pune", "Devesh Singh",
+    "Node.js", "Terraform", "AWS", "Mumbai", "Devesh Singh",
   ],
   authors: [{ name: profile.name, url: site.url }],
   creator: profile.name,
@@ -49,7 +49,7 @@ const personJsonLd = {
   jobTitle: profile.title,
   email: `mailto:${profile.email}`,
   url: site.url,
-  address: { "@type": "PostalAddress", addressLocality: "Pune", addressCountry: "IN" },
+  address: { "@type": "PostalAddress", addressLocality: "Mumbai", addressCountry: "IN" },
   alumniOf: { "@type": "CollegeOrUniversity", name: profile.education.school },
   sameAs: [profile.links.github, profile.links.linkedin, profile.links.devtools],
 };

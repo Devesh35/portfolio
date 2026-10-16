@@ -67,7 +67,7 @@ export const resume = {
 
   // 3 sentences, no numbers — who Dev is, not a metrics recap (Dev, 2026-09-01).
   summary:
-    "Full Stack & DevOps Engineer based in Pune, India. I take products from requirements and system design through to production, and stay responsible for them once they're live — the infrastructure side is as much my job as the application code. Most recently led the next phase of a European property-lending platform, alongside an AI-assisted observability build.",
+    "Full Stack & DevOps Engineer based in Mumbai, India. I take products from requirements and system design through to production, and stay responsible for them once they're live — the infrastructure side is as much my job as the application code. Most recently led the next phase of a European property-lending platform, alongside an AI-assisted observability build.",
 
   soloProject: {
     url: profile.links.devtools,
@@ -77,6 +77,7 @@ export const resume = {
   /** Shown once above the positions below — every position here is at this one company. */
   company: {
     name: "Nirmitee.io",
+    location: "Pune, India",
     period: "Nov 2021 – Sep 2026",
     blurb:
       "Nirmitee.io is a software consultancy — every engagement below is a client project delivered as a Nirmitee employee.",

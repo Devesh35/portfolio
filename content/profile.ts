@@ -35,7 +35,7 @@ export const profile = {
   /** Single public title. Do not vary this across the site. */
   title: "Full Stack & DevOps Engineer",
   currentRole: "Open to work · SDE 2 at Nirmitee.io until Sep 2026",
-  location: "Pune, India",
+  location: "Mumbai, India",
 
   /** The hero line. One sentence, no adjectives that can't be checked. */
   tagline:

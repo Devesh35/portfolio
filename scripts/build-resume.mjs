@@ -151,6 +151,7 @@ const html = `<!doctype html>
   /* Company header — printed once above every position held there. */
   .company-header { margin-bottom: 1.2pt; }
   .company-name { font-size: 11.6pt; font-weight: 700; text-transform: uppercase; color: #7a3316; letter-spacing: 0.02em; }
+  .company-loc { font-size: 9.22pt; font-weight: 400; text-transform: none; letter-spacing: 0; color: #333; }
   .company-header .date { font-size: 9.22pt; font-weight: 700; font-style: normal; color: #7a3316; }
   .company-blurb { font-size: 7.8pt; line-height: 10.8pt; color: #555; font-style: italic; margin: 1.5pt 0 6pt; }
 
@@ -240,7 +241,7 @@ const html = `<!doctype html>
 
   <h2>Professional Experience</h2>
   <div class="company-header row">
-    <span class="company-name">${esc(resume.company.name)}</span>
+    <span class="company-name">${esc(resume.company.name)}${resume.company.location ? ` <span class="company-loc">— ${esc(resume.company.location)}</span>` : ""}</span>
     <span class="date">${esc(resume.company.period)}</span>
   </div>
   <p class="company-blurb">${esc(resume.company.blurb)}</p>

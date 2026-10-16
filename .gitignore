@@ -41,3 +41,6 @@ yarn-error.log*
 next-env.d.ts
 _to_delete
 .fallow
+# Tailored résumé variants — built locally, not published
+/resume-variants/
+/resume-variants/*

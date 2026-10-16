@@ -1,4 +1,4 @@
-import { resume as base } from "@/content/resume";
+import { resume as base, type ResumeProject } from "@/content/resume";
 
 /**
  * "IC" variant of the résumé (Dev, 2026-09-16): the same document without
@@ -14,12 +14,20 @@ export const suffix = "IC";
  *  A variant edits those strings and drops contact rows, so it returns the
  *  structurally-widened shape instead — the build script only reads fields. */
 type Resume = typeof base;
-export type VariantResume = Omit<Resume, "header" | "summary" | "additionalIntro"> & {
-  header: Omit<Resume["header"], "contact"> & {
+export type VariantResume = Omit<
+  Resume,
+  "header" | "summary" | "additionalIntro" | "skills" | "majorProjects" | "additional"
+> & {
+  header: Omit<Resume["header"], "contact" | "line" | "stack"> & {
+    line: string;
+    stack: string;
     contact: readonly { label: string; value: string; href?: string }[];
   };
   summary: string;
   additionalIntro: string;
+  skills: readonly { label: string; items: string }[];
+  majorProjects: readonly ResumeProject[];
+  additional: readonly { slug: string; name: string; domain: string; url?: string; text: string }[];
 };
 
 export function apply(resume: Resume): VariantResume {

@@ -5,7 +5,7 @@ export const site = {
   name: "Devesh Singh",
   title: "Devesh Singh — Full Stack & DevOps Engineer",
   description:
-    "Full Stack & DevOps Engineer in Pune. Next.js and React Native front ends, Node.js services, and the Docker, Terraform and CI/CD pipelines that ship them on AWS and Azure.",
+    "Full Stack & DevOps Engineer in Mumbai. Next.js and React Native front ends, Node.js services, and the Docker, Terraform and CI/CD pipelines that ship them on AWS and Azure.",
   locale: "en_IN",
 } as const;
 
